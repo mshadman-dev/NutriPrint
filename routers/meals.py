@@ -3,6 +3,7 @@ from models.schemas import MealInput, MealPlan, RegenerateDay
 from models.db import supabase
 from services.groq_engine import generate_groq_plan
 from services.fallback_engine import generate_fallback_plan, DAYS_KN
+import secrets
 import json
 
 router = APIRouter(prefix="/api/meal", tags=["Meals"])
@@ -52,7 +53,9 @@ async def generate_meal(data: MealInput):
 
         print("PLAN TYPE:", type(plan))
         print("PLAN:", plan)
-
+        
+        share_token = secrets.token_urlsafe(16)
+        
         insert_data = {
             "student_name": data.student_name,
             "school_name": data.school_name,
@@ -71,6 +74,7 @@ async def generate_meal(data: MealInput):
             "avg_iron_mg": plan.avg_iron_mg,
             "total_cost_inr": plan.total_cost_inr,
             "generated_by": plan.generated_by,
+            "share_token": share_token,
         }
 
         if data.student_id:
