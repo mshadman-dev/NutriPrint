@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NutriPrint Health Report</title>
+</head>
+<body>
+
+<h1>🏥 NutriPrint Health Report</h1>
+
+<p><b>Student:</b> {{ plan.student_name }}</p>
+<p><b>School:</b> {{ plan.school_name }}</p>
+<p><b>Age Group:</b> {{ plan.age_group }}</p>
+
+<hr>
+
+<h2>Nutrition Summary</h2>
+
+<p>Calories: {{ plan.avg_daily_cal }}</p>
+<p>Protein: {{ plan.avg_protein_g }} g</p>
+<p>Calcium: {{ plan.avg_calcium_mg }} mg</p>
+<p>Iron: {{ plan.avg_iron_mg }} mg</p>
+
+<hr>
+
+<h2>Recommendations</h2>
+
+<ul>
+    <li>Increase iron-rich foods</li>
+    <li>Include calcium-rich foods</li>
+    <li>Maintain balanced diet</li>
+</ul>
+
+<br><br>
+
+Teacher Signature: ___________________
+
+<br><br><br>
+
+School Seal: ___________________
+
+</body>
+</html>
