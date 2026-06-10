@@ -23,7 +23,7 @@ async def generate_meal(data: MealInput):
             .limit(1)\
             .execute()
 
-        if cached.data:
+        if False and cached.data:
             row = cached.data[0]
         
             if isinstance(row["plan_json"], str):
