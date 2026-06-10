@@ -298,4 +298,123 @@ async def nutrition_gap(
                 "fix_kn": ""
             }
         ]
+
+        @router.get("/class-progress")
+async def class_progress(teacher_id: str):
+    try:
+        # Get all students for this teacher
+        students = supabase.table("students")\
+            .select("id, name, age, gender")\
+            .eq("teacher_id", teacher_id)\
+            .eq("is_active", True)\
+            .execute()
+
+        if not students.data:
+            return {"error": "No students found"}
+
+        student_ids = [s["id"] for s in students.data]
+
+        # Get latest BMI for each student
+        records = supabase.table("bmi_records")\
+            .select("student_id, bmi_value, classification, percentile, assessed_at")\
+            .eq("teacher_id", teacher_id)\
+            .order("assessed_at", desc=True)\
+            .execute()
+
+        # Keep only latest record per student
+        seen     = set()
+        latest   = []
+        for r in records.data:
+            sid = r["student_id"]
+            if sid not in seen:
+                seen.add(sid)
+                latest.append(r)
+
+        # Count classifications
+        dist = {
+            "underweight": 0,
+            "normal"     : 0,
+            "overweight" : 0,
+            "obese"      : 0,
+        }
+        total_percentile = 0
+        assessed_count   = 0
+
+        for r in latest:
+            c = r["classification"]
+            if c in dist:
+                dist[c] += 1
+            total_percentile += r.get("percentile", 50)
+            assessed_count   += 1
+
+        total_students = len(students.data)
+
+        # Class health score (0-10)
+        # Based on % of students in normal range
+        normal_pct   = (dist["normal"] / assessed_count * 100) if assessed_count else 0
+        health_score = round(normal_pct / 10, 1)
+
+        # Avg percentile
+        avg_percentile = round(
+            total_percentile / assessed_count, 1
+        ) if assessed_count else 0
+
+        # Most common deficiency based on
+        # underweight + overweight distribution
+        deficiency = "Iron 🩸"
+        if dist["underweight"] > dist["overweight"]:
+            deficiency = "Calories & Protein 💪"
+        elif dist["overweight"] + dist["obese"] > assessed_count * 0.3:
+            deficiency = "Fiber & Vegetables 🥬"
+
+        # Recommendation
+        recommendation = {
+            "Iron 🩸"              : {
+                "en": "Add Ragi Mudde to school lunch 3x/week. Encourage Palak Dal.",
+                "kn": "ವಾರಕ್ಕೆ 3 ಬಾರಿ ರಾಗಿ ಮುದ್ದೆ ಮತ್ತು ಪಾಲಕ್ ಬೇಳೆ ನೀಡಿ."
+            },
+            "Calories & Protein 💪": {
+                "en": "Add Groundnut Laddu as snack. Include Horsegram Saaru daily.",
+                "kn": "ತಿಂಡಿಗೆ ಕಡಲೆಕಾಯಿ ಉಂಡೆ ಮತ್ತು ಹುರಳಿ ಸಾರು ನೀಡಿ."
+            },
+            "Fiber & Vegetables 🥬": {
+                "en": "Replace fried snacks with seasonal vegetables and Ragi Dosa.",
+                "kn": "ಕರಿದ ತಿಂಡಿ ಬದಲು ತರಕಾರಿ ಮತ್ತು ರಾಗಿ ದೋಸೆ ನೀಡಿ."
+            },
+        }[deficiency]
+
+        # Per student leaderboard
+        # (healthiest = closest to 50th percentile = most normal)
+        leaderboard = []
+        student_map = {s["id"]: s for s in students.data}
+        for r in latest:
+            s    = student_map.get(r["student_id"], {})
+            dist_from_normal = abs(r.get("percentile", 50) - 50)
+            leaderboard.append({
+                "name"          : s.get("name", "Unknown"),
+                "bmi"           : r["bmi_value"],
+                "classification": r["classification"],
+                "percentile"    : r.get("percentile", 50),
+                "health_rank"   : dist_from_normal,
+            })
+
+        # Sort: lowest dist from normal = healthiest
+        leaderboard.sort(key=lambda x: x["health_rank"])
+
+        return {
+            "total_students"  : total_students,
+            "assessed_count"  : assessed_count,
+            "not_assessed"    : total_students - assessed_count,
+            "distribution"    : dist,
+            "health_score"    : health_score,
+            "karnataka_avg"   : 5.8,
+            "avg_percentile"  : avg_percentile,
+            "deficiency"      : deficiency,
+            "recommendation"  : recommendation,
+            "leaderboard"     : leaderboard[:10],
+            "bottom_5"        : leaderboard[-5:],
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     }
