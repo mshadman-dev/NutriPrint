@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 def _get_plan_by_token(token: str):
     result = supabase.table("meal_plans")\
         .select("*")\
-        .eq("share_token", token)\
+        .eq("id", token)\
         .single()\
         .execute()
     if not result.data:
