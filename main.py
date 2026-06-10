@@ -57,3 +57,14 @@ async def startup_event():
     print("🚀 NutriPrint V2 started!")
     print("📊 API docs: /docs")
     print("🏥 Health:   /ping")
+
+from routers.foods import router as foods_router
+# already included — just add /api/chat inside foods.py
+# and add this in main.py:
+@app.post("/api/chat")
+async def chat_proxy(data: dict):
+    from routers.foods import chat
+    from pydantic import BaseModel
+    class CM(BaseModel):
+        message: str
+    return await chat(CM(message=data["message"]))
