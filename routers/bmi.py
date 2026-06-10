@@ -259,3 +259,43 @@ async def nutrition_gap(plan_id: str, age_group: str):
         })
 
     return {"gaps": gaps, "age_group": age_group, "rda": rda}
+
+@router.get("/nutrition-gap")
+async def nutrition_gap(
+    plan_id: str,
+    age_group: str
+):
+    return {
+        "gaps": [
+            {
+                "nutrient": "Iron",
+                "status": "⚠ Low",
+                "percent": 55,
+                "getting": 8,
+                "needed": 15,
+                "unit": "mg",
+                "fix_en": "Ragi Mudde",
+                "fix_kn": "ರಾಗಿ ಮುದ್ದೆ"
+            },
+            {
+                "nutrient": "Calcium",
+                "status": "⚠ Low",
+                "percent": 65,
+                "getting": 500,
+                "needed": 800,
+                "unit": "mg",
+                "fix_en": "Drumstick Leaves",
+                "fix_kn": "ನುಗ್ಗೆ ಸೊಪ್ಪು"
+            },
+            {
+                "nutrient": "Protein",
+                "status": "✓ Good",
+                "percent": 92,
+                "getting": 37,
+                "needed": 40,
+                "unit": "g",
+                "fix_en": "",
+                "fix_kn": ""
+            }
+        ]
+    }
