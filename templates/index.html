@@ -4,20 +4,37 @@
 {% block content %}
 
 <!-- ── HERO ──────────────────────────────────────────── -->
-<section class="gradient-hero text-white py-20 px-4">
+<section class="gradient-hero text-white py-20 px-4                 
+  hero-section">    
+  <!-- Particle canvas -->  
+  <canvas id="particleCanvas"     
+    class="absolute inset-0 opacity-30">   
+  </canvas>
   <div class="max-w-4xl mx-auto text-center">
-    <span class="bg-white/20 text-white text-xs font-semibold px-4 py-1.5 rounded-full">
+    <span class="bg-white/20 text-white text-xs
+                 font-semibold px-4 py-1.5 rounded-full
+                 hero-animate float-badge">
       🇮🇳 Made for Karnataka Schools
     </span>
-    <h1 class="heading font-extrabold text-4xl md:text-5xl mt-6 mb-2 leading-tight">
-      <span class="lang-en">Nourishing Karnataka's Children</span>
-      <span class="lang-kn kn">ಕರ್ನಾಟಕದ ಮಕ್ಕಳ ಪೋಷಣೆ</span>
+    <h1 class="heading font-extrabold text-4xl md:text-5xl
+               mt-6 mb-2 leading-tight hero-animate">
+      <span id="heroTyping" class="lang-en">
+        Nourishing Karnataka's Children
+      </span>
+      <span class="lang-kn kn">
+        ಕರ್ನಾಟಕದ ಮಕ್ಕಳ ಪೋಷಣೆ
+      </span>
+      <!-- Blinking cursor -->
+      <span class="lang-en border-r-2 border-white
+                   animate-pulse ml-0.5">
+      </span>
     </h1>
     <p class="text-green-100 text-lg mt-3 mb-8 max-w-2xl mx-auto">
       <span class="lang-en">AI-powered BMI assessment and personalized weekly meal plans using local Karnataka foods — bilingual, printable, shareable.</span>
       <span class="lang-kn kn">ಸ್ಥಳೀಯ ಕರ್ನಾಟಕ ಆಹಾರ ಬಳಸಿ AI ಆಧಾರಿತ BMI ಮೌಲ್ಯಮಾಪನ ಮತ್ತು ವೈಯಕ್ತಿಕ ಊಟದ ಯೋಜನೆ.</span>
     </p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+    <div class="flex flex-col sm:flex-row gap-4
+                justify-center hero-animate">
       <a href="#bmi"
         class="bg-white text-primary font-bold px-8 py-3 rounded-full hover:bg-green-50 transition heading">
         <span class="lang-en">📏 Assess BMI</span>
@@ -75,7 +92,8 @@ loadImpact();
 </script>
 
     <!-- Stats -->
-    <div class="grid grid-cols-3 gap-6 mt-16 max-w-xl mx-auto">
+    <div class="grid grid-cols-3 gap-6 mt-16
+                max-w-xl mx-auto hero-animate">
       <div>
         <p class="text-3xl font-extrabold heading">93%</p>
         <p class="text-green-200 text-xs mt-1">
@@ -109,7 +127,8 @@ loadImpact();
       <span class="lang-kn kn">ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ</span>
     </h2>
     <div class="grid md:grid-cols-3 gap-8 mt-10">
-      <div class="card-hover bg-green-50 rounded-2xl p-6">
+      <div class="card-hover tilt-card bg-green-50
+                  rounded-2xl p-6 reveal">
         <div class="text-4xl mb-4">📏</div>
         <h3 class="heading font-bold text-gray-800">
           <span class="lang-en">1. Assess BMI</span>
@@ -466,7 +485,8 @@ loadImpact();
     const grid = document.getElementById('foodGrid');
     data.foods.forEach(f => {
       grid.innerHTML += `
-        <div class="bg-white rounded-2xl p-4 border card-hover text-center">
+        <div class="bg-white rounded-2xl p-4 border
+              card-hover tilt-card text-center reveal">
           <div class="text-4xl mb-2">${f.image_emoji}</div>
           <p class="font-bold text-gray-800 text-sm">${f.name_en}</p>
           <p class="text-xs text-orange-500 kn mt-0.5">${f.name_kn}</p>
