@@ -1,0 +1,185 @@
+/* =============================================================
+   NutriPrint — print.css  (UNIFIED FINAL)
+   Replaces both the outer print.css and static/print.css
+   ============================================================= */
+
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+
+    /* ── 1. Visibility trick — show ONLY the poster ───────── */
+    body * {
+        visibility: hidden !important;
+    }
+    #printable-poster,
+    #printable-poster * {
+        visibility: visible !important;
+    }
+    #printable-poster {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* ── 2. html / body ───────────────────────────────────── */
+    html, body {
+        background: #fff !important;
+        color: #000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        height: auto !important;          /* NOT 297mm — lets content flow */
+        overflow: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ── 3. Layout wrappers ───────────────────────────────── */
+    .generator-layout,
+    .preview-panel,
+    .poster-container-scroll,
+    .poster-wrapper {
+        display: block !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    /* ── 4. The A4 poster ─────────────────────────────────── */
+    .a4-poster {
+        width: 210mm !important;
+        height: auto !important;          /* NOT min-height:297mm */
+        min-height: 0 !important;
+        max-height: none !important;
+        padding: 8mm !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        box-sizing: border-box !important;
+        background: #fff !important;
+        overflow: visible !important;     /* was hidden — root cause of blank pages */
+        display: block !important;        /* NOT flex — flex + height:auto causes clipping */
+
+        /* No page-break rules here — let it flow naturally */
+    }
+
+    /* ── 5. Poster header ─────────────────────────────────── */
+    .poster-header {
+        border-bottom: 2px solid #1D9E75 !important;
+        padding-bottom: 8px !important;
+        margin-bottom: 10px !important;
+    }
+    .govt-emblem-svg       { height: 45px !important; }
+    .poster-school-meta h4 { font-size: 13px !important; color: #146F52 !important; }
+
+    /* ── 6. Title block ───────────────────────────────────── */
+    .poster-title-block {
+        margin-bottom: 8px !important;
+        /* no page-break-after: avoid here — was forcing blank page 1 */
+    }
+    .poster-title-block h2 { font-size: 16px !important; }
+    .poster-title-block h3 { font-size: 12px !important; }
+
+    /* ── 7. QR container ──────────────────────────────────── */
+    #poster-qr-container {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    #poster-qr-container img {
+        width: 85px !important;
+        height: 85px !important;
+    }
+
+    /* ── 8. Poster grid ───────────────────────────────────── */
+    .poster-grid,
+    #poster-grid-canvas {
+        width: 100% !important;
+        overflow: visible !important;
+        margin-bottom: 8px !important;
+        border-top: 1px solid #CBD5E1 !important;
+        border-left: 1px solid #CBD5E1 !important;
+        /* No page-break-inside: avoid on the whole grid — it is too large */
+    }
+
+    /* ── 9. Grid cells — only atomic cells avoid breaks ───── */
+    .grid-cell {
+        border-bottom: 1px solid #CBD5E1 !important;
+        border-right: 1px solid #CBD5E1 !important;
+        padding: 3px 4px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: visible !important;
+    }
+    .grid-header-cell {
+        background-color: #146F52 !important;
+        color: #fff !important;
+        padding: 6px 4px !important;
+    }
+    .grid-day-label-cell {
+        background-color: #E8F6F1 !important;
+        color: #146F52 !important;
+    }
+
+    /* ── 10. Meal blocks inside cells ─────────────────────── */
+    .meal-block        { border-top-width: 3px !important; }
+    .food-emoji        { font-size: 13px !important; margin-bottom: 1px !important; }
+    .meal-name-en,
+    .food-name-en      { font-size: 7.5px !important; }
+    .meal-name-kn,
+    .food-name-kn      { font-size: 6.5px !important; }
+    .meal-benefit      {
+        font-size: 6.5px !important;
+        padding: 1px 3px !important;
+        background-color: #ECFDF5 !important;
+        border: 1px solid #D1FAE5 !important;
+    }
+    .food-nutrition-row,
+    .food-nutrition-row span { font-size: 6px !important; }
+    .food-cost-tag     { font-size: 6px !important; }
+
+    /* ── 11. Slot / day labels ────────────────────────────── */
+    .meal-slot-label .slot-en,
+    .grid-day-label-cell strong { font-size: 8px !important; }
+    .meal-slot-label .kn-day,
+    .grid-day-label-cell .kn-lbl { font-size: 7px !important; }
+
+    /* ── 12. Summary row ──────────────────────────────────── */
+    .summary-label-cell .slot-en { font-size: 8px !important; }
+    .summary-label-cell .kn-day  { font-size: 7px !important; }
+    .summary-row   { font-size: 7px !important; }
+    .summary-cost  { font-size: 7px !important; }
+
+    /* ── 13. Poster footer ────────────────────────────────── */
+    .poster-footer {
+        border-top: 1px solid #CBD5E1 !important;
+        padding-top: 8px !important;
+        margin-top: 6px !important;
+    }
+    .poster-guidelines  { font-size: 7.5px !important; max-width: 100% !important; }
+    .poster-disclaimer  { font-size: 7px !important; }
+
+    /* ── 14. Hide all UI chrome ───────────────────────────── */
+    header, footer,
+    .govt-bar, .main-header, .main-footer,
+    .generator-layout .form-panel,
+    .preview-header, .poster-actions-bar,
+    .app-section:not(.active),
+    button, #nav-trigger, .hamburger-btn,
+    .ai-advisor-panel,
+    .poster-school-meta,
+    .section-title-wrapper {
+        display: none !important;
+    }
+}
