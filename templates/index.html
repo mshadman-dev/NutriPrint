@@ -510,8 +510,6 @@ if (mealMonth) {
 
   function loadMoreFoods() { foodPage++; loadFoods(false); }
 
-  console.log("STARTING LOADFOODS");
-  loadFoods().then(() => console.log("LOADFOODS SUCCESS"))
-             .catch(e => console.error("LOADFOODS ERROR", e));
+  loadFoods();
 </script>
 {% endblock %}
