@@ -37,45 +37,9 @@
   </script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
-    
-    :root {
-      --primary: #1D9E75;
-      --primary-dark: #146F52;
-      --accent: #E08E0B;
-      --shadow-premium: 0 10px 25px rgba(29, 158, 117, 0.08);
-      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body { font-family: 'Inter', sans-serif; background: #F8FAFC; color: #1E293B; }
+    body { font-family: 'Inter', sans-serif; background: #F8FAF9; }
     .kn  { font-family: 'Noto Sans Kannada', sans-serif; }
-    .heading { font-family: 'Outfit', sans-serif; font-weight: 700; }
-    
-    /* V1 Premium Design Elements */
-    .premium-card {
-      background: white;
-      border-radius: 16px;
-      border: 1px solid #E2E8F0;
-      box-shadow: var(--shadow-premium);
-      transition: var(--transition-smooth);
-    }
-    .premium-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-    }
-    
-    .official-bar {
-      background: linear-gradient(90deg, #12553E 0%, #1D9E75 100%);
-      color: white;
-      padding: 6px 4%;
-      font-size: 11px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid var(--accent);
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
+    .heading { font-family: 'Poppins', sans-serif; }
     .gradient-hero {
       background: linear-gradient(135deg, #1D9E75 0%, #0f5e46 50%, #1a7a5a 100%);
     }
@@ -265,19 +229,6 @@
 </head>
 <body>
 
-<!-- ── OFFICIAL GOVT BAR (V1 PREMIUM) ────────────────── -->
-<div class="official-bar">
-    <div class="flex items-center gap-4">
-        <span class="hidden md:inline">Yenepoya Institute of Technology, Moodbidri</span>
-        <span class="hidden md:inline opacity-50">|</span>
-        <span>Interdisciplinary Project 2025–26</span>
-    </div>
-    <div class="flex items-center gap-4">
-        <span class="hidden sm:inline">Healthy Eating Awareness · Karnataka</span>
-        <span class="bg-saffron/20 text-saffron px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Academic Prototype</span>
-    </div>
-</div>
-
 <!-- ── SPLASH SCREEN ─────────────────────────────────── -->
 <div id="splashScreen">
   <!-- Floating food emojis background -->
@@ -393,10 +344,6 @@
         <span class="lang-en">Dashboard</span>
         <span class="lang-kn kn">ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</span>
       </a>
-      <a href="/presentation" class="text-saffron font-bold hover:text-orange-600 transition">
-        <span class="lang-en">✨ Pitch Deck</span>
-        <span class="lang-kn kn">✨ ಪ್ರಸ್ತುತಿ</span>
-      </a>
     </div>
 
     <!-- Right buttons -->
@@ -503,28 +450,10 @@
     });
     if (res.ok) {
       const data = await res.json();
-      // data.user_id is the auth_user_id from Supabase
-      const authUserId = data.user_id;
-      
-      // Now fetch the actual teacher_id from our teachers table
-      const teacherRes = await fetch(`/auth/verify-teacher/${authUserId}`);
-      if (teacherRes.ok) {
-        const teacherData = await teacherRes.json();
-        if (teacherData.success) {
-          localStorage.setItem('teacher_id', teacherData.teacher_id);
-          localStorage.setItem('auth_user_id', authUserId);
-          closeLogin();
-          document.getElementById('loginBtn').textContent = '✅ Logged In';
-          // Refresh dashboard if on dashboard page
-          if (window.location.pathname.includes('dashboard')) {
-            window.location.reload();
-          }
-          return;
-        }
+      localStorage.setItem('auth_user_id', data.user_id);
+      if (data.teacher_id) {
+        localStorage.setItem('teacher_id', data.teacher_id);
       }
-      // If teacher profile doesn't exist, we might need to create it
-      // For now, store auth_user_id as fallback or alert
-      localStorage.setItem('teacher_id', authUserId); 
       closeLogin();
       document.getElementById('loginBtn').textContent = '✅ Logged In';
     } else {
@@ -533,6 +462,8 @@
   }
 </script>
 
+<script src="/static/js/splash.js"></script>
+<script src="/static/js/animations.js"></script>
 {% block scripts %}{% endblock %}
   <!-- Chatbot button -->
 <button onclick="toggleChat()"
