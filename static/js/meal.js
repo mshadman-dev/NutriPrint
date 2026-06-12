@@ -75,62 +75,62 @@ const _FOOD_SLUG = {
 
 /**
  * category fallback — when per-food file absent, use this existing SVG.
- * All values here are VERIFIED to have a matching .svg in static/images/foods/.
+ * All values here are VERIFIED to have a matching .jpg in static/images/foods/.
  */
 const _FALLBACK = {
-  ragi_mudde                      : "ragi_mudde",   // ragi_mudde.svg ✓
-  ragi_dosa                       : "dosa",          // dosa.svg ✓
+  ragi_mudde                      : "ragi_mudde",   // ragi_mudde.jpg ✓
+  ragi_dosa                       : "dosa",          // dosa.jpg ✓
   mudde_saaru                     : "ragi_mudde",
   ragi_malt                       : "milk",
   neer_dosa                       : "dosa",
   wheat_dosa                      : "dosa",
-  idli_with_sambar                : "idli",          // idli.svg ✓
+  idli_with_sambar                : "idli",          // idli.jpg ✓
   rava_idli                       : "idli",
-  akki_roti                       : "roti",          // roti.svg ✓
+  akki_roti                       : "roti",          // roti.jpg ✓
   jowar_roti                      : "roti",
   jolada_rotti_with_ennegayi      : "roti",
   methi_paratha                   : "roti",
   chapati_with_chana_masala       : "roti",
   beans_curry_with_chapati        : "roti",
-  coconut_rice                    : "rice",          // rice.svg ✓
+  coconut_rice                    : "rice",          // rice.jpg ✓
   groundnut_chutney_rice          : "rice",
   sambar_rice                     : "rice",
-  curd_rice                       : "curd_rice",     // curd_rice.svg ✓
+  curd_rice                       : "curd_rice",     // curd_rice.jpg ✓
   tomato_gojju_with_rice          : "rice",
   lemon_rice                      : "rice",
   vangi_bath                      : "rice",
   toor_dal_with_ghee_rice         : "rice",
   poha                            : "rice",
-  upma                            : "upma",          // upma.svg ✓
-  bisibelebath                    : "khichdi",       // khichdi.svg ✓
+  upma                            : "upma",          // upma.jpg ✓
+  bisibelebath                    : "khichdi",       // khichdi.jpg ✓
   sabudana_khichdi                : "khichdi",
   mixed_veg_khichdi               : "khichdi",
   pongal                          : "khichdi",
   shavige_bath                    : "upma",
-  palak_dal                       : "dal",           // dal.svg ✓
+  palak_dal                       : "dal",           // dal.jpg ✓
   horsegram_saaru                 : "dal",
   avarekalu_saaru                 : "dal",
   dill_leaves_dal                 : "dal",
   ambat                           : "dal",
-  moong_dal_payasam               : "milk",          // milk.svg ✓
-  drumstick_leaves_curry          : "vegetables",    // vegetables.svg ✓
+  moong_dal_payasam               : "milk",          // milk.jpg ✓
+  drumstick_leaves_curry          : "vegetables",    // vegetables.jpg ✓
   jackfruit_curry                 : "vegetables",
   colocasia_fry                   : "vegetables",
   sweet_potato_curry              : "vegetables",
   pathrode                        : "vegetables",
   kelyache_shiite                 : "vegetables",
-  green_gram_sprouted_salad       : "vegetables",    // no sprouts.svg → vegetables ✓
-  girmit                          : "nuts",          // no sprouts.svg → nuts ✓
-  egg_curry_with_rice             : "egg",           // egg.svg ✓
+  green_gram_sprouted_salad       : "vegetables",    // no sprouts.jpg → vegetables ✓
+  girmit                          : "nuts",          // no sprouts.jpg → nuts ✓
+  egg_curry_with_rice             : "egg",           // egg.jpg ✓
   boiled_egg_with_ragi_mudde      : "egg",
   omelette_with_bread             : "egg",
-  fish_curry_with_rice            : "fish",          // fish.svg ✓
-  chicken_saaru_with_jolada_rotti : "chicken",       // chicken.svg ✓
+  fish_curry_with_rice            : "fish",          // fish.jpg ✓
+  chicken_saaru_with_jolada_rotti : "chicken",       // chicken.jpg ✓
   koli_saaru                      : "chicken",
-  prawn_ghee_roast_with_neer_dosa : "prawn",         // prawn.svg ✓
-  banana_sheera                   : "fruits",        // fruits.svg ✓
+  prawn_ghee_roast_with_neer_dosa : "prawn",         // prawn.jpg ✓
+  banana_sheera                   : "fruits",        // fruits.jpg ✓
   carrot_halwa                    : "milk",
-  groundnut_laddu                 : "nuts",          // nuts.svg ✓
+  groundnut_laddu                 : "nuts",          // nuts.jpg ✓
 };
 
 const _EMOJI = {
@@ -142,7 +142,7 @@ const _EMOJI = {
 
 /**
  * Resolve a food name to the best available image URL.
- * Checks per-food slug first (.svg always present if named correctly),
+ * Checks per-food slug first (.jpg always present if named correctly),
  * then falls back to category slug.
  * Returns { url: string|null, emoji: string }.
  */
@@ -154,7 +154,7 @@ function _resolveFood(name) {
 
   // Try per-food svg (the only extension we currently have for most foods)
   // If a .webp / .jpg lands later, just add it — browser caching handles it.
-  const perFoodSvg = BASE + slug + '.svg';
+  const perFoodSvg = BASE + slug + '.jpg';
   // We can't do a synchronous HTTP check, so we rely on the fallback map
   // which we have already verified against the filesystem in Python.
   // Per-food SVG exists only for: ragi_mudde, curd_rice, upma, idli, roti,
@@ -170,7 +170,7 @@ function _resolveFood(name) {
   const fbSlug = _FALLBACK[slug];
   if (fbSlug) {
     return {
-      url  : BASE + fbSlug + '.svg',
+      url  : BASE + fbSlug + '.jpg',
       emoji: _EMOJI[fbSlug] || _EMOJI.default,
     };
   }
