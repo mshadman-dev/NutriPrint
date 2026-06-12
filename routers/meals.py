@@ -105,10 +105,8 @@ async def generate_meal(data: MealInput):
 
         row = saved.data[0]
 
-        plan.plan_id = str(row["id"])
-        # Fetch share_token separately since insert doesnt return it
-        token_result = supabase.table("meal_plans").select("share_token").eq("id", row["id"]).single().execute()
-        plan.share_token = str(token_result.data["share_token"]) if token_result.data else str(row["id"])
+        plan.plan_id    = str(row["id"])
+        plan.share_token = str(row.get("share_token") or share_token)
 
         return plan
 

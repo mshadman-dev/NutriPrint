@@ -47,16 +47,19 @@ def _to_meal_item(f) -> MealItem:
     )
 
 def generate_fallback_plan(
-    school_name  : str,
-    student_name : str,
-    teacher_name : str,
-    age_group    : str,
-    diet_pref    : str,
-    region       : str,
-    month        : str,
-    strategy     : str,
-    bmi_class    : str = None,
+    school_name      : str,
+    student_name     : str,
+    teacher_name     : str,
+    age_group        : str,
+    diet_pref        : str,
+    region           : str,
+    month            : str,
+    strategy         : str,
+    bmi_class        : str = None,
+    ai_recommendations: list = None,
 ) -> MealPlan:
+    if ai_recommendations is None:
+        ai_recommendations = []
 
     breakfasts = _filter_foods(region, diet_pref, "breakfast", month)
     lunches    = _filter_foods(region, diet_pref, "lunch",     month)
@@ -98,20 +101,21 @@ def generate_fallback_plan(
         ))
 
     return MealPlan(
-        student_name   = student_name,
-        school_name    = school_name,
-        teacher_name   = teacher_name,
-        age_group      = age_group,
-        diet_pref      = diet_pref,
-        region         = region,
-        month          = month,
-        strategy       = strategy,
-        bmi_class      = bmi_class,
-        week           = week,
-        avg_daily_cal  = round(total_cal   / 7, 1),
-        avg_protein_g  = round(total_pro   / 7, 2),
-        avg_calcium_mg = round(total_cal_mg/ 7, 1),
-        avg_iron_mg    = round(total_iron  / 7, 2),
-        total_cost_inr = round(total_cost,  2),
-        generated_by   = "fallback",
+        student_name      = student_name,
+        school_name       = school_name,
+        teacher_name      = teacher_name,
+        age_group         = age_group,
+        diet_pref         = diet_pref,
+        region            = region,
+        month             = month,
+        strategy          = strategy,
+        bmi_class         = bmi_class,
+        week              = week,
+        avg_daily_cal     = round(total_cal   / 7, 1),
+        avg_protein_g     = round(total_pro   / 7, 2),
+        avg_calcium_mg    = round(total_cal_mg/ 7, 1),
+        avg_iron_mg       = round(total_iron  / 7, 2),
+        total_cost_inr    = round(total_cost,  2),
+        generated_by      = "fallback",
+        ai_recommendations= ai_recommendations,
     )

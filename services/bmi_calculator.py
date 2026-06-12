@@ -1,5 +1,6 @@
 import math
 from models.schemas import BMIResult, BMIClass
+from services.diet_filter import get_fix_foods, DIET_VEGETARIAN
 
 # ─── IAP Pediatric BMI Percentile Tables ─────────────────
 # Source: Indian Academy of Pediatrics growth charts
@@ -147,15 +148,15 @@ ICMR_RDA = {
 }
 
 # ─── Fix Foods per Deficiency ─────────────────────────────
-
+# Kept for backward-compat. New code should use diet_filter.get_fix_foods().
 FIX_FOODS = {
     "calories": {
         "en": "Ragi Mudde, Groundnut Laddu, Ghee Rice, Banana Sheera",
         "kn": "ರಾಗಿ ಮುದ್ದೆ, ಕಡಲೆಕಾಯಿ ಉಂಡೆ, ತುಪ್ಪದ ಅನ್ನ, ಬಾಳೆಹಣ್ಣಿನ ಶಿರಾ",
     },
     "protein_g": {
-        "en": "Horsegram Saaru, Sprouted Moong, Egg Curry, Avarekalu Saaru",
-        "kn": "ಹುರಳಿ ಸಾರು, ಮೊಳಕೆ ಹೆಸರುಕಾಳು, ಮೊಟ್ಟೆ ಸಾಲನ್, ಅವರೆಕಾಳು ಸಾರು",
+        "en": "Horsegram Saaru, Sprouted Moong, Paneer Sabzi, Avarekalu Saaru",
+        "kn": "ಹುರಳಿ ಸಾರು, ಮೊಳಕೆ ಹೆಸರುಕಾಳು, ಪನೀರ್ ಸಬ್ಜಿ, ಅವರೆಕಾಳು ಸಾರು",
     },
     "calcium_mg": {
         "en": "Drumstick Leaves, Ragi Dosa, Curd Rice, Ragi Malt",
@@ -169,8 +170,15 @@ FIX_FOODS = {
 
 # ─── Nutrition Gap Calculator ─────────────────────────────
 
-def calculate_nutrition_gap(plan_data: dict, age_group: str) -> list:
+def calculate_nutrition_gap(plan_data: dict, age_group: str,
+                             diet_pref: str = DIET_VEGETARIAN) -> list:
+    """
+    Compare plan averages against ICMR RDA and return gap data.
+    Fix-food suggestions are filtered for the given diet preference
+    so vegetarian users never see egg/chicken/fish recommendations.
+    """
     rda = ICMR_RDA.get(age_group, ICMR_RDA["9-12"])
+    diet_pref = (diet_pref or DIET_VEGETARIAN).lower().strip()
 
     checks = [
         ("calories",   "Calories", "kcal", plan_data.get("avg_daily_cal",  0)),
@@ -195,6 +203,14 @@ def calculate_nutrition_gap(plan_data: dict, age_group: str) -> list:
             status       = "good"
             status_label = "✅ Good"
 
+        if gap > 0:
+            fix = get_fix_foods(key, diet_pref)
+            fix_en = fix["en"]
+            fix_kn = fix["kn"]
+        else:
+            fix_en = None
+            fix_kn = None
+
         gaps.append({
             "nutrient"    : label,
             "key"         : key,
@@ -205,8 +221,8 @@ def calculate_nutrition_gap(plan_data: dict, age_group: str) -> list:
             "percent"     : pct,
             "status"      : status,
             "status_label": status_label,
-            "fix_en"      : FIX_FOODS[key]["en"] if gap > 0 else None,
-            "fix_kn"      : FIX_FOODS[key]["kn"] if gap > 0 else None,
+            "fix_en"      : fix_en,
+            "fix_kn"      : fix_kn,
         })
 
     return gaps

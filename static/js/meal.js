@@ -302,7 +302,9 @@ async function loadNutritionGap(planId, ageGroup) {
   const container = document.getElementById('gapContainer');
   if (!container) return;
 
-  const res = await fetch(`/api/bmi/nutrition-gap?plan_id=${planId}&age_group=${ageGroup}`);
+  const dietPref = document.getElementById('mealDiet')?.value || 'vegetarian';
+  const res = await fetch(`/api/bmi/nutrition-gap?plan_id=${planId}&age_group=${encodeURIComponent(ageGroup)}&diet_pref=${encodeURIComponent(dietPref)}`);
+  if (!res.ok) return;
   const data = await res.json();
 
   let rows = '';
@@ -336,7 +338,9 @@ async function loadFoodEquivalents(ageGroup) {
   const container = document.getElementById('equivContainer');
   if (!container) return;
 
-  const res = await fetch(`/api/bmi/food-equivalents?age_group=${ageGroup}`);
+  const dietPref = document.getElementById('mealDiet')?.value || currentPlan?.diet_pref || 'vegetarian';
+  const res = await fetch(`/api/bmi/food-equivalents?age_group=${encodeURIComponent(ageGroup)}&diet_pref=${encodeURIComponent(dietPref)}`);
+  if (!res.ok) return;
   const data = await res.json();
 
   const cards = (data.equivalents || []).map(eq => {

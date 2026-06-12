@@ -459,7 +459,10 @@ function renderStudentTable(students) {
       No students yet. Assess a student from the homepage.</td></tr>`;
     return;
   }
-  tbody.innerHTML = students.map(s => `
+  tbody.innerHTML = students.map(s => {
+    const safeName   = s.name.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+    const safeGender = (s.gender || '').replace(/'/g, "&#39;");
+    return `
     <tr class="hover:bg-gray-50 transition">
       <td class="px-6 py-4 font-medium text-gray-800">${s.name}</td>
       <td class="px-6 py-4 text-gray-500">${s.age} yrs · ${s.gender}</td>
@@ -474,12 +477,12 @@ function renderStudentTable(students) {
       <td class="px-6 py-4 text-gray-400 text-xs">${s.last_assessed ?? '—'}</td>
       <td class="px-6 py-4">
         <button
-          onclick="reassessStudent('${s.name}', ${s.age}, '${s.gender}')"
+          onclick="reassessStudent('${safeName}', ${s.age}, '${safeGender}')"
           class="text-xs text-primary border border-primary px-3 py-1.5 rounded-full hover:bg-primary hover:text-white transition">
           Reassess
         </button>
       </td>
-    </tr>`).join('');
+    </tr>`}).join('');
 }
 
 function renderRecentPlans(plans) {

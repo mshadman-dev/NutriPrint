@@ -105,10 +105,10 @@ async def export_csv(teacher_id: str):
 
 # ── Nutrition Gap ─────────────────────────────────────────
 @router.get("/nutrition-gap")
-async def nutrition_gap(plan_id: str, age_group: str):
+async def nutrition_gap(plan_id: str, age_group: str, diet_pref: str = ""):
     try:
         result = supabase.table("meal_plans")\
-            .select("plan_json")\
+            .select("plan_json, diet_pref")\
             .eq("id", plan_id)\
             .single()\
             .execute()
@@ -124,7 +124,16 @@ async def nutrition_gap(plan_id: str, age_group: str):
             import json
             plan_json = json.loads(plan_json)
 
-        gaps = calculate_nutrition_gap(plan_json, age_group)
+        # Pull diet: query param > DB row > plan_json > default
+        from services.diet_filter import DIET_VEGETARIAN
+        diet_pref = (
+            diet_pref
+            or result.data.get("diet_pref")
+            or plan_json.get("diet_pref")
+            or DIET_VEGETARIAN
+        ).lower().strip()
+
+        gaps = calculate_nutrition_gap(plan_json, age_group, diet_pref)
         return {"gaps": gaps, "age_group": age_group}
 
     except HTTPException:
@@ -134,9 +143,11 @@ async def nutrition_gap(plan_id: str, age_group: str):
 
 
 @router.get("/food-equivalents")
-async def food_equivalents(age_group: str = "9-12"):
-    """Practical food serving examples for nutrient targets."""
-    return {"equivalents": get_food_equivalents(age_group), "age_group": age_group}
+async def food_equivalents(age_group: str = "9-12", diet_pref: str = "vegetarian"):
+    """Practical food serving examples for nutrient targets, filtered by diet."""
+    from services.diet_filter import DIET_VEGETARIAN
+    safe_diet = (diet_pref or DIET_VEGETARIAN).lower().strip()
+    return {"equivalents": get_food_equivalents(age_group, safe_diet), "age_group": age_group}
 
 
 # ── Dashboard Stats ───────────────────────────────────────

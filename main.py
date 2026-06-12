@@ -1,4 +1,5 @@
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -9,7 +10,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import ai_advisor, bmi, meals, foods, auth, poster
 from routers.foods import impact
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("NutriPrint V2 started")
+    print("API docs: /docs")
+    print("Health:   /ping")
+    yield
+
 app = FastAPI(
+    lifespan=lifespan,
     debug=os.getenv("DEBUG", "false").lower() == "true",
     title="NutriPrint V2",
     description="AI-powered school nutrition app for Karnataka",
@@ -88,13 +98,6 @@ async def about_page(request: Request):
 @app.get("/ping")
 async def ping():
     return {"status": "ok", "app": "NutriPrint V2"}
-
-
-@app.on_event("startup")
-async def startup_event():
-    print("NutriPrint V2 started")
-    print("API docs: /docs")
-    print("Health:   /ping")
 
 
 @app.get("/api/impact")
