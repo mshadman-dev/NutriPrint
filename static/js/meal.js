@@ -116,6 +116,7 @@ async function generateMeal() {
     if (window.NutriPrintRouter) {
       NutriPrintRouter.onPlanGenerated(plan);
     }
+
   } catch(e) {
     alert('Error generating plan. Please try again.');
   } finally {
@@ -217,6 +218,11 @@ function renderMealPlan(plan) {
 
   container.classList.remove('hidden');
   container.scrollIntoView({behavior:'smooth'});
+
+  if (window.NutriPrintAdvisor) {
+    const advisorPanel = document.getElementById('advisorPanel');
+    window.NutriPrintAdvisor.renderMeal(advisorPanel, plan, window.lastBMIResult);
+  }
 }
 
 async function regenerateDay(dayName) {
@@ -342,3 +348,12 @@ async function loadFoodEquivalents(ageGroup) {
       <div class="grid md:grid-cols-2 gap-3">${cards}</div>
     </div>`;
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const storedBmi = localStorage.getItem('nutriprint_last_bmi');
+    if (storedBmi && !window.lastBMIResult) {
+      window.lastBMIResult = JSON.parse(storedBmi);
+    }
+  } catch (_) {}
+});

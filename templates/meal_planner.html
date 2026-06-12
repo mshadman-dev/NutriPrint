@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}NutriPrint — Meal Planner{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="/static/css/advisor.css"/>
+{% endblock %}
+
 {% block content %}
 <section class="hero-banner page-section">
   <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
@@ -51,11 +55,13 @@
 
     <div id="mealLoading" class="hidden soft-card p-8 text-center"><div class="spinner mx-auto"></div><p class="mt-4 text-sm font-medium text-slate-600">Generating nutrient-balanced meal plan...</p></div>
     <div id="mealResult" class="hidden"></div>
+    <div id="advisorPanel" class="hidden"></div>
   </div>
 </section>
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/advisor.js"></script>
 <script src="/static/js/meal.js"></script>
 <script>
   const monthSelect = document.getElementById('mealMonth');

@@ -1,0 +1,322 @@
+.advisor-shell {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 249, 0.98));
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.advisor-header {
+  background: linear-gradient(135deg, #0F5E46 0%, #1D9E75 55%, #136B4F 100%);
+  color: white;
+  padding: 1.25rem;
+}
+
+.advisor-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.advisor-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.advisor-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.advisor-body {
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-body {
+    padding: 1.25rem;
+  }
+}
+
+.advisor-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .advisor-summary-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.advisor-summary-card,
+.advisor-detail-card,
+.advisor-action-card,
+.advisor-risk-card {
+  background: white;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 1rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.advisor-summary-card {
+  padding: 0.95rem;
+}
+
+.advisor-summary-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #1D9E75;
+  font-weight: 800;
+}
+
+.advisor-summary-value {
+  margin-top: 0.35rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.advisor-summary-kn {
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.advisor-section {
+  margin-top: 1rem;
+}
+
+.advisor-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.advisor-section-title {
+  font-family: Poppins, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.advisor-section-note {
+  font-size: 0.8rem;
+  color: #64748B;
+}
+
+.advisor-actions-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-actions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .advisor-actions-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.advisor-action-card {
+  padding: 0.95rem;
+  min-height: 9rem;
+}
+
+.advisor-action-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.advisor-action-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, rgba(29, 158, 117, 0.12), rgba(249, 115, 22, 0.08));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.15rem;
+}
+
+.advisor-action-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.advisor-action-kn {
+  margin-top: 0.1rem;
+  font-size: 0.72rem;
+  color: #1D9E75;
+}
+
+.advisor-action-body {
+  margin-top: 0.75rem;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.advisor-action-list {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: #334155;
+}
+
+.advisor-action-list span {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.advisor-detail-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .advisor-detail-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+
+.advisor-detail-card {
+  padding: 1rem;
+}
+
+.advisor-detail-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  color: #0F172A;
+  font-size: 1rem;
+}
+
+.advisor-detail-kn {
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: #1D9E75;
+}
+
+.advisor-detail-copy {
+  margin-top: 0.75rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.advisor-food-list,
+.advisor-goal-list {
+  margin-top: 0.85rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.advisor-food-item,
+.advisor-goal-item {
+  border-radius: 0.9rem;
+  background: #F8FAF9;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(29, 158, 117, 0.12);
+}
+
+.advisor-food-item strong,
+.advisor-goal-item strong {
+  display: block;
+  font-size: 0.86rem;
+  color: #0F172A;
+}
+
+.advisor-food-item span,
+.advisor-goal-item span {
+  display: block;
+  margin-top: 0.18rem;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.advisor-risk-grid {
+  margin-top: 0.85rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.advisor-risk-card {
+  padding: 0.8rem 0.85rem;
+}
+
+.advisor-risk-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.advisor-risk-label {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.advisor-risk-level {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 9999px;
+  padding: 0.28rem 0.55rem;
+}
+
+.advisor-risk-level.high { background: #FEE2E2; color: #991B1B; }
+.advisor-risk-level.medium { background: #FEF3C7; color: #92400E; }
+.advisor-risk-level.low { background: #D1FAE5; color: #065F46; }
+
+.advisor-risk-copy {
+  margin-top: 0.45rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.advisor-water-card {
+  margin-top: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(29, 158, 117, 0.12);
+  background: linear-gradient(135deg, rgba(29, 158, 117, 0.08), rgba(255, 255, 255, 1));
+  padding: 0.9rem;
+}
+
+.advisor-water-value {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #0F5E46;
+}
+
+.advisor-water-subtitle {
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.advisor-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(29, 158, 117, 0.24), transparent);
+  margin: 1rem 0;
+}

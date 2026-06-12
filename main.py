@@ -7,8 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers import bmi, meals, foods, auth, poster
-from routers.foods import chat, impact
-from routers.foods import ChatMessage
+from routers.foods import impact
 
 app = FastAPI(
     debug=os.getenv("DEBUG", "false").lower() == "true",
@@ -95,11 +94,6 @@ async def startup_event():
     print("NutriPrint V2 started")
     print("API docs: /docs")
     print("Health:   /ping")
-
-
-@app.post("/api/chat")
-async def chat_proxy(data: ChatMessage):
-    return await chat(data)
 
 
 @app.get("/api/impact")

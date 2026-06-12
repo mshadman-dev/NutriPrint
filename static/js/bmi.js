@@ -34,6 +34,9 @@ async function calculateBMI() {
   
   lastBMIResult = data;
   window.lastBMIResult = data;
+  try {
+    localStorage.setItem('nutriprint_last_bmi', JSON.stringify(data));
+  } catch (_) {}
   
   showBMIResult(data);
   showGrowthChart(data.student_name);
@@ -67,14 +70,24 @@ function showBMIResult(data) {
   document.getElementById('resultAdviceEN').textContent = data.advice_en;
   document.getElementById('resultAdviceKN').textContent = data.advice_kn;
 
+  if (window.NutriPrintAdvisor) {
+    const advisorPanel = document.getElementById('advisorPanel');
+    window.NutriPrintAdvisor.renderBMI(advisorPanel, data);
+  }
+
   // Scroll to result
   document.getElementById('bmiResult').scrollIntoView({behavior:'smooth', block:'center'});
 }
 
 function prefillMealForm() {
   if (!lastBMIResult) return;
-  document.getElementById('mealStudent').value = lastBMIResult.student_name;
-  document.querySelector('#meal').scrollIntoView({behavior:'smooth'});
+  try {
+    localStorage.setItem('prefill_name', lastBMIResult.student_name || '');
+    localStorage.setItem('prefill_age', String(lastBMIResult.age || ''));
+    localStorage.setItem('prefill_gender', lastBMIResult.gender || 'boy');
+    localStorage.setItem('nutriprint_last_bmi', JSON.stringify(lastBMIResult));
+  } catch (_) {}
+  window.location.href = '/meal-planner';
 }
 
 // Voice input
@@ -233,4 +246,12 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('prefill_age');
     localStorage.removeItem('prefill_gender');
   }
+
+  try {
+    const storedBmi = localStorage.getItem('nutriprint_last_bmi');
+    if (storedBmi && !window.lastBMIResult) {
+      window.lastBMIResult = JSON.parse(storedBmi);
+      lastBMIResult = window.lastBMIResult;
+    }
+  } catch (_) {}
 });

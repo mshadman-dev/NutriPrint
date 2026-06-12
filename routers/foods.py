@@ -3,10 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, Query
-from groq import Groq
-from pydantic import BaseModel
 
-from config import GROQ_API_KEY
 from models.db import supabase
 
 router = APIRouter(prefix="/api/foods", tags=["Foods"])
@@ -74,38 +71,6 @@ async def get_foods(
 
     except Exception as e:
         return {"error": str(e), "foods": []}
-
-
-class ChatMessage(BaseModel):
-    message: str
-
-
-@router.post("/chat")
-async def chat(data: ChatMessage):
-    client = Groq(api_key=GROQ_API_KEY)
-
-    res = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "system",
-                "content": """
-You are NutriBot, a school nutrition assistant for Karnataka schools in India.
-Answer only about child nutrition, Karnataka foods, BMI, and healthy eating.
-Keep answers under 3 sentences.
-Support both English and Kannada questions.
-""",
-            },
-            {
-                "role": "user",
-                "content": data.message,
-            },
-        ],
-        max_tokens=150,
-        temperature=0.5,
-    )
-
-    return {"reply": res.choices[0].message.content}
 
 
 @router.get("/impact")
