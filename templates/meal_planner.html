@@ -3,6 +3,8 @@
 
 {% block head %}
 <link rel="stylesheet" href="/static/css/advisor.css"/>
+<link rel="stylesheet" href="/static/css/nutrition_score.css"/>
+<link rel="stylesheet" href="/static/css/weekly_summary.css"/>
 {% endblock %}
 
 {% block content %}
@@ -206,8 +208,13 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSi2jPyMtAn6rZe8XHVE0IPCbPhRV1YlCEq8g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/router.js"></script>
 <script src="/static/js/advisor.js"></script>
+<script src="/static/js/nutrition_score.js"></script>
+<script src="/static/js/weekly_summary.js"></script>
 <script src="/static/js/meal.js"></script>
 <script>
   // Set current month
@@ -256,4 +263,206 @@
     if (fe) fe.classList.add('hidden');
   }
 </script>
+
+<!-- ══════════════════════════════════════════════════════════
+     Recipe QR Modal
+     ══════════════════════════════════════════════════════════ -->
+<div id="recipeQRModal"
+     hidden
+     role="dialog"
+     aria-labelledby="recipeQRTitle"
+     aria-describedby="recipeQRDesc"
+     class="qrm-backdrop"
+     onclick="if(event.target===this)closeRecipeQR()">
+
+  <div class="qrm-panel" role="document">
+
+    <!-- Header -->
+    <div class="qrm-header">
+      <div class="qrm-header-text">
+        <p class="qrm-kicker">Scan to open recipe</p>
+        <h2 class="qrm-title" id="recipeQRTitle">Recipe</h2>
+      </div>
+      <button onclick="closeRecipeQR()"
+              id="recipeQRClose"
+              class="qrm-close"
+              aria-label="Close QR modal">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- QR canvas -->
+    <div class="qrm-qr-wrap">
+      <div id="recipeQRCanvas" class="qrm-canvas" aria-label="QR code"></div>
+      <p class="qrm-scan-hint" id="recipeQRDesc">Point your phone camera at the code to open the recipe page.</p>
+    </div>
+
+    <!-- Direct link -->
+    <div class="qrm-link-row">
+      <a id="recipeQRLink"
+         href="#"
+         target="_blank"
+         rel="noopener"
+         class="qrm-link"
+         aria-label="Open recipe page in new tab">
+        Open recipe page ↗
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ── QR Modal styles (scoped to qrm- prefix) ─────────────────── */
+.qrm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: qrmFadeIn 180ms ease-out;
+}
+
+@keyframes qrmFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.qrm-backdrop[hidden] { display: none !important; }
+
+.qrm-panel {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.22);
+  overflow: hidden;
+  animation: qrmSlideUp 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes qrmSlideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+.qrm-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.1rem 1.25rem 0.9rem;
+  background: linear-gradient(135deg, #0F5E46, #1D9E75);
+  color: white;
+}
+
+.qrm-kicker {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 0.2rem;
+}
+
+.qrm-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: white;
+  margin: 0;
+  word-break: break-word;
+}
+
+.qrm-close {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 140ms ease;
+  margin-top: 0.1rem;
+}
+
+.qrm-close:hover { background: rgba(255,255,255,0.28); }
+.qrm-close:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.qrm-qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.4rem 1.25rem 0.9rem;
+}
+
+.qrm-canvas {
+  border-radius: 0.85rem;
+  overflow: hidden;
+  border: 3px solid #D1FAE5;
+  box-shadow: 0 8px 24px rgba(15, 94, 70, 0.12);
+  /* qrcode.js renders an img inside — make it fit */
+  line-height: 0;
+}
+
+.qrm-canvas img,
+.qrm-canvas canvas {
+  display: block;
+  border-radius: 0.6rem;
+}
+
+.qrm-scan-hint {
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  color: #64748B;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 22ch;
+}
+
+.qrm-link-row {
+  padding: 0 1.25rem 1.25rem;
+  text-align: center;
+}
+
+.qrm-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1D9E75;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: #ECFDF5;
+  border: 1px solid #BBF7D0;
+  transition: background 130ms ease;
+  word-break: break-all;
+}
+
+.qrm-link:hover {
+  background: #D1FAE5;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .qrm-backdrop, .qrm-panel { animation: none !important; }
+}
+</style>
+
 {% endblock %}

@@ -298,13 +298,31 @@ function portionBlock(meal, label) {
     : '';
   const m = estimateMacros(meal.calories, meal.protein_g);
 
+  // Recipe URL — encodes spaces as underscores to match the /recipes/ route
+  const recipeSlug = encodeURIComponent(meal.name_en.replace(/ /g, '_'));
+  const recipeUrl  = `${location.origin}/recipes/${recipeSlug}`;
+
   return `<div class="meal-portion-card">
     <div class="meal-portion-header">${label}</div>
     <div class="portion-item gap-3">
       ${foodImgHtml(meal.name_en, 'w-14 h-14', 'cover')}
       <div class="flex-1 min-w-0">
-        <p class="font-bold text-gray-900 text-sm leading-tight">${escStr(meal.name_en)}</p>
-        ${nameKn}
+        <div class="flex items-start justify-between gap-1">
+          <div class="min-w-0">
+            <p class="font-bold text-gray-900 text-sm leading-tight">${escStr(meal.name_en)}</p>
+            ${nameKn}
+          </div>
+          <div class="flex items-center gap-1 flex-shrink-0 ml-1">
+            <a href="${recipeUrl}" target="_blank" rel="noopener"
+               title="View recipe for ${escStr(meal.name_en)}"
+               class="flex h-6 w-6 items-center justify-center rounded-md border border-primary/30 text-primary hover:bg-primary hover:text-white transition text-xs"
+               aria-label="Open recipe for ${escStr(meal.name_en)}">🍽</a>
+            <button onclick="openRecipeQR(${JSON.stringify(meal.name_en)}, ${JSON.stringify(recipeUrl)})"
+               title="QR code for ${escStr(meal.name_en)} recipe"
+               class="flex h-6 w-6 items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:bg-slate-100 transition text-xs"
+               aria-label="Show QR code for ${escStr(meal.name_en)} recipe">⬜</button>
+          </div>
+        </div>
         ${ingredients ? `<p class="text-xs text-gray-400 mt-0.5 truncate">${escStr(ingredients)}</p>` : ''}
         <div class="portion-macros mt-1.5">
           <span class="macro-chip macro-cal">🔥${Math.round(meal.calories)}cal</span>
@@ -484,6 +502,12 @@ function renderMealPlan(plan) {
       ${nutrientRing('🩸','Iron',      plan.avg_iron_mg,'mg/day')}
     </div>
 
+    <!-- Nutrition Score (populated after innerHTML set) -->
+    <div id="nutritionScoreContainer"></div>
+
+    <!-- Weekly Nutrition Summary (populated after innerHTML set) -->
+    <div id="weeklySummaryContainer"></div>
+
     <!-- Budget + source row -->
     <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
       <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-4 py-1.5 text-xs font-bold text-green-700">
@@ -534,6 +558,18 @@ function renderMealPlan(plan) {
 
   container.classList.remove('hidden');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Render Nutrition Score card
+  const scoreEl = document.getElementById('nutritionScoreContainer');
+  if (scoreEl && typeof renderNutritionScore === 'function') {
+    renderNutritionScore(scoreEl, plan);
+  }
+
+  // Render Weekly Nutrition Summary (directly below score)
+  const summaryEl = document.getElementById('weeklySummaryContainer');
+  if (summaryEl && typeof renderWeeklySummary === 'function') {
+    renderWeeklySummary(summaryEl, plan);
+  }
 
   // Show advisor if not yet rendered
   if (window.NutriPrintAdvisor) {
@@ -761,4 +797,64 @@ window.addEventListener('DOMContentLoaded', () => {
       loadPlanByToken(token);
     }
   });
+});
+
+// ── Recipe QR modal ────────────────────────────────────────────────────────────
+
+/**
+ * Opens the QR modal for a given food name + recipe URL.
+ * Generates the QR code via qrcode.js (loaded in meal_planner.html).
+ * Does not touch any meal generation logic.
+ */
+function openRecipeQR(foodName, recipeUrl) {
+  const modal   = document.getElementById('recipeQRModal');
+  const title   = document.getElementById('recipeQRTitle');
+  const canvas  = document.getElementById('recipeQRCanvas');
+  const linkEl  = document.getElementById('recipeQRLink');
+
+  if (!modal || !canvas) return;
+
+  // Update title and direct link
+  title.textContent = foodName;
+  linkEl.href       = recipeUrl;
+  linkEl.textContent = recipeUrl;
+
+  // Clear previous QR
+  canvas.innerHTML = '';
+
+  // Generate QR — QRCode is loaded via CDN script in meal_planner.html
+  if (typeof QRCode !== 'undefined') {
+    new QRCode(canvas, {
+      text          : recipeUrl,
+      width         : 220,
+      height        : 220,
+      colorDark     : '#0F5E46',
+      colorLight    : '#FFFFFF',
+      correctLevel  : QRCode.CorrectLevel.M,
+    });
+  } else {
+    canvas.innerHTML = '<p class="text-sm text-slate-500 text-center p-4">QR library not loaded.</p>';
+  }
+
+  // Show modal
+  modal.removeAttribute('hidden');
+  modal.setAttribute('aria-modal', 'true');
+  document.body.style.overflow = 'hidden';
+
+  // Focus the close button for accessibility
+  const closeBtn = document.getElementById('recipeQRClose');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeRecipeQR() {
+  const modal = document.getElementById('recipeQRModal');
+  if (!modal) return;
+  modal.setAttribute('hidden', '');
+  modal.removeAttribute('aria-modal');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click and Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeRecipeQR();
 });
