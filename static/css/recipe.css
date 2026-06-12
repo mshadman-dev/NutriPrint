@@ -1,0 +1,615 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   NutriPrint — Recipe Page Styles
+   Namespaced with rp- to avoid collisions.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Hero banner ───────────────────────────────────────────────────────────── */
+.rp-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #0F5E46 0%, #1D9E75 55%, #136B4F 100%);
+  color: white;
+  padding: 2rem;
+  box-shadow: 0 24px 60px rgba(15, 94, 70, 0.2);
+}
+
+.rp-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 30%, rgba(255,255,255,0.1), transparent 30%),
+    radial-gradient(circle at 85% 60%, rgba(249,115,22,0.14), transparent 30%);
+  pointer-events: none;
+}
+
+.rp-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .rp-hero-inner {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+.rp-food-image-wrap {
+  position: relative;
+  width: clamp(120px, 22vw, 180px);
+  height: clamp(120px, 22vw, 180px);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rp-food-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rp-food-image-wrap .rp-emoji-fallback {
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1;
+}
+
+.rp-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: color 150ms ease;
+}
+
+.rp-back-link:hover {
+  color: white;
+}
+
+.rp-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 0.35rem;
+}
+
+.rp-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.4rem;
+}
+
+.rp-title-kn {
+  font-family: 'Noto Sans Kannada', sans-serif;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 0.75rem;
+}
+
+.rp-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.88);
+  max-width: 55ch;
+}
+
+/* ── Meta badges ───────────────────────────────────────────────────────────── */
+.rp-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.rp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.rp-badge-glass {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  backdrop-filter: blur(6px);
+}
+
+.rp-badge-diet-vegetarian { background: #D1FAE5; color: #065F46; }
+.rp-badge-diet-eggetarian { background: #FEF3C7; color: #92400E; }
+.rp-badge-diet-nonveg { background: #FEE2E2; color: #991B1B; }
+
+/* ── Nutrition section ─────────────────────────────────────────────────────── */
+.rp-nut-section {
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.5rem;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+  margin-top: 1.5rem;
+  animation: rpFadeUp 300ms ease-out both;
+}
+
+.rp-nut-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.1rem 1.35rem;
+  background: linear-gradient(90deg, #F0FDF4, #ECFDF5);
+  border-bottom: 1px solid #D1FAE5;
+}
+
+.rp-nut-section-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.75rem;
+  background: #D1FAE5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.rp-nut-section-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #065F46;
+  letter-spacing: -0.01em;
+}
+
+.rp-nut-section-sub {
+  font-size: 0.72rem;
+  color: #6EE7B7;
+  font-weight: 600;
+  margin-top: 0.05rem;
+}
+
+/* ── Four nutrient tiles ───────────────────────────────────────────────────── */
+.rp-nut-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+@media (min-width: 640px) {
+  .rp-nut-cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.rp-nut-tile {
+  padding: 1.1rem 1rem 1rem;
+  border-right: 1px solid rgba(148, 163, 184, 0.12);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: background 140ms ease;
+}
+
+/* Remove right border on last of each row */
+.rp-nut-tile:nth-child(2n)  { border-right: none; }
+@media (min-width: 640px) {
+  .rp-nut-tile:nth-child(2n)  { border-right: 1px solid rgba(148, 163, 184, 0.12); }
+  .rp-nut-tile:nth-child(4n)  { border-right: none; }
+}
+
+/* Remove bottom border on tiles in last row */
+.rp-nut-tile:nth-child(n+3) { border-bottom: none; }
+@media (min-width: 640px) {
+  .rp-nut-tile:nth-child(n+3) { border-bottom: 1px solid rgba(148, 163, 184, 0.12); }
+  .rp-nut-tile:nth-child(n+2) { border-bottom: none; }
+}
+
+.rp-nut-tile:hover { background: #FAFBFC; }
+
+/* Colour-coded left accent */
+.rp-nut-tile--cal { border-left: 3px solid #F97316; }
+.rp-nut-tile--pro { border-left: 3px solid #3B82F6; }
+.rp-nut-tile--ca  { border-left: 3px solid #8B5CF6; }
+.rp-nut-tile--fe  { border-left: 3px solid #EF4444; }
+
+.rp-nut-tile-top {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.rp-nut-tile-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.rp-nut-tile-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748B;
+}
+
+.rp-nut-tile-value {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: 1.45rem;
+  line-height: 1;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+}
+
+.rp-nut-tile-unit {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.55;
+}
+
+/* Progress bar */
+.rp-nut-bar-track {
+  height: 5px;
+  background: #F1F5F9;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 0.1rem;
+}
+
+.rp-nut-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rp-nut-bar--cal { background: linear-gradient(90deg, #FB923C, #F97316); }
+.rp-nut-bar--pro { background: linear-gradient(90deg, #60A5FA, #3B82F6); }
+.rp-nut-bar--ca  { background: linear-gradient(90deg, #A78BFA, #8B5CF6); }
+.rp-nut-bar--fe  { background: linear-gradient(90deg, #F87171, #EF4444); }
+
+.rp-nut-dv {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #94A3B8;
+  margin-top: 0.05rem;
+}
+
+/* ── Secondary macros row ──────────────────────────────────────────────────── */
+.rp-nut-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  background: #FAFBFC;
+}
+
+.rp-nut-secondary-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  flex: 1 1 120px;
+  border-right: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.rp-nut-secondary-item:last-child {
+  border-right: none;
+}
+
+.rp-nut-secondary-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.rp-nut-secondary-value {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #1D9E75;
+  white-space: nowrap;
+}
+
+.rp-nut-secondary-unit {
+  font-size: 0.65rem;
+  font-weight: 600;
+  opacity: 0.65;
+  margin-left: 0.05rem;
+}
+
+/* ── Content grid ──────────────────────────────────────────────────────────── */
+.rp-content-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .rp-content-grid {
+    grid-template-columns: 1fr 1.4fr;
+    align-items: start;
+  }
+}
+
+/* ── Section card ──────────────────────────────────────────────────────────── */
+.rp-section-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.5rem;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+  animation: rpFadeUp 300ms ease-out both;
+}
+
+.rp-section-card:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+@keyframes rpFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  background: linear-gradient(90deg, #F0FDF4, #ECFDF5);
+  border-bottom: 1px solid #D1FAE5;
+}
+
+.rp-section-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.75rem;
+  background: #D1FAE5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.rp-section-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #065F46;
+  letter-spacing: -0.01em;
+}
+
+.rp-section-subtitle {
+  font-size: 0.72rem;
+  color: #6EE7B7;
+  font-weight: 600;
+  margin-top: 0.05rem;
+}
+
+.rp-section-body {
+  padding: 1.25rem;
+}
+
+/* ── Ingredients list ──────────────────────────────────────────────────────── */
+.rp-ingredients-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rp-ingredient-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.85rem;
+  background: #F8FAF9;
+  border: 1px solid rgba(29, 158, 117, 0.1);
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.45;
+  transition: background 130ms ease, border-color 130ms ease;
+}
+
+.rp-ingredient-item:hover {
+  background: #F0FDF4;
+  border-color: rgba(29, 158, 117, 0.22);
+}
+
+.rp-ingredient-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1D9E75;
+  flex-shrink: 0;
+  margin-top: 0.38rem;
+}
+
+/* ── Preparation steps ─────────────────────────────────────────────────────── */
+.rp-steps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.rp-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  animation: rpFadeUp 280ms ease-out both;
+}
+
+.rp-step-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rp-step-number {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1D9E75, #0F5E46);
+  color: white;
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(29, 158, 117, 0.25);
+}
+
+.rp-step-text {
+  flex: 1;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #334155;
+  padding-top: 0.2rem;
+}
+
+/* ── Highlights panel ──────────────────────────────────────────────────────── */
+.rp-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.rp-highlight-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 9999px;
+  background: #ECFDF5;
+  border: 1px solid #BBF7D0;
+  color: #065F46;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* ── Not found state ───────────────────────────────────────────────────────── */
+.rp-not-found {
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.rp-not-found-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.rp-not-found-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #0F172A;
+  margin-bottom: 0.5rem;
+}
+
+.rp-not-found-sub {
+  font-size: 0.9rem;
+  color: #64748B;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Catalog link card ─────────────────────────────────────────────────────── */
+.rp-more-foods {
+  margin-top: 1.5rem;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(148,163,184,0.16);
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  box-shadow: 0 10px 28px rgba(15,23,42,0.04);
+}
+
+.rp-more-foods-text {
+  font-size: 0.88rem;
+  color: #475569;
+}
+
+.rp-more-foods-text strong {
+  display: block;
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  color: #0F172A;
+  font-size: 0.95rem;
+  margin-bottom: 0.15rem;
+}
+
+/* ── Mobile adjustments ────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .rp-hero {
+    padding: 1.25rem;
+  }
+
+  .rp-section-body {
+    padding: 1rem;
+  }
+
+  .rp-food-image-wrap {
+    width: 100px;
+    height: 100px;
+  }
+
+  .rp-step-text {
+    font-size: 0.84rem;
+  }
+
+  .rp-nut-section-header {
+    padding: 0.9rem 1rem;
+  }
+
+  .rp-nut-tile {
+    padding: 0.9rem 0.85rem 0.85rem;
+  }
+
+  .rp-nut-tile-value {
+    font-size: 1.2rem;
+  }
+
+  .rp-hero-inner {
+    grid-template-columns: 1fr;
+  }
+}

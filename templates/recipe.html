@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% block title %}{{ food.name_en }} Recipe — NutriPrint{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/recipe.css"/>
+{% endblock %}
+
+{% block content %}
+
+{% if food %}
+
+{# ── Hero banner ─────────────────────────────────────────────────────────── #}
+<section class="rp-hero">
+  <div class="rp-hero-inner">
+    <div>
+      <a href="/food-catalog" class="rp-back-link" aria-label="Back to food catalog">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Food Catalog
+      </a>
+
+      <div class="rp-kicker">Recipe</div>
+
+      <h1 class="rp-title">{{ food.name_en }}</h1>
+      {% if food.name_kn %}
+      <div class="rp-title-kn kn" lang="kn">{{ food.name_kn }}</div>
+      {% endif %}
+
+      {% if food.description_en %}
+      <p class="rp-description">{{ food.description_en }}</p>
+      {% endif %}
+
+      {# Meta badges #}
+      <div class="rp-meta-row">
+        {% if food.prep_time_min %}
+        <span class="rp-badge rp-badge-glass">
+          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+          {{ food.prep_time_min }} min
+        </span>
+        {% endif %}
+
+        {% if food.cost_inr %}
+        <span class="rp-badge rp-badge-glass">
+          ₹{{ food.cost_inr }} / serving
+        </span>
+        {% endif %}
+
+        {% if food.diet_type %}
+        <span class="rp-badge
+          {%- if food.diet_type == 'vegetarian' %} rp-badge-diet-vegetarian
+          {%- elif food.diet_type == 'eggetarian' %} rp-badge-diet-eggetarian
+          {%- else %} rp-badge-diet-nonveg
+          {%- endif %}">
+          {%- if food.diet_type == 'vegetarian' %}🌿 Vegetarian
+          {%- elif food.diet_type == 'eggetarian' %}🥚 Eggetarian
+          {%- else %}🍗 Non-Veg
+          {%- endif %}
+        </span>
+        {% endif %}
+
+        {% if food.meal_type %}
+          {% for mt in food.meal_type %}
+          <span class="rp-badge rp-badge-glass">{{ mt | capitalize }}</span>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    {# Food image #}
+    <div class="rp-food-image-wrap" aria-hidden="true">
+      {% if food.image_file %}
+      <img
+        src="/static/images/foods/{{ food.image_file }}"
+        alt="{{ food.name_en }}"
+        loading="lazy"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+      />
+      <span class="rp-emoji-fallback" style="display:none">{{ food.image_emoji or '🍽️' }}</span>
+      {% else %}
+      <span class="rp-emoji-fallback">{{ food.image_emoji or '🍽️' }}</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{# ── Nutrition section ────────────────────────────────────────────────────── #}
+<section class="rp-nut-section" aria-labelledby="nutrition-heading">
+  <div class="rp-nut-section-header">
+    <div class="rp-nut-section-icon" aria-hidden="true">📊</div>
+    <div>
+      <h2 class="rp-nut-section-title" id="nutrition-heading">Nutrition Information</h2>
+      <p class="rp-nut-section-sub">Per 100g serving · sourced from food database</p>
+    </div>
+  </div>
+
+  <div class="rp-nut-cards-grid" role="list" aria-label="Nutrition values per 100g">
+
+    {# Calories #}
+    {% set cal_pct = [(food.calories_per_100g / 500 * 100) | round | int, 100] | min %}
+    <div class="rp-nut-tile rp-nut-tile--cal" role="listitem">
+      <div class="rp-nut-tile-top">
+        <span class="rp-nut-tile-icon" aria-hidden="true">🔥</span>
+        <span class="rp-nut-tile-label">Calories</span>
+      </div>
+      <div class="rp-nut-tile-value">
+        {{ food.calories_per_100g }}<span class="rp-nut-tile-unit"> kcal</span>
+      </div>
+      <div class="rp-nut-bar-track" role="presentation">
+        <div class="rp-nut-bar-fill rp-nut-bar--cal" style="width: {{ cal_pct }}%" aria-hidden="true"></div>
+      </div>
+      <div class="rp-nut-dv">{{ cal_pct }}% of 500 kcal ref.</div>
+    </div>
+
+    {# Protein #}
+    {% set pro_pct = [(food.protein_g / 25 * 100) | round | int, 100] | min %}
+    <div class="rp-nut-tile rp-nut-tile--pro" role="listitem">
+      <div class="rp-nut-tile-top">
+        <span class="rp-nut-tile-icon" aria-hidden="true">💪</span>
+        <span class="rp-nut-tile-label">Protein</span>
+      </div>
+      <div class="rp-nut-tile-value">
+        {{ food.protein_g }}<span class="rp-nut-tile-unit">g</span>
+      </div>
+      <div class="rp-nut-bar-track" role="presentation">
+        <div class="rp-nut-bar-fill rp-nut-bar--pro" style="width: {{ pro_pct }}%" aria-hidden="true"></div>
+      </div>
+      <div class="rp-nut-dv">{{ pro_pct }}% of 25g ref.</div>
+    </div>
+
+    {# Calcium #}
+    {% set cal_mg_pct = [(food.calcium_mg / 800 * 100) | round | int, 100] | min %}
+    <div class="rp-nut-tile rp-nut-tile--ca" role="listitem">
+      <div class="rp-nut-tile-top">
+        <span class="rp-nut-tile-icon" aria-hidden="true">🦴</span>
+        <span class="rp-nut-tile-label">Calcium</span>
+      </div>
+      <div class="rp-nut-tile-value">
+        {{ food.calcium_mg }}<span class="rp-nut-tile-unit">mg</span>
+      </div>
+      <div class="rp-nut-bar-track" role="presentation">
+        <div class="rp-nut-bar-fill rp-nut-bar--ca" style="width: {{ cal_mg_pct }}%" aria-hidden="true"></div>
+      </div>
+      <div class="rp-nut-dv">{{ cal_mg_pct }}% of 800mg ref.</div>
+    </div>
+
+    {# Iron #}
+    {% set iron_pct = [(food.iron_mg / 17 * 100) | round | int, 100] | min %}
+    <div class="rp-nut-tile rp-nut-tile--fe" role="listitem">
+      <div class="rp-nut-tile-top">
+        <span class="rp-nut-tile-icon" aria-hidden="true">🩸</span>
+        <span class="rp-nut-tile-label">Iron</span>
+      </div>
+      <div class="rp-nut-tile-value">
+        {{ food.iron_mg }}<span class="rp-nut-tile-unit">mg</span>
+      </div>
+      <div class="rp-nut-bar-track" role="presentation">
+        <div class="rp-nut-bar-fill rp-nut-bar--fe" style="width: {{ iron_pct }}%" aria-hidden="true"></div>
+      </div>
+      <div class="rp-nut-dv">{{ iron_pct }}% of 17mg ref.</div>
+    </div>
+
+  </div>{# /.rp-nut-cards-grid #}
+
+  {# Secondary macros row #}
+  {% if food.carbs_g or food.fat_g or food.fiber_g %}
+  <div class="rp-nut-secondary" role="list" aria-label="Additional nutrition details">
+    {% if food.carbs_g %}
+    <div class="rp-nut-secondary-item" role="listitem">
+      <span class="rp-nut-secondary-label">Carbohydrates</span>
+      <span class="rp-nut-secondary-value">{{ food.carbs_g }}<span class="rp-nut-secondary-unit">g</span></span>
+    </div>
+    {% endif %}
+    {% if food.fat_g %}
+    <div class="rp-nut-secondary-item" role="listitem">
+      <span class="rp-nut-secondary-label">Fat</span>
+      <span class="rp-nut-secondary-value">{{ food.fat_g }}<span class="rp-nut-secondary-unit">g</span></span>
+    </div>
+    {% endif %}
+    {% if food.fiber_g %}
+    <div class="rp-nut-secondary-item" role="listitem">
+      <span class="rp-nut-secondary-label">Dietary Fibre</span>
+      <span class="rp-nut-secondary-value">{{ food.fiber_g }}<span class="rp-nut-secondary-unit">g</span></span>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+</section>
+
+{# ── Main content: Ingredients + Steps ───────────────────────────────────── #}
+<div class="rp-content-grid">
+
+  {# Ingredients #}
+  <article class="rp-section-card" aria-labelledby="ingredients-heading">
+    <div class="rp-section-header">
+      <div class="rp-section-icon" aria-hidden="true">🥄</div>
+      <div>
+        <h2 class="rp-section-title" id="ingredients-heading">Ingredients</h2>
+        <div class="rp-section-subtitle">{{ recipe.ingredients | length }} items</div>
+      </div>
+    </div>
+
+    <div class="rp-section-body">
+      {% if recipe.ingredients %}
+      <ul class="rp-ingredients-list" aria-label="Ingredient list">
+        {% for item in recipe.ingredients %}
+        <li class="rp-ingredient-item">
+          <span class="rp-ingredient-dot" aria-hidden="true"></span>
+          {{ item }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-sm text-slate-500">Ingredient details not available.</p>
+      {% endif %}
+    </div>
+
+    {# Highlights #}
+    {% if food.highlights %}
+    <div class="rp-highlights" role="list" aria-label="Food highlights">
+      {% for tag in food.highlights %}
+      <span class="rp-highlight-tag" role="listitem">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        </svg>
+        {{ tag | replace('-', ' ') | title }}
+      </span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </article>
+
+  {# Preparation Steps #}
+  <article class="rp-section-card" aria-labelledby="steps-heading">
+    <div class="rp-section-header">
+      <div class="rp-section-icon" aria-hidden="true">👨‍🍳</div>
+      <div>
+        <h2 class="rp-section-title" id="steps-heading">Preparation Steps</h2>
+        <div class="rp-section-subtitle">{{ recipe.steps | length }} steps</div>
+      </div>
+    </div>
+
+    <div class="rp-section-body">
+      {% if recipe.steps %}
+      <ol class="rp-steps-list" aria-label="Preparation steps">
+        {% for step in recipe.steps %}
+        <li class="rp-step-item" style="animation-delay: {{ loop.index0 * 40 }}ms">
+          <span class="rp-step-number" aria-label="Step {{ loop.index }}">{{ loop.index }}</span>
+          <p class="rp-step-text">{{ step }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="text-sm text-slate-500">Preparation steps not available.</p>
+      {% endif %}
+    </div>
+  </article>
+
+</div>
+
+{# ── Browse more foods ────────────────────────────────────────────────────── #}
+<div class="rp-more-foods">
+  <div class="rp-more-foods-text">
+    <strong>Explore more Karnataka foods</strong>
+    Browse nutrition cards, filter by diet, region, or meal type.
+  </div>
+  <a href="/food-catalog" class="btn-primary px-5 py-2.5 text-sm">
+    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h8"/>
+    </svg>
+    Food Catalog
+  </a>
+</div>
+
+{% else %}
+
+{# ── Not found state ─────────────────────────────────────────────────────── #}
+<div class="rp-not-found">
+  <div class="rp-not-found-icon">🍽️</div>
+  <h1 class="rp-not-found-title">Food not found</h1>
+  <p class="rp-not-found-sub">
+    We couldn't find <strong>{{ food_name }}</strong> in our catalog.
+  </p>
+  <a href="/food-catalog" class="btn-primary px-6 py-3">Browse all foods</a>
+</div>
+
+{% endif %}
+
+{% endblock %}
