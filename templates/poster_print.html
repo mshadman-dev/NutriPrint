@@ -394,7 +394,10 @@ body {
       <p>Yenepoya Institute of Technology, Moodbidri · ICMR RDA Standards</p>
     </div>
     <div style="text-align:right">
-      <img src="/api/plans/qr/{{ base_url }}plan/{{ share_token }}" alt="QR Code" style="width:45px;height:45px;border-radius:4px"/>
+      {% set plan_url = base_url + 'plan/' + share_token %}
+      <img src="/api/plans/qr?url={{ plan_url }}" alt="QR Code"
+        style="width:45px;height:45px;border-radius:4px"
+        onerror="this.parentNode.innerHTML='<span style=\'font-size:7px;color:#9CA3AF\'>QR unavailable</span>'"/>
       <p style="font-size:6.5px;color:#9CA3AF;margin-top:2px">Scan to open</p>
     </div>
   </div>

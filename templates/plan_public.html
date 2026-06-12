@@ -39,8 +39,14 @@
         </div>
       </div>
       <div class="bg-white rounded-xl p-3 text-center self-start no-print">
-        <img src="/api/plans/qr/{{ base_url }}plan/{{ share_token }}"
-          alt="QR Code — scan to open meal plan" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto"/>
+        {% set plan_url = base_url + 'plan/' + share_token %}
+        <img src="/api/plans/qr?url={{ plan_url }}"
+          alt="QR Code — scan to open meal plan"
+          class="w-20 h-20 sm:w-24 sm:h-24 mx-auto"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div style="display:none" class="w-20 h-20 sm:w-24 sm:h-24 mx-auto items-center justify-center rounded-lg bg-slate-100 text-xs text-slate-400 text-center p-2">
+          QR unavailable
+        </div>
         <p class="text-gray-500 text-xs mt-1">Scan to open</p>
       </div>
     </div>

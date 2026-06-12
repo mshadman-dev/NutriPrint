@@ -126,11 +126,26 @@ async def poster_print(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/api/plans/qr/{qr_code_string}")
-async def plan_qr(qr_code_string: str):
+@router.get("/api/plans/qr")
+async def plan_qr(url: str):
+    """
+    Generate a QR code PNG for the given URL.
+    The URL to encode is passed as a query parameter:
+        /api/plans/qr?url=https://...
+    This avoids FastAPI path-parameter slash-splitting bugs that broke
+    the previous  /api/plans/qr/{qr_code_string}  route.
+    """
+    if not url:
+        raise HTTPException(status_code=400, detail="url parameter is required")
+
     try:
-        qr = qrcode.QRCode(version=1, box_size=10, border=4)
-        qr.add_data(qr_code_string)
+        qr = qrcode.QRCode(
+            version          = None,   # auto-size
+            error_correction = qrcode.constants.ERROR_CORRECT_M,
+            box_size         = 8,
+            border           = 4,
+        )
+        qr.add_data(url)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
 
@@ -138,7 +153,14 @@ async def plan_qr(qr_code_string: str):
         img.save(buffer, format="PNG")
         buffer.seek(0)
 
-        return StreamingResponse(buffer, media_type="image/png")
+        return StreamingResponse(
+            buffer,
+            media_type="image/png",
+            headers={
+                # Allow caching for 1 hour — QR for a given URL never changes
+                "Cache-Control": "public, max-age=3600",
+            },
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
