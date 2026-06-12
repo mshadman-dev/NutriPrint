@@ -183,7 +183,24 @@ function initAllAnimations() {
   initWaves();
 }
 
-// Start immediately on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  initAllAnimations();
-});
+// Wait for splash to finish before running page animations.
+// If splash was skipped (sessionStorage), splashDone fires immediately
+// or the DOMContentLoaded fallback takes over.
+(function () {
+  let ran = false;
+  function runOnce () {
+    if (ran) return;
+    ran = true;
+    initAllAnimations();
+  }
+  // Fired by splash.js when done
+  document.addEventListener('splashDone', runOnce);
+  // Safety: if splash is absent or never fires, run on DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const splash = document.getElementById('splashScreen');
+    // If splash doesn't exist or is already hidden, run immediately
+    if (!splash || splash.style.display === 'none') runOnce();
+    // Hard fallback: always run within 3.5s
+    setTimeout(runOnce, 3500);
+  });
+})();

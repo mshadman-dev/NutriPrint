@@ -1,87 +1,319 @@
-{% from "partials/poster_macros.html" import food_icon, nutrient_stat, meal_portion, food_equivalents_section %}
+{% from "partials/poster_macros.html" import food_icon, meal_portion_print %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NutriPrint — {{ plan.student_name }}'s Poster</title>
-<link rel="stylesheet" href="/static/css/poster.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<title>NutriPrint — {{ plan.student_name }} ಪೋಷಣೆ ಪೋಸ್ಟರ್</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700;800&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Poppins', 'Noto Sans Kannada', sans-serif; background: white; color: #1A1A2E; font-size: 10px; }
-  .page { width: 210mm; min-height: 297mm; padding: 10mm; background: white; margin: 0 auto; }
-  .kn { font-family: 'Noto Sans Kannada', sans-serif; }
-  @media print {
-    body { background: white; }
-    .page { width: 100%; padding: 0; margin: 0; }
-    .no-print { display: none; }
-  }
-  @media screen {
-    body { background: #F3F4F6; padding: 1rem; }
-    .no-print { text-align: center; margin-bottom: 1rem; }
-  }
+/* ── Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+/* ── Fonts ── */
+body {
+  font-family: 'Poppins', 'Noto Sans Kannada', sans-serif;
+  background: #F3F4F6;
+  color: #1A1A2E;
+  font-size: 9.5px;
+  line-height: 1.4;
+}
+.kn { font-family: 'Noto Sans Kannada', sans-serif; font-weight: 600; }
+
+/* ── Page ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 8mm 10mm;
+  background: white;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ── Print overrides ── */
+@media print {
+  body  { background: white; }
+  .page { width: 100%; padding: 6mm 8mm; margin: 0; min-height: auto; }
+  .no-print { display: none !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media screen {
+  body { padding: 1rem; }
+  .no-print { text-align: center; margin-bottom: 1rem; }
+}
+
+/* ── Screen controls ── */
+.no-print-bar {
+  display: flex; gap: 0.75rem; align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 1rem;
+}
+.btn-print {
+  background: #1D9E75; color: white; border: none;
+  padding: 0.6rem 1.5rem; border-radius: 0.5rem;
+  font-weight: 700; cursor: pointer; font-size: 0.85rem;
+}
+.btn-back {
+  color: #1D9E75; font-weight: 600;
+  text-decoration: none; font-size: 0.85rem;
+}
+
+/* ── Header banner ── */
+.poster-header {
+  background: linear-gradient(135deg, #0F5E46 0%, #1D9E75 55%, #136B4F 100%);
+  border-radius: 8px;
+  color: white;
+  padding: 10px 14px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 7px;
+}
+.poster-header-left h1 { font-size: 17px; font-weight: 900; letter-spacing: -0.03em; }
+.poster-header-left p  { font-size: 8px; opacity: 0.85; margin-top: 1px; }
+.poster-header-right   { text-align: right; font-size: 8.5px; }
+.poster-header-right strong { font-size: 11px; display: block; margin-bottom: 2px; }
+
+/* ── Student card ── */
+.student-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  background: linear-gradient(135deg, #F0FDF4, #ECFDF5);
+  border: 1.5px solid #BBF7D0;
+  border-radius: 7px;
+  padding: 7px 10px;
+  margin-bottom: 7px;
+}
+.student-name  { font-size: 13px; font-weight: 800; color: #0F5E46; }
+.student-school { font-size: 8px; color: #065F46; margin-top: 1px; }
+.student-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.chip {
+  background: white; border: 1px solid #D1FAE5;
+  color: #065F46; padding: 2px 8px;
+  border-radius: 20px; font-size: 7.5px; font-weight: 700;
+}
+.chip-orange { background: #FFF7ED; border-color: #FED7AA; color: #9A3412; }
+.chip-blue   { background: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; }
+.chip-red    { background: #FEF2F2; border-color: #FECACA; color: #991B1B; }
+.chip-amber  { background: #FFFBEB; border-color: #FDE68A; color: #92400E; }
+
+/* ── BMI badge ── */
+.bmi-badge {
+  padding: 6px 10px; border-radius: 8px;
+  text-align: center; min-width: 60px;
+}
+.bmi-badge-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; }
+.bmi-badge-value { font-size: 14px; font-weight: 900; line-height: 1.1; }
+.bmi-badge-kn    { font-size: 7px; opacity: 0.8; }
+.bmi-normal      { background: #D1FAE5; color: #065F46; }
+.bmi-underweight { background: #DBEAFE; color: #1E40AF; }
+.bmi-overweight  { background: #FEF3C7; color: #92400E; }
+.bmi-obese       { background: #FEE2E2; color: #991B1B; }
+
+/* ── Nutrition summary ── */
+.nut-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-bottom: 7px;
+}
+.nut-cell {
+  background: #F8FAF9; border: 1px solid #E5E7EB;
+  border-radius: 6px; padding: 5px 4px;
+  text-align: center;
+}
+.nut-val  { font-size: 12px; font-weight: 800; color: #1D9E75; line-height: 1.1; }
+.nut-lbl  { font-size: 6.5px; color: #6B7280; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ── Progress bars (nutrition goals) ── */
+.goals-section { margin-bottom: 7px; }
+.goals-title { font-size: 9px; font-weight: 800; color: #1D9E75; margin-bottom: 4px; }
+.goal-row { margin-bottom: 4px; }
+.goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.goal-name  { font-size: 8px; font-weight: 700; color: #374151; }
+.goal-nums  { font-size: 7.5px; color: #6B7280; font-weight: 600; }
+.goal-track { height: 6px; background: #E5E7EB; border-radius: 99px; overflow: hidden; }
+.goal-fill  { height: 100%; border-radius: 99px; }
+.goal-fix   { font-size: 7px; color: #6B7280; margin-top: 1.5px; }
+.goal-fix .kn { font-size: 6.5px; color: #F97316; }
+
+/* ── Food guide (compact) ── */
+.food-guide-title { font-size: 9px; font-weight: 800; color: #1D9E75; margin-bottom: 4px; }
+.food-guide-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 7px; }
+.food-guide-card  {
+  background: #F8FAF9; border: 1px solid #E5E7EB;
+  border-radius: 5px; padding: 5px 7px;
+}
+.fgc-title { font-size: 7.5px; font-weight: 800; color: #065F46; margin-bottom: 2px; }
+.fgc-row   { font-size: 7px; color: #6B7280; margin-bottom: 1px; }
+
+/* ── AI tips ── */
+.ai-tips {
+  background: #F0FDF4; border: 1px solid #BBF7D0;
+  border-radius: 6px; padding: 5px 8px;
+  margin-bottom: 7px;
+}
+.ai-tips-title { font-size: 8.5px; font-weight: 800; color: #065F46; margin-bottom: 3px; }
+.ai-tips-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px; }
+.ai-tip-row    { font-size: 7.5px; color: #166534; font-weight: 600; }
+
+/* ── Parent guidance ── */
+.parent-section {
+  background: linear-gradient(135deg, #FFF7ED, #FFFBEB);
+  border: 1.5px solid #FED7AA;
+  border-radius: 7px;
+  padding: 6px 9px;
+  margin-bottom: 7px;
+}
+.parent-title { font-size: 9px; font-weight: 800; color: #92400E; margin-bottom: 4px; }
+.parent-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.parent-item  { font-size: 7.5px; color: #78350F; font-weight: 600; }
+.parent-item::before { content: '▶ '; color: #F97316; }
+
+/* ── Meal table ── */
+.meal-table { width: 100%; border-collapse: collapse; margin-bottom: 7px; font-size: 8px; }
+.meal-table thead tr { background: #1D9E75; color: white; }
+.meal-table th { padding: 5px 5px; text-align: left; font-weight: 700; font-size: 8px; }
+.meal-table td { padding: 4px 5px; border-bottom: 1px solid #E5E7EB; vertical-align: top; }
+.meal-table tr:nth-child(even) td { background: #F8FAF9; }
+.day-cell-en { font-weight: 800; color: #1D9E75; font-size: 8px; }
+.day-cell-kn { font-size: 7px; color: #F97316; display: block; margin-top: 1px; }
+.meal-name   { font-weight: 700; color: #1A1A2E; }
+.meal-ingr   { font-size: 6.5px; color: #9CA3AF; display: block; margin-top: 1px; }
+.meal-macros { font-size: 6px; color: #6B7280; margin-top: 1px; }
+
+/* ── Footer ── */
+.poster-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #E5E7EB;
+  padding-top: 5px;
+  margin-top: 4px;
+}
+.footer-left p { font-size: 7.5px; color: #9CA3AF; margin-bottom: 1px; }
+.footer-left strong { color: #1D9E75; }
 </style>
 </head>
 <body>
 
-<div class="no-print">
-  <button onclick="window.print()" style="background:#1D9E75;color:white;border:none;padding:0.75rem 2rem;border-radius:0.5rem;font-weight:bold;cursor:pointer;margin-right:0.5rem">🖨️ Print</button>
-  <a href="/plan/{{ share_token }}" style="color:#1D9E75;font-weight:600">← Back to Plan</a>
+<!-- Screen-only controls -->
+<div class="no-print no-print-bar">
+  <button class="btn-print" onclick="window.print()">🖨️ Print Poster</button>
+  <a class="btn-back" href="/plan/{{ share_token }}">← Back to Plan</a>
+  <a class="btn-back" href="/report/{{ share_token }}">📊 Health Report</a>
 </div>
 
 <div class="page" id="poster">
 
-  <!-- Header -->
-  <div style="background:linear-gradient(135deg,#1D9E75,#0f5e46);color:white;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <!-- ① Header -->
+  <div class="poster-header">
+    <div class="poster-header-left">
+      <h1>🥗 NutriPrint</h1>
+      <p>AI-Powered School Nutrition · Karnataka · <span class="kn">ಕರ್ನಾಟಕ ಶಾಲಾ ಪೋಷಣೆ</span></p>
+    </div>
+    <div class="poster-header-right">
+      <strong>{{ plan.student_name }}</strong>
+      <span>{{ plan.school_name }}</span><br/>
+      <span>{{ plan.month | title }} · {{ plan.region | replace('_',' ') | title }}</span>
+    </div>
+  </div>
+
+  <!-- ② Student summary card -->
+  <div class="student-card">
     <div>
-      <h1 style="font-size:18px;font-weight:800">🥗 NutriPrint</h1>
-      <p style="font-size:9px;opacity:0.85">AI-Powered School Nutrition · Karnataka</p>
+      <div class="student-name">{{ plan.student_name }}</div>
+      <div class="student-school">{{ plan.school_name }}{% if plan.teacher_name %} · Teacher: {{ plan.teacher_name }}{% endif %}</div>
+      <div class="student-chips">
+        <span class="chip">📅 Age {{ plan.age_group }} yrs</span>
+        <span class="chip">🥗 {{ plan.diet_pref | title }}</span>
+        <span class="chip">📍 {{ plan.region | replace('_',' ') | title }}</span>
+        <span class="chip">📆 {{ plan.month | title }}</span>
+        <span class="chip chip-orange">✅ Under ₹150/day</span>
+        {% if plan.strategy == 'high_protein' %}
+        <span class="chip chip-blue">💪 High Protein</span>
+        {% elif plan.strategy == 'calcium_iron' %}
+        <span class="chip chip-blue">🦴 Calcium + Iron</span>
+        {% elif plan.strategy == 'calorie_control' %}
+        <span class="chip chip-amber">⚖️ Calorie Control</span>
+        {% endif %}
+      </div>
     </div>
-    <div style="text-align:right;font-size:9px">
-      <p><strong>{{ plan.student_name }}</strong></p>
-      <p>{{ plan.school_name }}</p>
-      <p>{{ plan.month | title }} · {{ plan.region | replace('_',' ') | title }}</p>
+    <!-- BMI badge -->
+    {% if plan.bmi_class %}
+    <div class="bmi-badge bmi-{{ plan.bmi_class }}">
+      <div class="bmi-badge-label">BMI Status</div>
+      <div class="bmi-badge-value">{{ plan.bmi_class | upper }}</div>
+      <div class="bmi-badge-kn kn">
+        {% if plan.bmi_class == 'normal' %}ಆರೋಗ್ಯಕರ{% elif plan.bmi_class == 'underweight' %}ಕಡಿಮೆ ತೂಕ{% elif plan.bmi_class == 'overweight' %}ಹೆಚ್ಚು ತೂಕ{% else %}ಸ್ಥೂಲಕಾಯ{% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ③ Nutrition summary -->
+  <div class="nut-grid">
+    <div class="nut-cell">
+      <div class="nut-val">🔥 {{ plan.avg_daily_cal|round(0)|int }}</div>
+      <div class="nut-lbl">kcal/day</div>
+    </div>
+    <div class="nut-cell">
+      <div class="nut-val">💪 {{ plan.avg_protein_g|round(1) }}g</div>
+      <div class="nut-lbl">Protein/day</div>
+    </div>
+    <div class="nut-cell">
+      <div class="nut-val">🦴 {{ plan.avg_calcium_mg|round(0)|int }}mg</div>
+      <div class="nut-lbl">Calcium/day</div>
+    </div>
+    <div class="nut-cell">
+      <div class="nut-val">🩸 {{ plan.avg_iron_mg|round(1) }}mg</div>
+      <div class="nut-lbl">Iron/day</div>
     </div>
   </div>
 
-  <!-- Info chips -->
-  <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
-    <span style="background:#F0FDF4;border:1px solid #BBF7D0;color:#065F46;padding:3px 10px;border-radius:20px;font-size:8px;font-weight:600">📅 Age: {{ plan.age_group }}</span>
-    <span style="background:#F0FDF4;border:1px solid #BBF7D0;color:#065F46;padding:3px 10px;border-radius:20px;font-size:8px;font-weight:600">🥗 {{ plan.diet_pref | title }}</span>
-    <span style="background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;padding:3px 10px;border-radius:20px;font-size:8px;font-weight:700">✅ Under ₹150/day</span>
-  </div>
-
-  <!-- Nutrition summary -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px">
-    <div style="background:#F8FAF9;border:1px solid #E5E7EB;border-radius:6px;padding:6px;text-align:center">
-      <div style="font-size:13px;font-weight:700;color:#1D9E75">🔥 {{ plan.avg_daily_cal|round(0)|int }}</div>
-      <div style="font-size:7px;color:#6B7280">kcal/day</div>
-    </div>
-    <div style="background:#F8FAF9;border:1px solid #E5E7EB;border-radius:6px;padding:6px;text-align:center">
-      <div style="font-size:13px;font-weight:700;color:#1D9E75">💪 {{ plan.avg_protein_g|round(1) }}g</div>
-      <div style="font-size:7px;color:#6B7280">Protein/day</div>
-    </div>
-    <div style="background:#F8FAF9;border:1px solid #E5E7EB;border-radius:6px;padding:6px;text-align:center">
-      <div style="font-size:13px;font-weight:700;color:#1D9E75">🦴 {{ plan.avg_calcium_mg|round(0)|int }}mg</div>
-      <div style="font-size:7px;color:#6B7280">Calcium/day</div>
-    </div>
-    <div style="background:#F8FAF9;border:1px solid #E5E7EB;border-radius:6px;padding:6px;text-align:center">
-      <div style="font-size:13px;font-weight:700;color:#1D9E75">🩸 {{ plan.avg_iron_mg|round(1) }}mg</div>
-      <div style="font-size:7px;color:#6B7280">Iron/day</div>
+  <!-- ④ Nutrition goals with progress bars -->
+  {% if nutrition_gaps %}
+  <div class="goals-section">
+    <div class="goals-title">🎯 Daily Nutrition Goals vs ICMR RDA · <span class="kn">ಪ್ರತಿದಿನ ಪೋಷಣೆ ಗುರಿ</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+      {% for g in nutrition_gaps %}
+      {% set pct = [g.percent, 100]|min %}
+      {% set bar_color = '#EF4444' if g.percent < 60 else ('#F97316' if g.percent < 85 else '#10B981') %}
+      {% set icon = '🔥' if g.key == 'calories' else ('💪' if g.key == 'protein_g' else ('🦴' if g.key == 'calcium_mg' else '🩸')) %}
+      <div class="goal-row">
+        <div class="goal-header">
+          <span class="goal-name">{{ icon }} {{ g.nutrient }} {{ g.status_label }}</span>
+          <span class="goal-nums">{{ g.getting }}/{{ g.needed }}{{ g.unit }}</span>
+        </div>
+        <div class="goal-track">
+          <div class="goal-fill" style="width:{{ pct }}%;background:{{ bar_color }}"></div>
+        </div>
+        {% if g.fix_en and g.status != 'good' %}
+        <div class="goal-fix">💡 {{ g.fix_en }}<br/><span class="kn">{{ g.fix_kn or '' }}</span></div>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
   </div>
+  {% endif %}
 
-  <!-- Food equivalents (compact) -->
+  <!-- ⑤ Food guide (compact 2-col) -->
   {% if food_equivalents %}
-  <div style="margin-bottom:8px">
-    <p style="font-size:9px;font-weight:700;color:#1D9E75;margin-bottom:4px">🍽️ Daily Nutrient Food Guide</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+  <div>
+    <div class="food-guide-title">🍽️ Food Serving Guide · <span class="kn">ಆಹಾರ ಪ್ರಮಾಣ ಮಾರ್ಗದರ್ಶಿ</span></div>
+    <div class="food-guide-grid">
       {% for eq in food_equivalents %}
-      <div style="background:#F8FAF9;border:1px solid #E5E7EB;border-radius:4px;padding:4px 6px">
-        <p style="font-size:7.5px;font-weight:700;color:#065F46">{{ eq.icon }} {{ eq.nutrient }}: {{ eq.target }}{{ eq.unit }}</p>
-        {% for ex in eq.examples[:2] %}
-        <p style="font-size:7px;color:#6B7280">{{ ex.display }}</p>
+      <div class="food-guide-card">
+        <div class="fgc-title">{{ eq.icon }} {{ eq.nutrient }}: {{ eq.target }}{{ eq.unit }}/day</div>
+        {% for ex in eq.examples[:3] %}
+        <div class="fgc-row">• {{ ex.display }}</div>
         {% endfor %}
       </div>
       {% endfor %}
@@ -89,45 +321,65 @@
   </div>
   {% endif %}
 
-  <!-- AI poster actions -->
+  <!-- ⑥ AI tips -->
   {% if ai_poster_recommendations %}
-  <div style="margin-bottom:8px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:6px;padding:6px 8px">
-    <p style="font-size:9px;font-weight:800;color:#065F46;margin-bottom:4px">AI Action Tips</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 8px">
-      {% for rec in ai_poster_recommendations[:5] %}
-      <p style="font-size:7.5px;color:#166534;font-weight:600">✓ {{ rec.short_action }}</p>
+  <div class="ai-tips">
+    <div class="ai-tips-title">🤖 AI Nutrition Tips · <span class="kn">AI ಪೋಷಣೆ ಸಲಹೆ</span></div>
+    <div class="ai-tips-grid">
+      {% for rec in ai_poster_recommendations %}
+      <div class="ai-tip-row">✓ {{ rec.short_action }}</div>
       {% endfor %}
     </div>
   </div>
   {% endif %}
 
-  <!-- 7-day table with portions -->
-  <table style="width:100%;border-collapse:collapse;margin-bottom:8px;font-size:8px">
+  <!-- ⑦ "What parents should do" -->
+  <div class="parent-section">
+    <div class="parent-title">👨‍👩‍👧 ಪಾಲಕರಿಗೆ ಮಾರ್ಗದರ್ಶನ — What Parents Should Do</div>
+    <div class="parent-grid">
+      {% if ai_parent_recommendations %}
+        {% for rec in ai_parent_recommendations[:4] %}
+        <div class="parent-item">{{ rec.parent_guidance }}</div>
+        {% endfor %}
+      {% else %}
+      <div class="parent-item">Provide all 3 meals daily without skipping breakfast</div>
+      <div class="parent-item">Include Ragi, seasonal vegetables every day</div>
+      <div class="parent-item">Avoid fried snacks and sugary drinks</div>
+      <div class="parent-item">Ensure 6–8 glasses of water daily</div>
+      <div class="parent-item">Monitor child weight monthly with teacher</div>
+      <div class="parent-item">Consult doctor if BMI stays abnormal for 3 months</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ⑧ 7-day meal table -->
+  <table class="meal-table">
     <thead>
-      <tr style="background:#1D9E75;color:white">
-        <th style="padding:5px 6px;text-align:left">Day</th>
-        <th style="padding:5px 6px;text-align:left">🌅 Breakfast</th>
-        <th style="padding:5px 6px;text-align:left">☀️ Lunch</th>
-        <th style="padding:5px 6px;text-align:left">🌙 Dinner</th>
+      <tr>
+        <th style="width:11%">Day</th>
+        <th style="width:29%">🌅 Breakfast · <span class="kn" style="font-size:7px">ಬೆಳಗ್ಗಿನ ಉಪಾಹಾರ</span></th>
+        <th style="width:30%">☀️ Lunch · <span class="kn" style="font-size:7px">ಮಧ್ಯಾಹ್ನದ ಊಟ</span></th>
+        <th style="width:30%">🌙 Dinner · <span class="kn" style="font-size:7px">ರಾತ್ರಿ ಊಟ</span></th>
       </tr>
     </thead>
     <tbody>
       {% for day in plan.week %}
-      <tr style="{% if loop.index is even %}background:#F8FAF9{% endif %}">
-        <td style="padding:4px 6px;border-bottom:1px solid #E5E7EB;font-weight:700;color:#1D9E75;vertical-align:top">
-          {{ day.day[:3] }}
-          <span class="kn" style="font-size:7px;color:#F97316;display:block">{{ day.day_kn[:4] }}</span>
+      <tr>
+        <td>
+          <span class="day-cell-en">{{ day.day[:3] }}</span>
+          <span class="day-cell-kn kn">{{ day.day_kn }}</span>
         </td>
         {% for meal in [day.breakfast, day.lunch, day.dinner] %}
         {% set macros = meal_macros(meal) %}
-        <td style="padding:4px 6px;border-bottom:1px solid #E5E7EB;vertical-align:top">
-          <span style="font-weight:600">{{ meal.name_en }}</span>
-          {% if meal.ingredients %}
-          <span style="font-size:7px;color:#9CA3AF;display:block">{{ meal.ingredients | join(', ') }}</span>
+        <td>
+          <span class="meal-name">{{ meal.name_en }}</span>
+          {% if meal.name_kn %}
+          <span class="meal-ingr kn" style="color:#F97316">{{ meal.name_kn }}</span>
           {% endif %}
-          <span style="font-size:6.5px;color:#6B7280">
-            🔥{{ meal.calories|round(0)|int }} · 💪{{ meal.protein_g|round(1) }}g · 🍚{{ macros.carbs_g|round(0)|int }}g · 🥑{{ macros.fat_g|round(1) }}g
-          </span>
+          {% if meal.ingredients %}
+          <span class="meal-ingr">{{ meal.ingredients | join(', ') }}</span>
+          {% endif %}
+          <span class="meal-macros">🔥{{ meal.calories|round(0)|int }} · 💪{{ meal.protein_g|round(1) }}g · 🦴{{ meal.calcium_mg|round(0)|int }}mg</span>
         </td>
         {% endfor %}
       </tr>
@@ -135,16 +387,18 @@
     </tbody>
   </table>
 
-  <!-- Footer -->
-  <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E5E7EB;padding-top:6px">
-    <div>
-      <p style="font-size:7.5px;color:#9CA3AF"><strong>NutriPrint</strong> · Free for Karnataka schools</p>
+  <!-- ⑨ Footer with QR -->
+  <div class="poster-footer">
+    <div class="footer-left">
+      <p><strong>NutriPrint</strong> · Free for all Karnataka schools · <span class="kn">ಕರ್ನಾಟಕ ಶಾಲೆಗಳಿಗೆ ಉಚಿತ</span></p>
+      <p>Yenepoya Institute of Technology, Moodbidri · ICMR RDA Standards</p>
     </div>
     <div style="text-align:right">
-      <img src="/api/plans/qr/{{ base_url }}plan/{{ share_token }}" alt="QR" style="width:40px;height:40px"/>
+      <img src="/api/plans/qr/{{ base_url }}plan/{{ share_token }}" alt="QR Code" style="width:45px;height:45px;border-radius:4px"/>
+      <p style="font-size:6.5px;color:#9CA3AF;margin-top:2px">Scan to open</p>
     </div>
   </div>
 
-</div>
+</div><!-- .page -->
 </body>
 </html>

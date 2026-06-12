@@ -193,19 +193,33 @@
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    color-adjust: exact;
   }
 
+  /* Force background colours to print */
   .infographic-header,
   .nutrient-ring,
   .food-equiv-card,
   .meal-portion-card,
-  .combo-badge {
+  .combo-badge,
+  .macro-chip,
+  .report-bar-fill,
+  .goal-fill,
+  .bmi-gauge-track {
     break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   #poster, #report {
     max-width: 100% !important;
     padding: 0 !important;
+  }
+
+  /* Ensure section dividers print */
+  .section-divider::before,
+  .section-divider::after {
+    background: #D1FAE5 !important;
   }
 }
 

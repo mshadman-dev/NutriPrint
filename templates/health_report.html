@@ -1,72 +1,206 @@
 {% extends "base.html" %}
 {% from "partials/poster_macros.html" import food_icon, nutrient_stat, meal_portion, food_equivalents_section, macro_chip %}
-{% block title %}NutriPrint — Health Report for {{ plan.student_name }}{% endblock %}
+{% block title %}NutriPrint — Health Report · {{ plan.student_name }}{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="/static/css/poster.css"/>
 <style>
+/* ── Report-specific styles ── */
+.report-progress-wrap { margin-bottom: 1.25rem; }
+.report-progress-label {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.35rem;
+}
+.report-progress-title { font-size: 0.875rem; font-weight: 700; color: #1F2937; }
+.report-progress-pct   { font-size: 0.75rem; font-weight: 700; }
+.report-progress-nums  { font-size: 0.7rem; color: #6B7280; }
+.report-bar-track {
+  height: 1rem; background: #F3F4F6; border-radius: 9999px;
+  overflow: hidden; position: relative;
+}
+.report-bar-fill {
+  height: 100%; border-radius: 9999px;
+  transition: width 0.8s ease;
+  display: flex; align-items: center; padding-left: 6px;
+}
+.report-bar-text { font-size: 0.6rem; font-weight: 800; color: white; white-space: nowrap; }
+
+/* BMI gauge */
+.bmi-gauge-track {
+  height: 1.25rem; border-radius: 9999px; overflow: hidden;
+  background: linear-gradient(90deg, #3B82F6 0%, #10B981 35%, #F97316 70%, #EF4444 100%);
+  position: relative;
+  margin: 0.5rem 0;
+}
+.bmi-gauge-needle {
+  position: absolute; top: -4px;
+  width: 3px; height: calc(100% + 8px);
+  background: #1F2937; border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+/* Strengths / Improvement cards */
+.strength-card   { background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 1rem; padding: 1rem; }
+.improve-card    { background: #FFF7ED; border: 1.5px solid #FED7AA; border-radius: 1rem; padding: 1rem; }
+.strength-title  { font-size: 0.875rem; font-weight: 800; color: #15803D; margin-bottom: 0.5rem; }
+.improve-title   { font-size: 0.875rem; font-weight: 800; color: #C2410C; margin-bottom: 0.5rem; }
+.strength-item   { font-size: 0.78rem; color: #166534; padding: 0.25rem 0; border-bottom: 1px solid #BBF7D0; }
+.improve-item    { font-size: 0.78rem; color: #92400E; padding: 0.25rem 0; border-bottom: 1px solid #FDE68A; }
+.strength-item:last-child, .improve-item:last-child { border-bottom: none; }
+
+/* Parent card */
+.parent-card {
+  background: linear-gradient(135deg, #FFFBEB, #FFF7ED);
+  border: 1.5px solid #FED7AA; border-radius: 1rem; padding: 1rem;
+}
+.parent-card-title { font-size: 0.875rem; font-weight: 800; color: #92400E; margin-bottom: 0.625rem; }
+.parent-item       { display: flex; gap: 0.5rem; padding: 0.35rem 0; font-size: 0.8rem; color: #78350F;
+                     border-bottom: 1px solid rgba(251,191,36,0.3); }
+.parent-item:last-child { border-bottom: none; }
+.parent-item-dot   { flex-shrink: 0; color: #F97316; font-weight: 900; }
+
+/* Print */
 @media print {
-  .no-print, nav, footer, button { display: none !important; }
+  .no-print, nav, footer, header, button, a[href] { display: none !important; }
   body { background: white !important; }
+  #report { padding: 0 !important; }
+  .report-bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 </style>
 {% endblock %}
 
 {% block content %}
-<div id="report" class="max-w-4xl mx-auto px-4 py-6 sm:py-10">
+<div id="report" class="max-w-4xl mx-auto px-4 py-6 sm:py-8">
 
-  <!-- Report header -->
-  <div class="infographic-header mb-6 sm:mb-8">
+  <!-- ① Report header -->
+  <div class="infographic-header mb-6">
     <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
-      <div>
-        <p class="text-green-200 text-xs sm:text-sm font-medium mb-1">🏥 NutriPrint Health & Nutrition Report</p>
+      <div class="flex-1">
+        <p class="text-green-200 text-xs font-semibold tracking-widest uppercase mb-1">🏥 NutriPrint Health &amp; Nutrition Report</p>
         <h1 class="heading font-extrabold text-2xl sm:text-3xl">{{ plan.student_name }}</h1>
         <p class="text-green-100 mt-1 text-sm">{{ plan.school_name }}</p>
+        {% if plan.teacher_name %}
+        <p class="text-green-200 text-xs mt-0.5">Teacher: {{ plan.teacher_name }}</p>
+        {% endif %}
         <div class="flex flex-wrap gap-2 mt-3">
-          <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">Age {{ plan.age_group }}</span>
+          <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">Age {{ plan.age_group }} years</span>
           <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">{{ plan.diet_pref | title }}</span>
+          <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">{{ plan.region | replace('_',' ') | title }}</span>
           {% if plan.bmi_class %}
-          <span class="bg-white/30 text-white text-xs px-3 py-1 rounded-full font-bold">BMI: {{ plan.bmi_class | upper }}</span>
+          {% set bmi_bg = {'normal':'bg-green-400','underweight':'bg-blue-400','overweight':'bg-orange-400','obese':'bg-red-400'} %}
+          <span class="{{ bmi_bg.get(plan.bmi_class,'bg-gray-400') }} text-white text-xs px-3 py-1 rounded-full font-bold">
+            BMI: {{ plan.bmi_class | upper }}
+          </span>
           {% endif %}
         </div>
       </div>
-      <div class="text-right text-green-100 text-xs sm:text-sm">
-        <p>Report Date: {{ plan.month | title }}</p>
-        <p class="mt-1">Region: {{ plan.region | replace('_',' ') | title }}</p>
+      <div class="text-right text-green-100 text-xs shrink-0">
+        <p class="font-semibold">{{ plan.month | title }} {{ plan.age_group }} years</p>
+        <p class="mt-1">{{ plan.region | replace('_',' ') | title }}, Karnataka</p>
+        <p class="mt-2 text-green-300 text-xs">ICMR RDA Standards</p>
       </div>
     </div>
   </div>
 
-  <!-- At-a-glance nutrition dashboard -->
-  <div class="section-divider"><span>📊 Nutrition at a Glance</span></div>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+  <!-- ② Nutrition at a glance -->
+  <div class="section-divider"><span>📊 Nutrition at a Glance · <span class="kn">ಪೋಷಣೆ ಸಂಕ್ಷಿಪ್ತ</span></span></div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
     {{ nutrient_stat('🔥', plan.avg_daily_cal|round(0)|int, 'Calories/day') }}
     {{ nutrient_stat('💪', plan.avg_protein_g|round(1), 'Protein/day', 'g') }}
     {{ nutrient_stat('🦴', plan.avg_calcium_mg|round(0)|int, 'Calcium/day', 'mg') }}
     {{ nutrient_stat('🩸', plan.avg_iron_mg|round(1), 'Iron/day', 'mg') }}
   </div>
 
-  <!-- ICMR gap analysis -->
-  {% if nutrition_gaps %}
-  <div class="section-divider"><span>🎯 ICMR RDA Gap Analysis</span></div>
-  <div class="bg-white rounded-2xl border p-4 sm:p-6 mb-8">
-    <div class="grid sm:grid-cols-2 gap-4">
-      {% for g in nutrition_gaps %}
+  <!-- ③ BMI interpretation -->
+  {% if plan.bmi_class %}
+  <div class="section-divider"><span>📏 BMI Interpretation · <span class="kn">BMI ವ್ಯಾಖ್ಯಾನ</span></span></div>
+  <div class="bg-white rounded-2xl border p-4 sm:p-6 mb-6">
+    <div class="grid sm:grid-cols-2 gap-6 items-start">
       <div>
-        <div class="flex justify-between text-sm mb-2">
-          <span class="font-semibold text-gray-800">
-            {% if g.key == 'calories' %}🔥{% elif g.key == 'protein_g' %}💪{% elif g.key == 'calcium_mg' %}🦴{% else %}🩸{% endif %}
-            {{ g.nutrient }}
-            <span class="text-xs ml-1">{{ g.status_label }}</span>
-          </span>
-          <span class="text-gray-500 text-xs">{{ g.getting }}/{{ g.needed }}{{ g.unit }}</span>
+        {% set bmi_data = {
+          'underweight': {'label':'Underweight','kn':'ಕಡಿಮೆ ತೂಕ','color':'#3B82F6','bg':'#EFF6FF','border':'#BFDBFE',
+            'meaning': 'The student\'s BMI is below the 5th percentile for their age and gender, indicating insufficient weight for healthy growth.',
+            'action': 'Focus on energy-dense Karnataka foods: Ragi Mudde, Groundnut Laddu, Ghee Rice, Banana Sheera. Ensure 3 full meals daily.'},
+          'normal':      {'label':'Normal Weight','kn':'ಆರೋಗ್ಯಕರ ತೂಕ','color':'#10B981','bg':'#F0FDF4','border':'#BBF7D0',
+            'meaning': 'The student\'s BMI falls between the 5th and 85th percentile — healthy weight for age and gender.',
+            'action': 'Continue balanced meals with Ragi, Jowar, seasonal vegetables, and adequate protein and calcium daily.'},
+          'overweight':  {'label':'Overweight','kn':'ಹೆಚ್ಚು ತೂಕ','color':'#F97316','bg':'#FFF7ED','border':'#FED7AA',
+            'meaning': 'BMI between 85th–95th percentile. Excess body weight relative to age and gender. Early intervention recommended.',
+            'action': 'Reduce fried foods and sweets. Increase vegetables, Ragi, and physical activity to 45 minutes daily.'},
+          'obese':       {'label':'Obese','kn':'ಸ್ಥೂಲಕಾಯ','color':'#EF4444','bg':'#FEF2F2','border':'#FECACA',
+            'meaning': 'BMI above the 95th percentile. Significant health risk requiring medical attention and structured dietary plan.',
+            'action': 'Please consult a doctor immediately. Avoid junk food completely. Use the high-fiber, low-calorie meal plan.'}
+        } %}
+        {% set bd = bmi_data.get(plan.bmi_class, bmi_data.normal) %}
+        <div class="rounded-xl p-4 mb-3" style="background:{{ bd.bg }};border:1.5px solid {{ bd.border }}">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl font-black" style="color:{{ bd.color }}">{{ bd.label }}</span>
+            <span class="text-base kn font-bold" style="color:{{ bd.color }}">{{ bd.kn }}</span>
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed mb-2">{{ bd.meaning }}</p>
+          <p class="text-xs font-semibold" style="color:{{ bd.color }}">📋 {{ bd.action }}</p>
         </div>
-        <div class="gap-bar-track">
-          <div class="gap-bar-fill" style="width:{{ [g.percent, 100]|min }}%;background:{% if g.percent < 60 %}#EF4444{% elif g.percent < 85 %}#F97316{% else %}#10B981{% endif %}"></div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-600 mb-2">BMI Classification Scale (IAP Pediatric Chart)</p>
+        <div class="bmi-gauge-track">
+          {% set needle_pos = {'underweight': 8, 'normal': 40, 'overweight': 75, 'obese': 92} %}
+          <div class="bmi-gauge-needle" style="left:{{ needle_pos.get(plan.bmi_class, 40) }}%"></div>
         </div>
-        {% if g.fix_en %}
-        <p class="text-xs text-gray-500 mt-2">💡 Add: {{ g.fix_en }}</p>
-        <p class="text-xs text-orange-400 kn">{{ g.fix_kn }}</p>
+        <div class="flex justify-between text-xs text-gray-500 mt-1">
+          <span>Underweight</span><span>Normal</span><span>Over</span><span>Obese</span>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+          <div class="rounded-lg bg-slate-50 p-2">
+            <span class="text-gray-400 block">Age group</span>
+            <span class="font-bold text-gray-800">{{ plan.age_group }} years</span>
+          </div>
+          <div class="rounded-lg bg-slate-50 p-2">
+            <span class="text-gray-400 block">Diet</span>
+            <span class="font-bold text-gray-800">{{ plan.diet_pref | title }}</span>
+          </div>
+          <div class="rounded-lg bg-slate-50 p-2">
+            <span class="text-gray-400 block">Region</span>
+            <span class="font-bold text-gray-800">{{ plan.region | replace('_',' ') | title }}</span>
+          </div>
+          <div class="rounded-lg bg-slate-50 p-2">
+            <span class="text-gray-400 block">Plan period</span>
+            <span class="font-bold text-gray-800">{{ plan.month | title }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ④ ICMR RDA visual progress bars -->
+  {% if nutrition_gaps %}
+  <div class="section-divider"><span>🎯 ICMR RDA Progress · <span class="kn">ಪ್ರತಿದಿನ ಪೋಷಣೆ ಗುರಿ</span></span></div>
+  <div class="bg-white rounded-2xl border p-4 sm:p-6 mb-6">
+    <p class="text-xs text-gray-400 mb-4">Bars show % of daily ICMR RDA target achieved by this meal plan</p>
+    <div class="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+      {% for g in nutrition_gaps %}
+      {% set pct = [g.percent, 100]|min %}
+      {% set bar_color = '#EF4444' if g.percent < 60 else ('#F97316' if g.percent < 85 else '#10B981') %}
+      {% set icon = '🔥' if g.key == 'calories' else ('💪' if g.key == 'protein_g' else ('🦴' if g.key == 'calcium_mg' else '🩸')) %}
+      <div class="report-progress-wrap">
+        <div class="report-progress-label">
+          <span class="report-progress-title">{{ icon }} {{ g.nutrient }} <span class="text-xs font-normal text-gray-400 ml-1">{{ g.status_label }}</span></span>
+          <div class="text-right">
+            <span class="report-progress-pct" style="color:{{ bar_color }}">{{ g.percent }}%</span>
+            <span class="report-progress-nums ml-2">{{ g.getting }}/{{ g.needed }}{{ g.unit }}</span>
+          </div>
+        </div>
+        <div class="report-bar-track">
+          <div class="report-bar-fill" style="width:{{ pct }}%;background:{{ bar_color }}">
+            {% if pct > 12 %}<span class="report-bar-text">{{ g.getting }}{{ g.unit }}</span>{% endif %}
+          </div>
+        </div>
+        {% if g.fix_en and g.status != 'good' %}
+        <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+          💡 <span class="font-medium text-gray-700">{{ g.fix_en }}</span>
+        </p>
+        <p class="text-xs text-orange-400 kn mt-0.5">{{ g.fix_kn or '' }}</p>
         {% endif %}
       </div>
       {% endfor %}
@@ -74,103 +208,141 @@
   </div>
   {% endif %}
 
-  <!-- Food quantity → nutrient mapping -->
+  <!-- ⑤ Strengths and improvement areas -->
+  {% if nutrition_gaps %}
+  <div class="section-divider"><span>💪 Strengths &amp; Improvement Areas</span></div>
+  <div class="grid sm:grid-cols-2 gap-4 mb-6">
+    <div class="strength-card">
+      <p class="strength-title">✅ Nutritional Strengths · <span class="kn text-sm">ಶಕ್ತಿಗಳು</span></p>
+      {% set has_strengths = namespace(value=false) %}
+      {% for g in nutrition_gaps %}
+        {% if g.status == 'good' %}
+          {% set has_strengths.value = true %}
+          <div class="strength-item">✓ {{ g.nutrient }} — {{ g.getting }}{{ g.unit }}/day ({{ g.percent }}% of RDA)</div>
+        {% endif %}
+      {% endfor %}
+      {% if not has_strengths.value %}
+        <div class="strength-item">📋 Consistent meal planning will improve nutrient levels over 4–6 weeks</div>
+        <div class="strength-item">✓ Regional Karnataka foods used — culturally appropriate</div>
+        <div class="strength-item">✓ Budget under ₹150/day — financially sustainable</div>
+      {% endif %}
+      <div class="strength-item">✓ 7-day plan with breakfast, lunch, and dinner</div>
+      <div class="strength-item">✓ Diet preference respected: {{ plan.diet_pref | title }}</div>
+    </div>
+    <div class="improve-card">
+      <p class="improve-title">⚠️ Needs Improvement · <span class="kn text-sm">ಸುಧಾರಣೆ ಬೇಕು</span></p>
+      {% set has_gaps = namespace(value=false) %}
+      {% for g in nutrition_gaps %}
+        {% if g.status != 'good' %}
+          {% set has_gaps.value = true %}
+          <div class="improve-item">
+            {{ '🔴' if g.status == 'critical' else '⚠️' }} {{ g.nutrient }}: {{ g.percent }}% of RDA
+            {% if g.status == 'critical' %} — Critical, needs immediate attention{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% if not has_gaps.value %}
+        <div class="improve-item">✅ All nutrients meeting ICMR RDA — maintain this plan</div>
+      {% endif %}
+      <div class="improve-item">📅 Review and update plan every month</div>
+      <div class="improve-item">⚕️ Consult school health officer if BMI is abnormal for 3+ months</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ⑥ Food quantity guide -->
   {% if food_equivalents %}
-  <div class="section-divider"><span>🍽️ How Much Food to Eat — Practical Guide</span></div>
-  <p class="text-sm text-gray-500 mb-4 text-center">
-    Understand serving sizes needed to meet daily nutrient goals for age group {{ plan.age_group }}
-  </p>
+  <div class="section-divider"><span>🍽️ How Much to Eat Daily · <span class="kn">ಎಷ್ಟು ಆಹಾರ ತಿನ್ನಬೇಕು</span></span></div>
+  <p class="text-xs text-gray-500 mb-4">Practical Karnataka food quantities to meet daily nutrient targets for age group {{ plan.age_group }}</p>
   {{ food_equivalents_section(food_equivalents) }}
   {% endif %}
 
+  <!-- ⑦ AI report recommendations -->
   {% if ai_report_recommendations %}
-  <div class="section-divider"><span>AI Nutrition Recommendations</span></div>
-  <div class="bg-white rounded-2xl border p-4 sm:p-6 mb-8">
-    <div class="grid gap-4">
+  <div class="section-divider"><span>🤖 AI Nutrition Recommendations</span></div>
+  <div class="bg-white rounded-2xl border p-4 sm:p-6 mb-6">
+    <div class="grid gap-3">
       {% for rec in ai_report_recommendations %}
-      <div class="border-l-4 border-primary bg-green-50/60 rounded-r-xl p-4">
-        <p class="font-bold text-green-900 text-sm">{{ rec.title }}</p>
-        <p class="text-sm text-slate-700 mt-2">{{ rec.detailed_explanation }}</p>
+      <div class="flex gap-3 border-l-4 border-primary bg-green-50/50 rounded-r-xl p-4">
+        <span class="text-xl flex-shrink-0 mt-0.5">💡</span>
+        <div>
+          <p class="font-bold text-green-900 text-sm">{{ rec.title }}</p>
+          <p class="text-sm text-slate-700 mt-1 leading-relaxed">{{ rec.detailed_explanation }}</p>
+        </div>
       </div>
       {% endfor %}
     </div>
   </div>
   {% endif %}
 
-  {% if ai_parent_recommendations %}
-  <div class="section-divider"><span>Parent Guidance</span></div>
-  <div class="grid sm:grid-cols-2 gap-4 mb-8">
-    {% for rec in ai_parent_recommendations %}
-    <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
-      <p class="font-bold text-orange-800 text-sm">{{ rec.title }}</p>
-      <p class="text-xs text-orange-700 mt-2">{{ rec.parent_guidance }}</p>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <!-- Sample day portions -->
-  <div class="section-divider"><span>📋 Sample Day — Portion Guide</span></div>
+  <!-- ⑧ Sample day portions -->
+  <div class="section-divider"><span>📋 Sample Day — Monday Portions · <span class="kn">ಸೋಮವಾರ ಊಟದ ಪ್ರಮಾಣ</span></span></div>
   {% set sample_day = plan.week[0] %}
-  <div class="grid md:grid-cols-3 gap-4 mb-8">
+  <div class="grid md:grid-cols-3 gap-4 mb-6">
     {{ meal_portion(sample_day.breakfast, '🌅 Breakfast') }}
     {{ meal_portion(sample_day.lunch, '☀️ Lunch') }}
     {{ meal_portion(sample_day.dinner, '🌙 Dinner') }}
   </div>
 
-  <!-- Recommendations -->
-  <div class="section-divider"><span>✅ Recommendations</span></div>
-  <div class="grid sm:grid-cols-2 gap-4 mb-8">
-    <div class="bg-green-50 border border-green-200 rounded-xl p-4">
-      <p class="font-bold text-green-800 text-sm mb-2">🥗 Balanced Diet</p>
-      <ul class="text-xs text-green-700 space-y-1 list-disc list-inside">
-        <li>Include local Karnataka foods daily (Ragi, Jowar, seasonal vegetables)</li>
-        <li>Ensure 3 full meals with adequate protein and calcium</li>
-        <li>Drink sufficient water — 6-8 glasses per day</li>
-      </ul>
+  <!-- ⑨ Parent recommendations -->
+  <div class="section-divider"><span>👨‍👩‍👧 Parent Guidance · <span class="kn">ಪಾಲಕರ ಮಾರ್ಗದರ್ಶನ</span></span></div>
+  <div class="grid sm:grid-cols-2 gap-4 mb-6">
+    {% if ai_parent_recommendations %}
+      {% for rec in ai_parent_recommendations %}
+      <div class="parent-card">
+        <p class="parent-card-title">{{ rec.title }}</p>
+        <div class="parent-item">
+          <span class="parent-item-dot">▶</span>
+          <span>{{ rec.parent_guidance }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+    <div class="parent-card">
+      <p class="parent-card-title">🍽️ Daily Meals · <span class="kn text-sm">ಪ್ರತಿದಿನ ಊಟ</span></p>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span>Serve all 3 meals — do not skip breakfast</span></div>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span>Include Ragi, Jowar, seasonal vegetables daily</span></div>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span>Offer 6–8 glasses of clean water</span></div>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span class="kn">ಪ್ರತಿದಿನ ರಾಗಿ, ಜೋಳ ಮತ್ತು ತರಕಾರಿ ನೀಡಿ</span></div>
     </div>
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-      <p class="font-bold text-amber-800 text-sm mb-2">⚠️ Key Focus Areas</p>
-      <ul class="text-xs text-amber-700 space-y-1 list-disc list-inside">
-        {% set has_gaps = namespace(value=false) %}
-        {% for g in nutrition_gaps %}
-          {% if g.status != 'good' %}
-            {% set has_gaps.value = true %}
-            <li>Increase {{ g.nutrient | lower }} intake — currently at {{ g.percent }}% of RDA</li>
-          {% endif %}
-        {% endfor %}
-        {% if not has_gaps.value %}
-        <li>All nutrients meeting ICMR standards — maintain current plan</li>
-        {% endif %}
-        <li>Limit fried foods and sugary snacks to weekends</li>
-      </ul>
+    <div class="parent-card">
+      <p class="parent-card-title">🚫 Avoid · <span class="kn text-sm">ತಡೆಯಿರಿ</span></p>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span>Fried snacks, chips, biscuits as main food</span></div>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span>Sugary drinks, cold drinks, packaged juices</span></div>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span>Skipping meals due to time or cost</span></div>
+      <div class="parent-item"><span class="parent-item-dot">▶</span><span class="kn">ಕರಿದ ತಿನಿಸು ಮತ್ತು ಸಿಹಿ ಪಾನೀಯ ತಪ್ಪಿಸಿ</span></div>
     </div>
+    {% endif %}
   </div>
 
-  <!-- Signature block -->
-  <div class="grid sm:grid-cols-2 gap-8 mb-8 pt-6 border-t border-gray-200">
+  <!-- ⑩ Signature block -->
+  <div class="grid sm:grid-cols-2 gap-8 mb-6 pt-6 border-t border-gray-200">
     <div>
-      <p class="text-sm text-gray-600 mb-8">Teacher Signature:</p>
-      <div class="border-b border-gray-400 w-48"></div>
+      <p class="text-sm text-gray-500 mb-8">Teacher Signature / <span class="kn text-sm">ಶಿಕ್ಷಕರ ಸಹಿ</span>:</p>
+      <div class="border-b-2 border-gray-300 w-48 mt-6"></div>
       {% if plan.teacher_name %}
       <p class="text-xs text-gray-400 mt-2">{{ plan.teacher_name }}</p>
       {% endif %}
     </div>
     <div>
-      <p class="text-sm text-gray-600 mb-8">School Seal:</p>
-      <div class="border-b border-gray-400 w-48"></div>
+      <p class="text-sm text-gray-500 mb-8">School Seal / <span class="kn text-sm">ಶಾಲಾ ಮುದ್ರೆ</span>:</p>
+      <div class="border-b-2 border-gray-300 w-48 mt-6"></div>
       <p class="text-xs text-gray-400 mt-2">{{ plan.school_name }}</p>
     </div>
   </div>
 
-  <!-- Actions -->
-  <div class="flex flex-col sm:flex-row gap-3 no-print">
+  <!-- ⑪ Action buttons (no-print) -->
+  <div class="flex flex-col sm:flex-row gap-3 no-print mb-4">
     <a href="/plan/{{ share_token }}" target="_blank" rel="noopener noreferrer"
       class="flex-1 bg-primary text-white font-bold py-3 rounded-xl text-center hover:bg-green-700 transition heading text-sm">
       📄 View Full Meal Plan
     </a>
-    <a href="/poster/{{ share_token }}/pdf" target="_blank" rel="noopener noreferrer"
+    <a href="/poster/{{ share_token }}/print" target="_blank" rel="noopener noreferrer"
       class="flex-1 border-2 border-primary text-primary font-bold py-3 rounded-xl text-center hover:bg-green-50 transition heading text-sm">
+      🖨️ Print Poster
+    </a>
+    <a href="/poster/{{ share_token }}/pdf" target="_blank" rel="noopener noreferrer"
+      class="flex-1 border-2 border-gray-300 text-gray-700 font-bold py-3 rounded-xl text-center hover:bg-gray-50 transition heading text-sm">
       📥 Download PDF
     </a>
     <button onclick="window.print()"
@@ -179,8 +351,9 @@
     </button>
   </div>
 
-  <p class="text-center text-xs text-gray-400 mt-6">
-    NutriPrint · Free for all Karnataka schools · ICMR RDA Standards
+  <p class="text-center text-xs text-gray-400">
+    NutriPrint · Free for all Karnataka schools · ICMR RDA Standards · Yenepoya Institute of Technology
   </p>
+
 </div>
 {% endblock %}

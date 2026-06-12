@@ -1,75 +1,99 @@
-{# Reusable food icon with SVG + emoji fallback #}
+{# ─── NutriPrint Poster Macros ───────────────────────────────────────────── #}
+
+{# ── Food icon with SVG + emoji fallback ────────────────────────────────── #}
 {% macro food_icon(name, size='md') %}
 {% set icon = food_icon_lookup(name) if food_icon_lookup is defined else {'url': none, 'emoji': '🥗'} %}
-{% set sz = 'w-8 h-8' if size == 'sm' else ('w-10 h-10' if size == 'md' else 'w-12 h-12') %}
-{% set img_sz = 'w-6 h-6' if size == 'sm' else ('w-7 h-7' if size == 'md' else 'w-9 h-9') %}
-<div class="food-icon-wrap {{ sz }}">
+{% set sz      = 'w-8 h-8'   if size == 'sm' else ('w-10 h-10' if size == 'md' else 'w-12 h-12') %}
+{% set img_sz  = 'w-5 h-5'   if size == 'sm' else ('w-7 h-7'   if size == 'md' else 'w-9 h-9')  %}
+<div class="food-icon-wrap {{ sz }}" aria-hidden="true">
   {% if icon.url %}
   <img src="{{ icon.url }}" alt="{{ name }}"
-    class="{{ img_sz }} object-contain"
-    onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-  <span class="emoji-fallback" style="display:none">{{ icon.emoji }}</span>
+       class="{{ img_sz }} object-contain"
+       onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <span class="emoji-fallback hidden items-center justify-center w-full h-full text-base">{{ icon.emoji }}</span>
   {% else %}
-  <span class="emoji-fallback">{{ icon.emoji }}</span>
+  <span class="emoji-fallback text-base">{{ icon.emoji }}</span>
   {% endif %}
 </div>
 {% endmacro %}
 
-{# Nutrient stat ring #}
+{# ── Nutrient stat ring ──────────────────────────────────────────────────── #}
 {% macro nutrient_stat(icon, value, label, unit='') %}
 <div class="nutrient-ring">
   <div class="icon">{{ icon }}</div>
-  <div class="value">{{ value }}{{ unit }}</div>
+  <div class="value">{{ value }}{% if unit %}<span class="text-xs font-normal text-gray-400 ml-0.5">{{ unit }}</span>{% endif %}</div>
   <div class="label">{{ label }}</div>
 </div>
 {% endmacro %}
 
-{# Macro chip #}
+{# ── Macro chip ──────────────────────────────────────────────────────────── #}
 {% macro macro_chip(type, value, unit='') %}
 <span class="macro-chip macro-{{ type }}">
-  {% if type == 'cal' %}🔥{% elif type == 'pro' %}💪{% elif type == 'carb' %}🍚{% else %}🥑{% endif %}
-  {{ value }}{{ unit }}
+  {% if type == 'cal' %}🔥{% elif type == 'pro' %}💪{% elif type == 'carb' %}🍚{% else %}🥑{% endif %}{{ value }}{{ unit }}
 </span>
 {% endmacro %}
 
-{# Meal portion block #}
+{# ── Meal portion card (web view — used in plan_public and health_report) ── #}
 {% macro meal_portion(meal, meal_label) %}
 {% set macros = meal_macros(meal) if meal_macros is defined else {'carbs_g': 0, 'fat_g': 0} %}
-<div class="meal-portion-card mb-4">
+<div class="meal-portion-card">
   <div class="meal-portion-header">{{ meal_label }}</div>
   <div class="portion-item">
     {{ food_icon(meal.name_en, 'md') }}
     <div class="flex-1 min-w-0">
-      <p class="font-semibold text-gray-800 text-sm">{{ meal.name_en }}</p>
-      <p class="text-xs text-orange-500 kn">{{ meal.name_kn }}</p>
+      <p class="font-semibold text-gray-800 text-sm leading-tight">{{ meal.name_en }}</p>
+      {% if meal.name_kn %}
+      <p class="text-xs text-orange-500 kn mt-0.5">{{ meal.name_kn }}</p>
+      {% endif %}
       {% if meal.ingredients %}
-      <p class="text-xs text-gray-500 mt-1">
+      <p class="text-xs text-gray-400 mt-1 leading-relaxed">
         {% for ing in meal.ingredients %}{{ ing }}{% if not loop.last %} · {% endif %}{% endfor %}
       </p>
       {% endif %}
-      <div class="portion-macros">
-        {{ macro_chip('cal', meal.calories|round(0)|int, 'cal') }}
-        {{ macro_chip('pro', meal.protein_g|round(1), 'g') }}
-        {{ macro_chip('carb', macros.carbs_g|round(1), 'g') }}
-        {{ macro_chip('fat', macros.fat_g|round(1), 'g') }}
+      <div class="portion-macros mt-1">
+        {{ macro_chip('cal',  meal.calories  | round(0) | int,    'cal') }}
+        {{ macro_chip('pro',  meal.protein_g | round(1),           'g')  }}
+        {{ macro_chip('carb', macros.carbs_g | round(1),           'g')  }}
+        {{ macro_chip('fat',  macros.fat_g   | round(1),           'g')  }}
       </div>
     </div>
   </div>
 </div>
 {% endmacro %}
 
-{# Food equivalent section #}
+{# ── Meal portion (print poster — no extra margin) ───────────────────────── #}
+{% macro meal_portion_print(meal, meal_label) %}
+{% set macros = meal_macros(meal) if meal_macros is defined else {'carbs_g': 0, 'fat_g': 0} %}
+<div class="meal-portion-card" style="margin:0">
+  <div class="meal-portion-header">{{ meal_label }}</div>
+  <div class="portion-item">
+    {{ food_icon(meal.name_en, 'sm') }}
+    <div class="flex-1 min-w-0">
+      <p class="font-semibold text-gray-800 text-xs leading-tight">{{ meal.name_en }}</p>
+      {% if meal.name_kn %}
+      <p class="text-xs text-orange-500 kn mt-0.5" style="font-size:0.65rem">{{ meal.name_kn }}</p>
+      {% endif %}
+      <div class="portion-macros mt-1">
+        {{ macro_chip('cal',  meal.calories  | round(0) | int, 'cal') }}
+        {{ macro_chip('pro',  meal.protein_g | round(1),        'g')  }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{# ── Food equivalents section ────────────────────────────────────────────── #}
 {% macro food_equivalents_section(equivs) %}
 <div class="grid md:grid-cols-2 gap-4 mb-8">
   {% for eq in equivs %}
   <div class="food-equiv-card">
     <div class="flex items-center gap-2 mb-3">
-      <span class="text-xl">{{ eq.icon }}</span>
+      <span class="text-xl" aria-hidden="true">{{ eq.icon }}</span>
       <div>
-        <p class="font-bold text-gray-800 text-sm">{{ eq.nutrient }} Goal: {{ eq.target }}{{ eq.unit }}</p>
+        <p class="font-bold text-gray-800 text-sm">{{ eq.nutrient }} Goal: {{ eq.target }}{{ eq.unit }}/day</p>
       </div>
     </div>
-    <div class="space-y-1 mb-3">
+    <div class="space-y-0.5 mb-3">
       {% for ex in eq.examples %}
       <div class="food-equiv-row">
         {{ food_icon(ex.name, 'sm') }}
