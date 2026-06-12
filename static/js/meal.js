@@ -243,9 +243,17 @@ function escStr(v) {
 
 function showError(msg) {
   const el = document.getElementById('formError');
-  if (!el) { alert(msg); return; }
-  el.textContent = msg;
-  el.classList.remove('hidden');
+  if (!el) return;
+  el.className = 'mt-3';
+  el.innerHTML = `
+    <div class="es-toast">
+      <span class="es-toast-icon">⚠️</span>
+      <div class="es-toast-body">
+        <div class="es-toast-title">Unable to generate meal plan</div>
+        <div class="es-toast-msg">${escStr(msg)}</div>
+      </div>
+      <button class="es-toast-retry" onclick="this.closest('.es-toast').parentElement.innerHTML=''">Dismiss</button>
+    </div>`;
   el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 

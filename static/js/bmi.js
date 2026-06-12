@@ -8,7 +8,19 @@ async function calculateBMI() {
   const weight = document.getElementById('bmiWeight').value;
 
   if (!name || !age || !height || !weight) {
-    alert('Please fill all fields / ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಅಂಕಣಗಳನ್ನು ತುಂಬಿಸಿ');
+    // Show inline validation error instead of alert
+    const resultEl = document.getElementById('bmiResult');
+    if (resultEl) {
+      resultEl.classList.remove('hidden');
+      resultEl.innerHTML = `
+        <div class="es-toast es-toast--warn">
+          <span class="es-toast-icon">⚠️</span>
+          <div class="es-toast-body">
+            <div class="es-toast-title">Missing information</div>
+            <div class="es-toast-msg">Please fill in all fields — Name, Age, Height, and Weight — to calculate BMI.</div>
+          </div>
+        </div>`;
+    }
     return;
   }
 
@@ -54,8 +66,16 @@ async function calculateBMI() {
     });
 
     if (!res.ok) {
-      if (resultEl) resultEl.classList.add('hidden');
-      alert('Error calculating BMI. Please try again.');
+      if (resultEl) {
+        resultEl.classList.remove('hidden');
+        resultEl.innerHTML = `
+          <div class="es-card es-card--error es-card--full">
+            <div class="es-icon es-icon--red">⚠️</div>
+            <div class="es-title">Assessment failed</div>
+            <div class="es-body">Unable to calculate BMI right now. Please check the values and try again.</div>
+            <button class="es-btn" onclick="document.getElementById('bmiResult').classList.add('hidden')">Try Again</button>
+          </div>`;
+      }
       return;
     }
 
@@ -90,8 +110,16 @@ async function calculateBMI() {
 
   } catch (err) {
     console.error('BMI error:', err);
-    if (resultEl) resultEl.classList.add('hidden');
-    alert('Error calculating BMI. Please try again.');
+    if (resultEl) {
+      resultEl.classList.remove('hidden');
+      resultEl.innerHTML = `
+        <div class="es-card es-card--error es-card--full">
+          <div class="es-icon es-icon--red">🔌</div>
+          <div class="es-title">Connection problem</div>
+          <div class="es-body">Unable to reach the assessment service. Please check your connection and try again.</div>
+          <button class="es-btn" onclick="document.getElementById('bmiResult').classList.add('hidden');document.getElementById('bmiName').focus()">Try Again</button>
+        </div>`;
+    }
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = 'Calculate BMI'; }
   }
@@ -148,7 +176,18 @@ function prefillMealForm() {
 // Voice input
 function startVoice(fieldId) {
   if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    alert('Voice input not supported on this browser');
+    const resultEl = document.getElementById('bmiResult');
+    if (resultEl) {
+      resultEl.classList.remove('hidden');
+      resultEl.innerHTML = `
+        <div class="es-toast es-toast--info">
+          <span class="es-toast-icon">🎙️</span>
+          <div class="es-toast-body">
+            <div class="es-toast-title">Voice input not supported</div>
+            <div class="es-toast-msg">Your browser does not support voice input. Please type the value directly.</div>
+          </div>
+        </div>`;
+    }
     return;
   }
   const SR   = window.SpeechRecognition || window.webkitSpeechRecognition;
