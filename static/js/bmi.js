@@ -344,17 +344,36 @@ async function runDemo() {
 
 // Restore prefill from dashboard reassess on page load
 window.addEventListener('DOMContentLoaded', () => {
+  // ── Demo mode: auto-fill first demo student ────────────────────────────
+  if (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo()) {
+    const students = NutriDemo.getStudents();
+    if (students.length) {
+      const s = students[0]; // Rohan Kumar — underweight
+      const get = id => document.getElementById(id);
+      if (get('bmiName'))   get('bmiName').value   = s.name;
+      if (get('bmiAge'))    get('bmiAge').value     = s.age;
+      if (get('bmiGender')) get('bmiGender').value  = s.gender;
+      // height + weight live on the full student object in DEMO_HISTORY context
+      const raw = JSON.parse(
+        localStorage.getItem('bmi_history_' + s.name) || '[]'
+      );
+      // We know the first demo student is Rohan: 140cm / 32kg
+      if (get('bmiHeight')) get('bmiHeight').value = 140;
+      if (get('bmiWeight')) get('bmiWeight').value = 32;
+    }
+  }
+
   const prefillName   = localStorage.getItem('prefill_name');
   const prefillAge    = localStorage.getItem('prefill_age');
   const prefillGender = localStorage.getItem('prefill_gender');
 
   if (prefillName) {
-    const bmiName = document.getElementById('bmiName');
-    const bmiAge  = document.getElementById('bmiAge');
-    const bmiGender = document.getElementById('bmiGender');
+    const bmiName     = document.getElementById('bmiName');
+    const bmiAge      = document.getElementById('bmiAge');
+    const bmiGender   = document.getElementById('bmiGender');
     const mealStudent = document.getElementById('mealStudent');
-    if (bmiName) bmiName.value = prefillName;
-    if (bmiAge && prefillAge) bmiAge.value = prefillAge;
+    if (bmiName)   bmiName.value   = prefillName;
+    if (bmiAge && prefillAge)   bmiAge.value   = prefillAge;
     if (bmiGender && prefillGender) bmiGender.value = prefillGender;
     if (mealStudent) mealStudent.value = prefillName;
     localStorage.removeItem('prefill_name');

@@ -12,6 +12,21 @@ from services.food_images import get_food_icon, NUTRIENT_ICONS
 from services.diet_filter import DIET_VEGETARIAN, validate_and_fix_plan
 
 
+def _serialize_week(week) -> list:
+    """Convert MealDay objects to plain dicts for JSON-safe template embedding."""
+    serialized = []
+    for day in week or []:
+        if hasattr(day, "model_dump"):
+            serialized.append(day.model_dump())
+        elif hasattr(day, "dict"):
+            serialized.append(day.dict())
+        elif isinstance(day, dict):
+            serialized.append(day)
+        else:
+            serialized.append(dict(day))
+    return serialized
+
+
 def build_poster_context(plan, share_token: str, base_url: str) -> dict:
     try:
         plan_data = plan.model_dump()
@@ -72,6 +87,7 @@ def build_poster_context(plan, share_token: str, base_url: str) -> dict:
 
     return {
         "plan":                      plan,
+        "plan_week_json":            _serialize_week(plan_data.get("week", [])),
         "share_token":               share_token,
         "base_url":                  base_url,
         "nutrition_gaps":            gaps,

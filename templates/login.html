@@ -160,6 +160,31 @@ main.login-main {
 }
 .login-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
 
+/* ── Demo Mode button ── */
+.login-demo-btn {
+  width: 100%;
+  padding: .75rem;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  color: #78350F;
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+  font-size: .88rem;
+  border: 1.5px solid #FDE68A;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  margin-top: .65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+}
+.login-demo-btn:hover {
+  background: #FDE68A;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(251,191,36,.28);
+}
+
 /* ── Card footer ── */
 .login-card-footer {
   padding: 1rem 2.5rem 1.5rem;
@@ -258,6 +283,22 @@ main.login-main {
 
         <button type="submit" id="loginSubmitBtn" class="login-submit">
           Sign In
+        </button>
+
+        <!-- Demo Mode shortcut -->
+        <div style="position:relative;text-align:center;margin-top:1rem;">
+          <div style="position:absolute;inset-x-0;top:50%;height:1px;background:rgba(148,163,184,.2);"></div>
+          <span style="position:relative;background:white;padding:0 .75rem;
+                       font-size:.7rem;font-weight:600;color:#94A3B8;">or</span>
+        </div>
+        <button type="button"
+                onclick="NutriDemo.activate()"
+                class="login-demo-btn"
+                aria-label="Try Demo Mode — explore with pre-loaded sample data">
+          🚀 Try Demo Mode
+          <span style="font-size:.68rem;font-weight:600;opacity:.75;margin-left:.25rem;">
+            — No account needed
+          </span>
         </button>
 
       </form>

@@ -1018,7 +1018,7 @@
 
   const BASE   = {{ base_url | tojson }};
   const TOKEN  = {{ share_token | tojson }};
-  const WEEK   = {{ plan.week | tojson }};
+  const WEEK   = {{ plan_week_json | tojson }};
 
   /* ── Collect unique meals from week ──────────────────────────────────── */
   const seen  = new Set();

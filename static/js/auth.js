@@ -75,6 +75,7 @@
       const loginBtn   = document.getElementById('loginBtn');
       const logoutBtn  = document.getElementById('logoutBtn');
       const badge      = document.getElementById('teacherBadge');
+      const demoBadge  = document.getElementById('demoBadge');
 
       // Dashboard links (desktop + mobile)
       const dashLinks  = document.querySelectorAll('.nav-dashboard-link');
@@ -82,12 +83,24 @@
       if (session) {
         if (loginBtn)  loginBtn.style.display  = 'none';
         if (logoutBtn) logoutBtn.style.display = '';
-        if (badge)     badge.style.display     = '';
+
+        // Teacher badge — hide when demo badge is visible to avoid crowding
+        const inDemo = (typeof NutriDemo !== 'undefined') && NutriDemo.isDemo();
+        if (badge) {
+          if (inDemo) {
+            badge.style.display = 'none';
+          } else {
+            badge.style.display = '';
+            badge.textContent   = '👩‍🏫 Teacher';
+          }
+        }
+        if (demoBadge) demoBadge.style.display = inDemo ? '' : 'none';
         dashLinks.forEach(function (el) { el.style.display = ''; });
       } else {
         if (loginBtn)  loginBtn.style.display  = '';
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (badge)     badge.style.display     = 'none';
+        if (demoBadge) demoBadge.style.display = 'none';
         dashLinks.forEach(function (el) { el.style.display = 'none'; });
       }
     },

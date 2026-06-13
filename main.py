@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from routers import ai_advisor, bmi, meals, foods, auth, poster, recipes
 from routers.foods import impact
+from config import CORS_ORIGINS
 
 
 @asynccontextmanager
@@ -28,7 +29,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -823,6 +823,20 @@ function renderFoodEquivalents(container, equivalents) {
 // ── Init ───────────────────────────────────────────────────────────────────────
 
 window.addEventListener('DOMContentLoaded', () => {
+  // ── Demo mode: auto-fill meal planner form ─────────────────────────────
+  if (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo()) {
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+    set('mealSchool',   'Government Higher Primary School, Bengaluru');
+    set('mealStudent',  'Rohan Kumar');
+    set('mealAge',      '9-12');
+    set('mealGender',   'boy');
+    set('mealHeight',   '140');
+    set('mealWeight',   '32');
+    set('mealDiet',     'vegetarian');
+    set('mealRegion',   'bengaluru_rural');
+    set('mealStrategy', 'calcium_iron');
+  }
+
   // Restore last BMI from localStorage
   try {
     const stored = localStorage.getItem('nutriprint_last_bmi');

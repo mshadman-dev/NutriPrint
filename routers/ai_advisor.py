@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from models.schemas import AIAdvisorRequest, AIAdvisorResponse
 from services.groq_engine import ask_nutrition_advisor
+from routers.deps import safe_error_detail
 
 router = APIRouter(prefix="/api/ai-advisor", tags=["AI Advisor"])
 
@@ -29,4 +30,4 @@ async def chat_with_advisor(data: AIAdvisorRequest):
         )
         return AIAdvisorResponse(**result)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e, "AI advisor unavailable"))

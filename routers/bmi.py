@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from models.schemas import BMIInput, BMIResult
 from models.db import supabase
 from services.bmi_calculator import calculate_bmi, calculate_nutrition_gap
 from services.food_equivalents import get_food_equivalents
+from routers.deps import require_teacher_access, safe_error_detail
 from datetime import datetime
 
 router = APIRouter(prefix="/api/bmi", tags=["BMI"])
@@ -38,27 +39,42 @@ async def bmi_calculate(data: BMIInput):
         return result
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 # ── BMI History ───────────────────────────────────────────
 @router.get("/history/{student_id}")
-async def bmi_history(student_id: str):
+async def bmi_history(student_id: str, request: Request):
     try:
+        student = (
+            supabase.table("students")
+            .select("teacher_id")
+            .eq("id", student_id)
+            .single()
+            .execute()
+        )
+        if not student.data:
+            raise HTTPException(status_code=404, detail="Student not found")
+
+        await require_teacher_access(request, student.data["teacher_id"])
+
         result = supabase.table("bmi_records")\
             .select("*")\
             .eq("student_id", student_id)\
             .order("assessed_at", desc=False)\
             .execute()
         return {"history": result.data}
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 # ── Export CSV ────────────────────────────────────────────
 @router.get("/export/{teacher_id}")
-async def export_csv(teacher_id: str):
+async def export_csv(teacher_id: str, request: Request):
     try:
+        await require_teacher_access(request, teacher_id)
         import csv
         import io
 
@@ -99,8 +115,10 @@ async def export_csv(teacher_id: str):
                     "attachment; filename=bmi_records.csv"
             }
         )
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 # ── Nutrition Gap ─────────────────────────────────────────
@@ -139,7 +157,7 @@ async def nutrition_gap(plan_id: str, age_group: str, diet_pref: str = ""):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 @router.get("/food-equivalents")
@@ -152,8 +170,9 @@ async def food_equivalents(age_group: str = "9-12", diet_pref: str = "vegetarian
 
 # ── Dashboard Stats ───────────────────────────────────────
 @router.get("/dashboard/stats")
-async def dashboard_stats(teacher_id: str):
+async def dashboard_stats(teacher_id: str, request: Request):
     try:
+        await require_teacher_access(request, teacher_id)
         teacher = supabase.table("teachers")\
             .select("name, school_name")\
             .eq("id", teacher_id)\
@@ -207,14 +226,17 @@ async def dashboard_stats(teacher_id: str):
             "total_assessments": assessments.count or 0,
             "bmi_distribution" : bmi_dist,
         }
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 # ── Dashboard Students ────────────────────────────────────
 @router.get("/dashboard/students")
-async def dashboard_students(teacher_id: str):
+async def dashboard_students(teacher_id: str, request: Request):
     try:
+        await require_teacher_access(request, teacher_id)
         students = supabase.table("students")\
             .select("*")\
             .eq("teacher_id", teacher_id)\
@@ -243,14 +265,17 @@ async def dashboard_students(teacher_id: str):
             })
 
         return {"students": result}
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 # ── Recent Plans ──────────────────────────────────────────
 @router.get("/dashboard/recent-plans")
-async def recent_plans(teacher_id: str):
+async def recent_plans(teacher_id: str, request: Request):
     try:
+        await require_teacher_access(request, teacher_id)
         plans = supabase.table("meal_plans")\
             .select(
                 "student_name, share_token, "
@@ -261,14 +286,17 @@ async def recent_plans(teacher_id: str):
             .limit(5)\
             .execute()
         return {"plans": plans.data}
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 # ── Class Progress ────────────────────────────────────────
 @router.get("/class-progress")
-async def class_progress(teacher_id: str):
+async def class_progress(teacher_id: str, request: Request):
     try:
+        await require_teacher_access(request, teacher_id)
         students = supabase.table("students")\
             .select("id, name, age, gender")\
             .eq("teacher_id", teacher_id)\
@@ -379,5 +407,7 @@ async def class_progress(teacher_id: str):
             "needs_attention"   : leaderboard[-5:],
         }
 
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))

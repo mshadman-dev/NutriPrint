@@ -966,6 +966,17 @@ function daAnimateCount(id, target) {
 }
 
 function daRenderStats(d) {
+  // In demo mode use the pre-set realistic stats for the overview KPI cards
+  if (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo()) {
+    const ds = NutriDemo.getStats();
+    daAnimateCount('ovStudents',    ds.total_students);
+    daAnimateCount('ovHealthy',     ds.total_students - ds.total_assessments + Math.round(ds.total_students * 0.46));
+    daAnimateCount('ovUnderweight', Math.round(ds.total_students * 0.32));
+    daAnimateCount('ovOverweight',  Math.round(ds.total_students * 0.22));
+    daAnimateCount('ovPlans',       ds.total_plans);
+    return;
+  }
+
   const dist  = d.distribution;
   const total = (dist.underweight + dist.normal + dist.overweight + dist.obese);
 
@@ -1244,12 +1255,23 @@ async function daLoadDashboard() {
   // ── Fallback: localStorage ───────────────────────────────────────────────
   if (!data) {
     const lsData = lsBuildDataset();
+
+    // In demo mode, enrich with realistic pre-set stats
+    const demoStats = (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo())
+      ? NutriDemo.getStats()
+      : null;
+
+    // In demo mode also override student list with the full demo set
+    const students = (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo())
+      ? NutriDemo.getStudents()
+      : lsData.students;
+
     data = {
-      students     : lsData.students,
+      students     : students,
       distribution : lsData.distribution,
-      total_plans  : lsData.total_plans,
-      teacher_name : '',
-      school_name  : '',
+      total_plans  : demoStats ? demoStats.total_plans  : lsData.total_plans,
+      teacher_name : demoStats ? demoStats.teacher_name : '',
+      school_name  : demoStats ? demoStats.school_name  : '',
     };
   }
 

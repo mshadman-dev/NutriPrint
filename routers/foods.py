@@ -8,6 +8,16 @@ from models.db import supabase
 
 router = APIRouter(prefix="/api/foods", tags=["Foods"])
 
+_FOODS_FILE = Path("data/foods.json")
+
+
+def _food_count() -> int:
+    try:
+        with open(_FOODS_FILE, "r", encoding="utf-8") as f:
+            return len(json.load(f))
+    except Exception:
+        return 53
+
 
 @router.get("")
 async def get_foods(
@@ -21,7 +31,7 @@ async def get_foods(
     limit: int = Query(12, ge=1, le=50),
 ):
     try:
-        foods_file = Path("data/foods.json")
+        foods_file = _FOODS_FILE
 
         with open(foods_file, "r", encoding="utf-8") as f:
             foods = json.load(f)
@@ -75,11 +85,19 @@ async def get_foods(
 
 @router.get("/impact")
 async def impact():
-    plans = supabase.table("meal_plans").select("id", count="exact").execute()
-    students = supabase.table("students").select("id", count="exact").execute()
+    total_foods = _food_count()
+    try:
+        plans = supabase.table("meal_plans").select("id", count="exact").execute()
+        students = supabase.table("students").select("id", count="exact").execute()
 
-    return {
-        "total_plans": plans.count or 0,
-        "total_students": students.count or 0,
-        "total_foods": 53,
-    }
+        return {
+            "total_plans": plans.count or 0,
+            "total_students": students.count or 0,
+            "total_foods": total_foods,
+        }
+    except Exception:
+        return {
+            "total_plans": 0,
+            "total_students": 0,
+            "total_foods": total_foods,
+        }

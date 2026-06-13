@@ -3,6 +3,7 @@ import os
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel
 from models.db import supabase
+from routers.deps import get_session_user, safe_error_detail
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 legacy_router = APIRouter(prefix="/api/auth", tags=["Auth"])
@@ -104,8 +105,15 @@ async def verify(data: VerifyInput, response: Response):
         raise HTTPException(status_code=401, detail=str(e))
 
 @router.post("/profile")
-async def create_profile(data: TeacherProfile):
+async def create_profile(data: TeacherProfile, request: Request):
     try:
+        user = await get_session_user(request)
+        if data.auth_user_id != user.id:
+            raise HTTPException(
+                status_code=403,
+                detail="Cannot create a profile for another user",
+            )
+
         existing = supabase.table("teachers")\
             .select("id")\
             .eq("auth_user_id", data.auth_user_id)\
@@ -122,8 +130,10 @@ async def create_profile(data: TeacherProfile):
         }).execute()
 
         return {"success": True, "teacher_id": result.data[0]["id"]}
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 @router.post("/logout")
 async def logout(response: Response):

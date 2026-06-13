@@ -3,6 +3,7 @@ from models.schemas import MealInput, MealPlan, RegenerateDay
 from models.db import supabase
 from services.groq_engine import generate_groq_plan
 from services.fallback_engine import generate_fallback_plan
+from routers.deps import safe_error_detail
 
 import secrets
 import json
@@ -116,7 +117,7 @@ async def generate_meal(data: MealInput):
 
         raise HTTPException(
             status_code=500,
-            detail=str(e)
+            detail=safe_error_detail(e, "Meal plan generation failed"),
         )
 
 
@@ -187,7 +188,7 @@ async def regenerate_day(plan_id: str, data: RegenerateDay):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 @router.get("/by-token/{share_token}", response_model=MealPlan)
@@ -220,4 +221,4 @@ async def get_plan_by_token(share_token: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))

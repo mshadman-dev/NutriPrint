@@ -10,9 +10,26 @@ import io
 import json
 import re
 import qrcode
+from urllib.parse import urlparse
 
 router = APIRouter(tags=["Poster"])
 templates = Jinja2Templates(directory="templates")
+
+
+def _validate_qr_url(url: str, request: Request) -> str:
+    """Only encode same-origin NutriPrint URLs to prevent open-redirect QR abuse."""
+    parsed = urlparse(url.strip())
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise HTTPException(status_code=400, detail="Invalid URL")
+
+    request_host = urlparse(str(request.base_url)).netloc.lower()
+    if parsed.netloc.lower() != request_host:
+        raise HTTPException(
+            status_code=400,
+            detail="URL must belong to this NutriPrint site",
+        )
+
+    return url.strip()
 
 
 def _get_plan_by_token(token: str):
@@ -64,7 +81,11 @@ async def plan_public(
         ctx = build_poster_context(plan, share_token, base)
         ctx["request"] = request
 
-        return templates.TemplateResponse("plan_public.html", ctx)
+        return templates.TemplateResponse(
+            request=request,
+            name="plan_public.html",
+            context=ctx,
+        )
 
     except HTTPException:
         raise
@@ -90,7 +111,11 @@ async def health_report(
         ctx = build_poster_context(plan, share_token, base)
         ctx["request"] = request
 
-        return templates.TemplateResponse("health_report.html", ctx)
+        return templates.TemplateResponse(
+            request=request,
+            name="health_report.html",
+            context=ctx,
+        )
 
     except HTTPException:
         raise
@@ -118,7 +143,11 @@ async def poster_print(
         ctx = build_poster_context(plan, share_token, base)
         ctx["request"] = request
 
-        return templates.TemplateResponse("poster_print.html", ctx)
+        return templates.TemplateResponse(
+            request=request,
+            name="poster_print.html",
+            context=ctx,
+        )
 
     except HTTPException:
         raise
@@ -127,7 +156,7 @@ async def poster_print(
 
 
 @router.get("/api/plans/qr")
-async def plan_qr(url: str):
+async def plan_qr(url: str, request: Request):
     """
     Generate a QR code PNG for the given URL.
     The URL to encode is passed as a query parameter:
@@ -137,6 +166,8 @@ async def plan_qr(url: str):
     """
     if not url:
         raise HTTPException(status_code=400, detail="url parameter is required")
+
+    url = _validate_qr_url(url, request)
 
     try:
         qr = qrcode.QRCode(

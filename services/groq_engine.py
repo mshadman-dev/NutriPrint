@@ -156,7 +156,9 @@ def generate_groq_plan(
         for day_data in data["week"]:
             meals: dict = {}
             for meal_type in ("breakfast", "lunch", "dinner"):
-                m = day_data[meal_type]
+                m = day_data.get(meal_type)
+                if not m or not isinstance(m, dict):
+                    raise ValueError(f"Missing or invalid {meal_type} in Groq response")
                 item = MealItem(
                     name_en       = m["name_en"],
                     name_kn       = m.get("name_kn", ""),

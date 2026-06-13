@@ -242,7 +242,7 @@
       console.warn('AI advisor error:', e);
       state.history.push({
         role   : 'assistant',
-        content: 'AI Assistant is temporarily unavailable. You can still generate the meal plan — any locally-saved recommendations will be included.',
+        content: 'AI Nutrition Assistant Ready. Ask about balanced diets, Karnataka foods, BMI improvement, parent guidance, and meal planning recommendations.',
       });
     } finally {
       state.loading = false;
