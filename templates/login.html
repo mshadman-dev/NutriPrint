@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}NutriPrint — Explore{% endblock %}
+{% block title %}NutriPrint — School Nutrition Intelligence Platform{% endblock %}
 
 {# ── Hide footer on this page ── #}
 {% block footer_content %}{% endblock %}
@@ -21,10 +21,69 @@
     radial-gradient(ellipse at 80% 70%, rgba(249,115,22,0.06) 0%, transparent 45%);
 }
 
+/* ── Two-column layout on wide screens ──────────────────────────────────── */
+.login-wrapper {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+  max-width: 900px;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .login-wrapper { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Left pane: product pitch ───────────────────────────────────────────── */
+.login-pitch { display: none; }
+@media (min-width: 768px) {
+  .login-pitch { display: block; padding: 1.5rem; }
+}
+.login-pitch-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  letter-spacing: -0.04em;
+  color: #0F172A;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.login-pitch-title span {
+  background: linear-gradient(135deg, #1D9E75, #34D399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.login-pitch-desc {
+  font-size: 0.92rem;
+  color: #64748B;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+.login-pitch-features { display: flex; flex-direction: column; gap: 0.65rem; }
+.login-pitch-feat {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: #374151;
+}
+.login-pitch-feat-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.6rem;
+  background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+  border: 1px solid #BBF7D0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
 /* ── Card ───────────────────────────────────────────────────────────────── */
 .login-card {
   width: 100%;
-  max-width: 440px;
   background: rgba(255,255,255,0.97);
   border: 1px solid rgba(148,163,184,0.18);
   border-radius: 1.75rem;
@@ -74,15 +133,15 @@
 .login-title {
   font-family: Poppins, sans-serif;
   font-weight: 900;
-  font-size: 1.65rem;
+  font-size: 1.45rem;
   letter-spacing: -0.03em;
   color: #0F172A;
   line-height: 1.15;
   margin-bottom: 0.4rem;
 }
-.login-subtitle { font-size: 0.88rem; color: #64748B; line-height: 1.55; }
+.login-subtitle { font-size: 0.85rem; color: #64748B; line-height: 1.6; }
 
-/* ── Info banner (redirect from protected page) ─────────────────────────── */
+/* ── Info banner ─────────────────────────────────────────────────────────── */
 .login-banner {
   display: flex;
   align-items: flex-start;
@@ -96,8 +155,8 @@
 }
 .login-banner--info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; }
 
-/* ── Primary CTA — Demo button ──────────────────────────────────────────── */
-.login-demo-primary {
+/* ── Primary CTA ─────────────────────────────────────────────────────────── */
+.login-cta-primary {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,7 +174,7 @@
   box-shadow: 0 6px 22px rgba(29,158,117,0.32);
   transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
-.login-demo-primary:hover {
+.login-cta-primary:hover {
   background: #166F53;
   transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(29,158,117,0.38);
@@ -144,69 +203,110 @@
 
 /* ── Footer hint ────────────────────────────────────────────────────────── */
 .login-hint { font-size: 0.72rem; color: #94A3B8; line-height: 1.65; }
-.login-hint strong { color: #64748B; }
 
 @media (prefers-reduced-motion: reduce) {
-  .login-demo-primary { transition: none !important; }
+  .login-cta-primary { transition: none !important; }
 }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="login-main">
-  <div class="login-card">
-    <div class="login-card-body">
+  <div class="login-wrapper">
 
-      <!-- Logo + heading -->
-      <div class="login-logo-wrap">
-        <img src="/static/images/logo.svg" alt="NutriPrint" class="login-logo-img"/>
-        <div class="login-eyebrow">Karnataka School Nutrition · AI Platform</div>
-        <h1 class="login-title">Welcome to NutriPrint</h1>
-        <p class="login-subtitle">
-          Explore the complete platform instantly —<br/>
-          no account or data entry required.
+    <!-- Left pitch panel -->
+    <div class="login-pitch">
+      <h1 class="login-pitch-title">
+        School Nutrition<br/>
+        <span>Intelligence Platform</span>
+      </h1>
+      <p class="login-pitch-desc">
+        NutriPrint helps schools assess student health, generate AI-powered meal plans,
+        and deliver actionable nutrition guidance to parents — all in one platform.
+      </p>
+      <div class="login-pitch-features">
+        <div class="login-pitch-feat">
+          <div class="login-pitch-feat-icon">📐</div>
+          BMI Assessment with age-specific classification
+        </div>
+        <div class="login-pitch-feat">
+          <div class="login-pitch-feat-icon">🤖</div>
+          AI-generated 7-day meal plans
+        </div>
+        <div class="login-pitch-feat">
+          <div class="login-pitch-feat-icon">📊</div>
+          Class-level analytics dashboard
+        </div>
+        <div class="login-pitch-feat">
+          <div class="login-pitch-feat-icon">⬜</div>
+          QR recipe access for parents
+        </div>
+        <div class="login-pitch-feat">
+          <div class="login-pitch-feat-icon">📋</div>
+          Printable parent nutrition reports
+        </div>
+        <div class="login-pitch-feat">
+          <div class="login-pitch-feat-icon">🗣️</div>
+          Bilingual support in English &amp; Kannada
+        </div>
+      </div>
+    </div>
+
+    <!-- Right card -->
+    <div class="login-card">
+      <div class="login-card-body">
+
+        <!-- Logo + heading -->
+        <div class="login-logo-wrap">
+          <img src="/static/images/logo.jpg" alt="NutriPrint" class="login-logo-img"/>
+          <div class="login-eyebrow">School Nutrition Intelligence</div>
+          <h2 class="login-title">Access the NutriPrint Platform</h2>
+          <p class="login-subtitle">
+            Explore the full platform with a pre-loaded<br/>
+            nutrition planning workspace.
+          </p>
+        </div>
+
+        <!-- Info banner — shown only when redirected from a protected page -->
+        <div id="loginError" class="login-banner login-banner--info hidden" role="alert">
+          <svg class="h-4 w-4 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5
+                     0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                  clip-rule="evenodd"/>
+          </svg>
+          <span id="loginErrorMsg">Access the NutriPrint Platform to continue.</span>
+        </div>
+
+        <!-- Primary CTA -->
+        <button onclick="NutriDemo.activate()"
+                class="login-cta-primary"
+                aria-label="Get started with NutriPrint">
+          <span aria-hidden="true">🚀</span>
+          Get Started
+        </button>
+
+        <!-- What's included pills -->
+        <div class="login-features" aria-label="Platform modules">
+          <span class="login-feature-pill">⚖️ BMI Assessment</span>
+          <span class="login-feature-pill">🤖 AI Meal Plans</span>
+          <span class="login-feature-pill">📊 Analytics Dashboard</span>
+          <span class="login-feature-pill">📈 Progress Tracking</span>
+          <span class="login-feature-pill">⬜ QR Recipes</span>
+          <span class="login-feature-pill">📋 Parent Reports</span>
+        </div>
+
+      </div>
+
+      <!-- Card footer -->
+      <div class="login-card-footer">
+        <p class="login-hint">
+          Pre-loaded with a nutrition planning workspace.<br/>
+          <strong style="color:#64748B;">NutriPrint</strong> · AI-Powered School Nutrition Platform
         </p>
       </div>
 
-      <!-- Info banner — shown only when redirected from a protected page -->
-      <div id="loginError" class="login-banner login-banner--info hidden" role="alert">
-        <svg class="h-4 w-4 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5
-                   0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.75.75 0 100-1.5.75.75 0 000 1.5z"
-                clip-rule="evenodd"/>
-        </svg>
-        <span id="loginErrorMsg">Please start Demo Mode to continue using NutriPrint.</span>
-      </div>
-
-      <!-- Primary CTA -->
-      <button onclick="NutriDemo.activate()"
-              class="login-demo-primary"
-              aria-label="Explore NutriPrint in Demo Mode — no account needed">
-        <span aria-hidden="true">🚀</span>
-        Explore NutriPrint in Demo Mode
-      </button>
-
-      <!-- What's included pills -->
-      <div class="login-features" aria-label="What's included in demo">
-        <span class="login-feature-pill">⚖️ BMI Assessment</span>
-        <span class="login-feature-pill">🤖 AI Meal Plans</span>
-        <span class="login-feature-pill">📊 Analytics Dashboard</span>
-        <span class="login-feature-pill">📈 Progress Tracking</span>
-        <span class="login-feature-pill">⬜ QR Recipes</span>
-        <span class="login-feature-pill">📋 Parent Reports</span>
-      </div>
-
     </div>
-
-    <!-- Card footer -->
-    <div class="login-card-footer">
-      <p class="login-hint">
-        Pre-loaded with sample students, meal plans, and analytics.<br/>
-        <strong>NutriPrint V2</strong> · Yenepoya Institute of Technology, Moodbidri
-      </p>
-    </div>
-
   </div>
 </div>
 {% endblock %}

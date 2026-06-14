@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}NutriPrint — Karnataka School Nutrition{% endblock %}
+{% block title %}NutriPrint — AI-Powered School Nutrition Platform{% endblock %}
 {% block page_id %}home{% endblock %}
 
 {% block head %}
@@ -862,9 +862,8 @@
       </div>
 
       <h1 class="hp-hero-headline hp-reveal hp-d1" id="hp-hero-headline">
-        Nourishing
-        <span class="hp-hl-accent">Karnataka's Children,</span><br/>
-        One Meal Plan at a Time
+        <span class="hp-hl-accent">AI-Powered</span><br/>
+        School Nutrition Platform
       </h1>
 
       <p class="hp-hero-tagline hp-reveal hp-d2">
@@ -873,22 +872,15 @@
       </p>
 
       <div class="hp-hero-cta hp-reveal hp-d3">
-        <a href="/bmi" class="hp-cta-primary">
-          <span aria-hidden="true">⚖️</span> Assess Student BMI
+        <a href="/login" class="hp-cta-primary">
+          <span aria-hidden="true">🚀</span> Get Started
         </a>
-        <a href="/meal-planner" class="hp-cta-secondary">
-          <span aria-hidden="true">🗓️</span> Generate Meal Plan
+        <a href="/bmi" class="hp-cta-secondary">
+          <span aria-hidden="true">⚖️</span> BMI Assessment
         </a>
-        <a href="/food-catalog" class="hp-cta-ghost">
-          <span aria-hidden="true">🥗</span> Browse Catalog
+        <a href="/about" class="hp-cta-ghost">
+          <span aria-hidden="true">ℹ️</span> Learn More
         </a>
-        <button onclick="NutriDemo.activate()"
-                class="hp-cta-ghost"
-                style="background:rgba(252,211,77,0.18);border-color:rgba(252,211,77,0.5);
-                       font-weight:800;cursor:pointer;"
-                aria-label="Try Demo Mode — explore with pre-loaded sample data">
-          <span aria-hidden="true">🚀</span> Try Demo Mode
-        </button>
       </div>
 
       <div class="hp-hero-pills hp-reveal hp-d4">
@@ -897,24 +889,25 @@
         <span class="hp-hero-pill">🗣️ EN · ಕನ್ನಡ</span>
         <span class="hp-hero-pill">₹150/day Budget</span>
         <span class="hp-hero-pill">⬜ QR Recipes</span>
+        <span class="hp-hero-pill">📊 Analytics Dashboard</span>
       </div>
     </div>
 
     <!-- Right: live impact card -->
     <div class="hp-hero-card hp-reveal hp-d2">
-      <div class="hp-hero-card-label">Live Platform Impact</div>
+      <div class="hp-hero-card-label">Platform Capabilities</div>
       <div class="hp-live-grid">
         <div class="hp-live-tile">
-          <div class="hp-live-value" id="metricPlans">0</div>
-          <div class="hp-live-label">Meal Plans Generated</div>
-        </div>
-        <div class="hp-live-tile">
-          <div class="hp-live-value" id="metricStudents">0</div>
-          <div class="hp-live-label">Students Assessed</div>
-        </div>
-        <div class="hp-live-tile">
           <div class="hp-live-value" id="metricFoods">53</div>
-          <div class="hp-live-label">Foods in Catalog</div>
+          <div class="hp-live-label">Food Items in Catalog</div>
+        </div>
+        <div class="hp-live-tile">
+          <div class="hp-live-value">15+</div>
+          <div class="hp-live-label">Nutrition Metrics Tracked</div>
+        </div>
+        <div class="hp-live-tile">
+          <div class="hp-live-value">6</div>
+          <div class="hp-live-label">Core Platform Modules</div>
         </div>
         <div class="hp-live-tile">
           <div class="hp-live-value">24/7</div>
@@ -935,27 +928,27 @@
   <div class="hp-stats-grid">
 
     <div class="hp-stat-card hp-reveal">
-      <div class="hp-stat-icon" aria-hidden="true">👨‍🎓</div>
-      <div class="hp-stat-value" id="statStudents">500+</div>
-      <div class="hp-stat-label">Students Assessed</div>
+      <div class="hp-stat-icon" aria-hidden="true">🥘</div>
+      <div class="hp-stat-value" id="statFoods">53+</div>
+      <div class="hp-stat-label">Food Items Available</div>
     </div>
 
     <div class="hp-stat-card hp-reveal hp-d1">
-      <div class="hp-stat-icon" aria-hidden="true">📄</div>
-      <div class="hp-stat-value" id="statPlans">1,000+</div>
-      <div class="hp-stat-label">Meal Plans Generated</div>
+      <div class="hp-stat-icon" aria-hidden="true">📊</div>
+      <div class="hp-stat-value">15+</div>
+      <div class="hp-stat-label">Nutrition Metrics Supported</div>
     </div>
 
     <div class="hp-stat-card hp-reveal hp-d2">
-      <div class="hp-stat-icon" aria-hidden="true">🥗</div>
-      <div class="hp-stat-value" id="statFoods">53+</div>
-      <div class="hp-stat-label">Nutrition Foods Available</div>
+      <div class="hp-stat-icon" aria-hidden="true">⚙️</div>
+      <div class="hp-stat-value">6</div>
+      <div class="hp-stat-label">Core Platform Modules</div>
     </div>
 
     <div class="hp-stat-card hp-reveal hp-d3">
-      <div class="hp-stat-icon" aria-hidden="true">🏫</div>
-      <div class="hp-stat-value">Pilot</div>
-      <div class="hp-stat-label">Schools Supported</div>
+      <div class="hp-stat-icon" aria-hidden="true">🗣️</div>
+      <div class="hp-stat-value">EN · ಕನ್ನಡ</div>
+      <div class="hp-stat-label">Bilingual Support</div>
     </div>
 
   </div>
@@ -1050,45 +1043,45 @@
 
   <div class="hp-features-grid">
 
-    <a href="/bmi" class="hp-feat-card hp-reveal" aria-label="BMI Assessment feature">
+    <a href="/bmi" class="hp-feat-card hp-reveal" aria-label="BMI Assessment module">
       <div class="hp-feat-icon-wrap" aria-hidden="true">📐</div>
       <div class="hp-feat-title">BMI Assessment</div>
-      <div class="hp-feat-desc">Accurate BMI calculation with age-gender percentile classification and personalised student advice.</div>
-      <div class="hp-feat-arrow">Try it →</div>
+      <div class="hp-feat-desc">Accurate BMI calculation with age-gender percentile classification and personalised student health advice for every risk level.</div>
+      <div class="hp-feat-arrow">Explore →</div>
     </a>
 
-    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d1" aria-label="AI Nutrition Advisor feature">
+    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d1" aria-label="AI Meal Planning module">
       <div class="hp-feat-icon-wrap" aria-hidden="true">🤖</div>
-      <div class="hp-feat-title">AI Nutrition Advisor</div>
-      <div class="hp-feat-desc">Groq-powered advisor that answers nutrition questions in English and Kannada before generating a plan.</div>
-      <div class="hp-feat-arrow">Try it →</div>
+      <div class="hp-feat-title">AI Meal Planning</div>
+      <div class="hp-feat-desc">Groq-powered AI generates personalised 7-day meal plans with regional Karnataka foods, bilingual guidance, and nutrition strategy tailoring.</div>
+      <div class="hp-feat-arrow">Explore →</div>
     </a>
 
-    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d2" aria-label="Weekly Meal Planner feature">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">🗓️</div>
-      <div class="hp-feat-title">Weekly Meal Planner</div>
-      <div class="hp-feat-desc">AI-generated 7-day meal plans tailored to diet type, Karnataka region, age group, and nutrition strategy.</div>
-      <div class="hp-feat-arrow">Plan meals →</div>
+    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d2" aria-label="Nutrition Analytics module">
+      <div class="hp-feat-icon-wrap" aria-hidden="true">📊</div>
+      <div class="hp-feat-title">Nutrition Analytics</div>
+      <div class="hp-feat-desc">Identifies shortfalls in calories, protein, calcium, and iron against age-appropriate daily targets with class-level dashboard insights.</div>
+      <div class="hp-feat-arrow">Explore →</div>
     </a>
 
-    <a href="/food-catalog" class="hp-feat-card hp-reveal hp-d1" aria-label="Food Catalog feature">
+    <a href="/food-catalog" class="hp-feat-card hp-reveal hp-d1" aria-label="Food Catalog module">
       <div class="hp-feat-icon-wrap" aria-hidden="true">🥗</div>
       <div class="hp-feat-title">Food Catalog</div>
-      <div class="hp-feat-desc">53+ Karnataka foods with full nutrition data, seasonal filters, region tags, and recipe pages.</div>
-      <div class="hp-feat-arrow">Browse →</div>
+      <div class="hp-feat-desc">53+ Karnataka foods with full nutrition data, seasonal filters, region tags, diet-type filters, and individual recipe pages.</div>
+      <div class="hp-feat-arrow">Explore →</div>
     </a>
 
-    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d2" aria-label="Nutrition Gap Analysis feature">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">📊</div>
-      <div class="hp-feat-title">Nutrition Gap Analysis</div>
-      <div class="hp-feat-desc">Identifies shortfalls in calories, protein, calcium, and iron against age-appropriate daily targets.</div>
-      <div class="hp-feat-arrow">See gaps →</div>
-    </a>
-
-    <a href="/food-catalog" class="hp-feat-card hp-reveal hp-d3" aria-label="QR Recipe System feature">
+    <a href="/food-catalog" class="hp-feat-card hp-reveal hp-d2" aria-label="QR Recipes module">
       <div class="hp-feat-icon-wrap" aria-hidden="true">⬜</div>
-      <div class="hp-feat-title">QR Recipe System</div>
-      <div class="hp-feat-desc">Scan QR codes on any meal plan item to instantly open a full recipe page with ingredients and prep steps.</div>
+      <div class="hp-feat-title">QR Recipes</div>
+      <div class="hp-feat-desc">Scan QR codes on any meal plan to instantly open step-by-step recipe pages. Works on any smartphone — no app needed.</div>
+      <div class="hp-feat-arrow">Explore →</div>
+    </a>
+
+    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d3" aria-label="Parent Reports module">
+      <div class="hp-feat-icon-wrap" aria-hidden="true">📋</div>
+      <div class="hp-feat-title">Parent Reports</div>
+      <div class="hp-feat-desc">Printable parent nutrition awareness packs with BMI status, AI recommendations, weekly meal tables, and shareable QR links.</div>
       <div class="hp-feat-arrow">Explore →</div>
     </a>
 
@@ -1359,15 +1352,15 @@
       Ready to Improve<br/>School Nutrition?
     </h2>
     <p class="hp-cta-sub">
-      Join schools across Karnataka using NutriPrint to make evidence-based nutrition decisions
-      for every child, every day.
+      NutriPrint gives every school the tools for evidence-based nutrition decisions —
+      from BMI assessment to AI meal planning and parent reports.
     </p>
     <div class="hp-cta-btns">
-      <a href="/bmi" class="hp-cta-primary">
-        <span aria-hidden="true">⚖️</span> Assess Student BMI
+      <a href="/login" class="hp-cta-primary">
+        <span aria-hidden="true">🚀</span> Get Started
       </a>
-      <a href="/meal-planner" class="hp-cta-secondary">
-        <span aria-hidden="true">🗓️</span> Generate Meal Plan
+      <a href="/about" class="hp-cta-secondary">
+        <span aria-hidden="true">ℹ️</span> Learn More
       </a>
     </div>
   </div>
@@ -1377,54 +1370,18 @@
 
 {% block scripts %}
 <script>
-/* ── Count-up animation (same logic as before, preserved exactly) ─────────── */
-async function animateCount(id, target) {
-  const el = document.getElementById(id);
-  if (!el || !target) return;
-  let current = 0;
-  const step = Math.max(1, Math.ceil(target / 40));
-  const timer = setInterval(() => {
-    current = Math.min(current + step, target);
-    el.textContent = current.toLocaleString();
-    if (current >= target) clearInterval(timer);
-  }, 35);
-}
-
-/* ── Live impact fetch (existing IDs kept + new stat IDs updated) ─────────── */
+/* ── Real platform metrics fetch ─────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded', async () => {
   try {
     const response = await fetch('/api/impact');
     const data     = await response.json();
-
-    const plans    = data.total_plans    ?? 0;
-    const students = data.total_students ?? 0;
-    const foods    = data.total_foods    ?? 53;
-
-    /* Hero card (original IDs — unchanged) */
-    await Promise.all([
-      animateCount('metricPlans',    plans),
-      animateCount('metricStudents', students),
-      animateCount('metricFoods',    foods)
-    ]);
-
-    /* Stats strip (new IDs) */
-    const fmt = (n, fallback) => {
-      if (!n) return fallback;
-      return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k+' : n + '+';
-    };
-    const ss = document.getElementById('statStudents');
-    const sp = document.getElementById('statPlans');
+    const foods    = data.total_foods ?? 53;
     const sf = document.getElementById('statFoods');
-    if (ss) ss.textContent = fmt(students, '583+');
-    if (sp) sp.textContent = fmt(plans,    '1.2k+');
+    const mf = document.getElementById('metricFoods');
     if (sf) sf.textContent = foods + '+';
-
+    if (mf) mf.textContent = foods;
   } catch (_) {
-    await Promise.all([
-      animateCount('metricPlans',    1247),
-      animateCount('metricStudents', 583),
-      animateCount('metricFoods',    53)
-    ]);
+    // keep fallback values already rendered
   }
 });
 
