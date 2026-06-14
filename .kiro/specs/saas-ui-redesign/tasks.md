@@ -16,7 +16,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
 
 ## Tasks
 
-- [ ] 1. Create `base.css` — design tokens, Shell_Card, Badge, and global resets
+- [x] 1. Create `base.css` — design tokens, Shell_Card, Badge, and global resets
   - Create `/static/css/base.css` as a new file (does not yet exist).
   - Define the `:root` block with all nine required custom properties:
     `--color-bg`, `--color-surface`, `--color-primary`, `--color-accent`,
@@ -58,7 +58,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     5.1, 5.3, 5.4, 6.1, 6.2, 7.1, 7.3, 7.4, 8.1, 8.4, 9.1, 9.2, 9.4, 10.1, 10.5,
     11.1, 12.2, 13.5_
 
-  - [ ] 1.1 Write `base.css` with all tokens, Shell_Card, Badge, and component styles
+  - [x] 1.1 Write `base.css` with all tokens, Shell_Card, Badge, and component styles
     - Create the file at the absolute path `/static/css/base.css`.
     - Implement every class listed above.
     - All brand colours in rule bodies MUST use `var(--*)` tokens — no bare hex.
@@ -82,7 +82,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
       `padding`, `font-weight` from `base.css`; assert pill constraints.
     - **Validates: Requirements 9.4**
 
-- [ ] 2. Update `base.html` — link `base.css` first, upgrade navigation
+- [x] 2. Update `base.html` — link `base.css` first, upgrade navigation
   - Open `/templates/base.html`.
   - Insert `<link rel="stylesheet" href="/static/css/base.css"/>` as the FIRST stylesheet
     entry in `<head>`, before all existing stylesheet links.
@@ -103,13 +103,13 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     `#demoProgressText`, `#pauseDemoBtn`, `#resumeDemoBtn`.
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 15.1, 15.6_
 
-  - [ ] 2.1 Link `base.css` first and wire frosted-glass header in `base.html`
+  - [x] 2.1 Link `base.css` first and wire frosted-glass header in `base.html`
     - Add `<link>` tag as first stylesheet.
     - Add `site-header` class to `<header>`.
     - Add scroll listener script.
     - _Requirements: 2.1, 1.2_
 
-  - [ ] 2.2 Upgrade mobile nav drawer in `base.html`
+  - [x] 2.2 Upgrade mobile nav drawer in `base.html`
     - Update `toggleMobileNav()` to use `.open` class on `#mobileNav`.
     - Add outside-click close handler.
     - Verify `#mobileNav` ID is preserved.
@@ -135,12 +135,12 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     `IntersectionObserver` logic (design.md §3.3).
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 3.1 Implement hero banner and staggered animation in `index.html`
+  - [-] 3.1 Implement hero banner and staggered animation in `index.html`
     - Apply `.hero-banner`, `.hero-grid`, `.hero-animate` classes.
     - Add `.hero-headline-accent` span, CTA button classes, impact panel IDs.
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-  - [ ] 3.2 Implement statistics cards and counter animation in `index.html`
+  - [-] 3.2 Implement statistics cards and counter animation in `index.html`
     - Apply `.stats-grid`, `.stat-card` and sub-element classes.
     - Add `id="statsSection"`, `animateCounter()` JS, `IntersectionObserver` trigger.
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
@@ -168,7 +168,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     existing error element IDs).
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
 
-  - [ ] 4.1 Apply Shell_Card, gauge, badge, and callout classes in `bmi.html`
+  - [-] 4.1 Apply Shell_Card, gauge, badge, and callout classes in `bmi.html`
     - Add all required classes listed above.
     - Confirm no form `action`/`method`/`name`/`type` attributes are modified.
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
@@ -179,7 +179,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
       assert background, border-radius, and box-shadow are identical.
     - **Validates: Requirements 9.1, 9.2**
 
-- [ ] 5. Checkpoint — Base foundation verified
+- [~] 5. Checkpoint — Base foundation verified
   - Ensure `base.css` loads without errors (check browser console for custom property failures).
   - Confirm `.shell-card` looks consistent on `/bmi` and `/` pages.
   - Confirm frosted-glass header appears on scroll.
@@ -204,13 +204,13 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     `#mealMonth`, `#mealStrategy`.
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-  - [ ] 6.1 Apply day-card grid and Shell_Card classes in `meal_planner.html`
+  - [-] 6.1 Apply day-card grid and Shell_Card classes in `meal_planner.html`
     - Add `.shell-card`, `.card-header-gradient`, `.day-cards-grid`, `.day-card`, `.day-card-header`,
       `.meal-row` classes to appropriate elements.
     - Confirm all JS form field IDs are intact.
     - _Requirements: 6.1, 6.2, 6.4, 6.6_
 
-  - [ ] 6.2 Wire weekly summary Shell_Card and loading state in `meal_planner.html`
+  - [~] 6.2 Wire weekly summary Shell_Card and loading state in `meal_planner.html`
     - Add `.shell-card` to `.wns-panel` container.
     - Confirm `.ld-meal-card` is applied to the loading skeleton container.
     - _Requirements: 6.3, 6.5_
@@ -234,7 +234,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
   - Verify `.filter-toolbar` has `overflow-x: auto; flex-wrap: nowrap` — from `base.css`.
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
 
-  - [ ] 7.1 Apply food card grid and filter toolbar classes in `food_catalog.html`
+  - [-] 7.1 Apply food card grid and filter toolbar classes in `food_catalog.html`
     - Add `.food-cards-grid`, `.food-card`, `.filter-toolbar`, `.filter-chip`,
       `.badge` classes to their respective elements.
     - Confirm `.es-no-results` empty state is in place.
@@ -287,7 +287,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
       use fast-check to iterate over them; assert each is findable in the redesigned templates.
     - **Validates: Requirements 15.1, 15.6**
 
-- [ ] 9. Checkpoint — Per-page redesign complete
+- [~] 9. Checkpoint — Per-page redesign complete
   - Confirm each page renders Shell_Cards consistently.
   - Confirm advisor side-by-side layout at ≥ 1024 px.
   - Confirm food catalog filter toolbar scrolls horizontally on mobile.
@@ -314,17 +314,17 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
       block to cover any new animation declarations.
   - _Requirements: 1.2, 9.3, 12.1, 12.2, 13.5_
 
-  - [ ] 10.1 Token-update `loading.css` and `empty_states.css`
+  - [~] 10.1 Token-update `loading.css` and `empty_states.css`
     - Replace hard-coded hex values with `var(--*)` tokens.
     - Preserve all class names and `@keyframes` names.
     - _Requirements: 1.2, 12.1, 13.5_
 
-  - [ ] 10.2 Token-update `advisor.css`, `nutrition_score.css`, `weekly_summary.css`
+  - [~] 10.2 Token-update `advisor.css`, `nutrition_score.css`, `weekly_summary.css`
     - Replace hard-coded hex values with `var(--*)` tokens.
     - Preserve all class names.
     - _Requirements: 1.2, 12.1_
 
-  - [ ] 10.3 Token-update `poster.css`, `progress_tracker.css`, `qr_system.css`, `recipe.css`
+  - [~] 10.3 Token-update `poster.css`, `progress_tracker.css`, `qr_system.css`, `recipe.css`
     - Replace hard-coded hex values with `var(--*)` tokens.
     - Preserve all class names.
     - _Requirements: 1.2, 12.1_
@@ -356,15 +356,15 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     `@media (max-width: 480px)` block in `base.css`.
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 13.1, 13.4, 13.6_
 
-  - [ ] 11.1 Audit and fix spacing values to 0.25rem grid in `base.css`
+  - [~] 11.1 Audit and fix spacing values to 0.25rem grid in `base.css`
     - Replace any non-grid-compliant values; add responsive gap rules.
     - _Requirements: 11.1, 11.5_
 
-  - [ ] 11.2 Add `max-width` container, responsive padding, and mobile font-size guards
+  - [~] 11.2 Add `max-width` container, responsive padding, and mobile font-size guards
     - Add `max-width: 1280px` to main wrapper; set mobile padding; set minimum font sizes.
     - _Requirements: 11.2, 13.6_
 
-  - [ ] 11.3 Add `min-height: 44px` tap-target rules for mobile form inputs and buttons
+  - [~] 11.3 Add `min-height: 44px` tap-target rules for mobile form inputs and buttons
     - Add `@media (max-width: 480px)` block in `base.css` for all form inputs and buttons.
     - _Requirements: 13.4_
 
@@ -391,7 +391,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     with font-weight only) so the global font rules apply automatically.
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6_
 
-  - [ ] 12.1 Add global Poppins/Inter reset and letter-spacing rules to `base.css`
+  - [~] 12.1 Add global Poppins/Inter reset and letter-spacing rules to `base.css`
     - Implement heading and body font rules as specified.
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6_
 
@@ -412,7 +412,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     (design.md Testing Strategy unit test 14.2).
   - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5_
 
-  - [ ] 13.1 Confirm Shell_Card classes on loading/empty state containers in templates
+  - [~] 13.1 Confirm Shell_Card classes on loading/empty state containers in templates
     - Add `.shell-card` alongside `.ld-meal-card`, `.ld-bmi-card` in templates.
     - Confirm `.es-toast--error` is used for API failures.
     - _Requirements: 14.1, 14.3, 14.4, 14.5_
@@ -427,7 +427,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     updated to `var(--color-accent)`.
   - _Requirements: 12.2, 12.3_
 
-  - [ ] 14.1 Replace orange primary interactive colours with accent green in `advisor.css` and all CSS files
+  - [~] 14.1 Replace orange primary interactive colours with accent green in `advisor.css` and all CSS files
     - Update `.advisor-send` background to `var(--color-accent)`.
     - Audit all other files for `#F97316` in interactive contexts.
     - _Requirements: 12.2, 12.3_
@@ -439,7 +439,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
       not `#F97316`.
     - **Validates: Requirements 12.2, 12.3**
 
-- [ ] 15. Set up the property-based test infrastructure
+- [x] 15. Set up the property-based test infrastructure
   - Create directory `tests/css_properties/` (relative to project root).
   - Initialise a minimal `package.json` in `tests/` with `fast-check`, `jest`, and
     `ts-jest` (or plain JS with jest) as dev dependencies.
@@ -454,7 +454,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
   - The test utility files are pure CSS/DOM text parsing — no real browser required.
   - _Requirements: (testing infrastructure — underpins all property tests)_
 
-  - [ ] 15.1 Set up `tests/css_properties/` directory with `fast-check` and parser utilities
+  - [x] 15.1 Set up `tests/css_properties/` directory with `fast-check` and parser utilities
     - Create `tests/package.json`, `tests/css_properties/utils/css-parser.js`,
       `tests/css_properties/utils/dom-snapshot.js`.
     - _Requirements: (underpins properties 1–15)_
@@ -474,7 +474,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     `// Feature: saas-ui-redesign, Property N: <property_text>`.
   - _Requirements: All (via test coverage)_
 
-  - [ ] 16.1 Write property tests for token system (Properties 1 & 2)
+  - [~] 16.1 Write property tests for token system (Properties 1 & 2)
     - Implement `design-tokens.test.js`.
     - Minimum 100 iterations per `fc.assert`.
     - _Requirements: 1.1, 1.2_
@@ -489,7 +489,7 @@ navigation upgrade, per-page layout improvements, and a property-based test suit
     - Implement all remaining test files listed above.
     - **Validates: All remaining correctness properties**
 
-- [ ] 17. Final checkpoint — full test suite and JS regression check
+- [~] 17. Final checkpoint — full test suite and JS regression check
   - Run `cd tests && npm test` (or `npx jest --runInBand`) — assert all property tests pass.
   - Run `grep -r 'getElementById\|querySelector\|getElementsByClassName\|querySelectorAll' static/js/` and verify each referenced id/class still exists in the redesigned templates.
   - Open each of the six pages in a browser and check DevTools Console for:

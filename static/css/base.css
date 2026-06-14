@@ -1,0 +1,770 @@
+/* ==========================================================================
+   base.css — NutriPrint V2 SaaS UI Redesign
+   Design token definitions, Shell_Card, Badge, and global component styles.
+   LOAD ORDER: Must be first stylesheet loaded in base.html.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. DESIGN TOKENS (:root)
+   ========================================================================== */
+
+:root {
+  /* ── Brand Colours ─────────────────────────────────────────────────────── */
+  --color-bg:           #F8FAFC;
+  --color-surface:      #FFFFFF;
+  --color-primary:      #0F172A;
+  --color-accent:       #10B981;
+  --color-text:         #0F172A;
+  --color-text-muted:   #64748B;
+
+  /* ── Derived Accent Tints ───────────────────────────────────────────────── */
+  --color-accent-light: rgba(16,185,129,0.10);
+  --color-accent-mid:   rgba(16,185,129,0.20);
+  --color-accent-dark:  #0D9668;
+
+  /* ── Semantic Colours ───────────────────────────────────────────────────── */
+  --color-error:        #EF4444;
+  --color-warning:      #F59E0B;
+  --color-success:      #10B981;
+  --color-info:         #3B82F6;
+
+  /* ── Shadows ────────────────────────────────────────────────────────────── */
+  --shadow-card:        0 14px 35px rgba(15,23,42,0.06);
+  --shadow-hover:       0 22px 48px rgba(15,23,42,0.10);
+  --shadow-nav:         0 1px 0 rgba(15,23,42,0.04);
+
+  /* ── Radii ──────────────────────────────────────────────────────────────── */
+  --radius-card:        1.5rem;
+  --radius-inner:       1rem;
+  --radius-pill:        9999px;
+
+  /* ── Spacing Scale (4 px / 0.25 rem base grid) ─────────────────────────── */
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-5:   1.25rem;
+  --space-6:   1.5rem;
+  --space-7:   1.75rem;
+  --space-8:   2rem;
+  --space-9:   2.25rem;
+  --space-10:  2.5rem;
+  --space-11:  2.75rem;
+  --space-12:  3rem;
+  --space-13:  3.25rem;
+  --space-14:  3.5rem;
+  --space-15:  3.75rem;
+  --space-16:  4rem;
+  --space-17:  4.25rem;
+  --space-18:  4.5rem;
+  --space-19:  4.75rem;
+  --space-20:  5rem;
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body:    'Inter', sans-serif;
+}
+
+/* ==========================================================================
+   2. GLOBAL RESETS & BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:  var(--color-bg);
+  font-family: var(--font-body);
+  color:       var(--color-text);
+  margin:      0;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   3. TYPOGRAPHY GLOBALS
+   ========================================================================== */
+
+h1, h2, h3, h4,
+.heading,
+.section-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color:       var(--color-primary);
+  line-height: 1.2;
+  margin-top:  0;
+}
+
+h1, .h1 { font-size: 2.4rem; letter-spacing: -0.03em; }
+h2, .h2 { font-size: 1.8rem; letter-spacing: -0.03em; }
+h3, .h3 { font-size: 1.4rem; }
+h4, .h4 { font-size: 1.1rem; }
+
+.section-title {
+  font-size:      1.8rem;
+  letter-spacing: -0.03em;
+}
+
+/* Body text elements use Inter */
+body,
+p,
+span,
+label,
+li,
+.body-text {
+  font-family: var(--font-body);
+}
+
+p { margin-top: 0; }
+
+/* ==========================================================================
+   4. LAYOUT — CONTAINER
+   ========================================================================== */
+
+.container {
+  width:      100%;
+  max-width:  1280px;
+  margin-left:  auto;
+  margin-right: auto;
+  padding:    0 var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
+}
+
+/* Section vertical spacing */
+.section {
+  padding-top:    var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-top:    var(--space-20);
+    padding-bottom: var(--space-20);
+  }
+}
+
+/* ==========================================================================
+   5. SHELL_CARD — CANONICAL (do NOT override these 4 properties)
+   ========================================================================== */
+
+.shell-card {
+  background:    var(--color-surface);
+  border:        1px solid rgba(148,163,184,0.18);
+  border-radius: var(--radius-card);
+  box-shadow:    var(--shadow-card);
+}
+
+/* Shell-card padding helpers */
+.shell-card-body {
+  padding: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .shell-card-body {
+    padding: var(--space-7);
+  }
+}
+
+/* ==========================================================================
+   6. BADGE / PILL COMPONENT
+   ========================================================================== */
+
+/* Base badge */
+.badge {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           0.25rem;
+  padding:       0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size:     0.75rem;
+  font-weight:   700;
+  line-height:   1.4;
+  white-space:   nowrap;
+}
+
+/* Semantic colour variants */
+.badge--green {
+  background: #D1FAE5;
+  color:      #065F46;
+}
+
+.badge--blue {
+  background: #DBEAFE;
+  color:      #1D4ED8;
+}
+
+.badge--orange {
+  background: #FEF3C7;
+  color:      #92400E;
+}
+
+.badge--red {
+  background: #FEE2E2;
+  color:      #991B1B;
+}
+
+.badge--accent {
+  background: var(--color-accent);
+  color:      var(--color-surface);
+}
+
+.badge--outline {
+  background:  transparent;
+  border:      1.5px solid var(--color-accent);
+  color:       var(--color-accent);
+}
+
+/* BMI classification aliases — KEEP exact names (JS/templates reference them) */
+.badge-underweight {
+  background: #DBEAFE;
+  color:      #1D4ED8;
+}
+
+.badge-normal {
+  background: #D1FAE5;
+  color:      #065F46;
+}
+
+.badge-overweight {
+  background: #FEF3C7;
+  color:      #92400E;
+}
+
+.badge-obese {
+  background: #FEE2E2;
+  color:      #991B1B;
+}
+
+/* ==========================================================================
+   7. NAVIGATION
+   ========================================================================== */
+
+.site-header {
+  position:        sticky;
+  top:             0;
+  z-index:         50;
+  background:      rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom:   1px solid rgba(148,163,184,0.12);
+  box-shadow:      var(--shadow-nav);
+  transition:      box-shadow 200ms ease, background 200ms ease;
+}
+
+.site-header.scrolled {
+  box-shadow: 0 4px 24px rgba(15,23,42,0.08);
+  background: rgba(255,255,255,0.97);
+}
+
+.nav-link-active {
+  color:      var(--color-accent);
+  background: var(--color-accent-light);
+  box-shadow: inset 0 0 0 1.5px var(--color-accent-mid);
+}
+
+/* Mobile drawer */
+#mobileNav {
+  max-height: 0;
+  overflow:   hidden;
+  transition: max-height 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#mobileNav.open {
+  max-height: 400px;
+}
+
+/* ==========================================================================
+   8. HERO SECTION
+   ========================================================================== */
+
+.hero-banner {
+  background:    linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  min-height:    420px;
+  border-radius: var(--radius-card);
+  overflow:      hidden;
+  position:      relative;
+  padding:       3rem 2rem;
+}
+
+@media (max-width: 1023px) {
+  .hero-banner {
+    min-height: auto;
+    padding:    2.5rem 1.5rem;
+  }
+}
+
+.hero-grid {
+  display:     grid;
+  gap:         var(--space-8);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+/* Staggered fade-up animation */
+.hero-animate {
+  opacity:   0;
+  animation: heroFadeUp 400ms ease forwards;
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity:   0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity:   1;
+    transform: translateY(0);
+  }
+}
+
+.hero-animate:nth-child(1) { animation-delay:   0ms; }
+.hero-animate:nth-child(2) { animation-delay: 100ms; }
+.hero-animate:nth-child(3) { animation-delay: 150ms; }
+.hero-animate:nth-child(4) { animation-delay: 200ms; }
+
+/* Gradient text headline */
+.hero-headline-accent {
+  background:              linear-gradient(90deg, #6EE7B7 0%, var(--color-accent) 50%, #34D399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip:         text;
+}
+
+/* CTA Buttons */
+.btn-hero-primary {
+  background:    var(--color-surface);
+  color:         var(--color-primary);
+  padding:       0.875rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-weight:   700;
+  font-size:     1rem;
+  box-shadow:    0 8px 24px rgba(255,255,255,0.2);
+  transition:    transform 160ms ease, box-shadow 160ms ease;
+  display:       inline-flex;
+  align-items:   center;
+  gap:           var(--space-2);
+  border:        none;
+  cursor:        pointer;
+  text-decoration: none;
+}
+
+.btn-hero-primary:hover {
+  transform:  translateY(-2px);
+  box-shadow: 0 14px 32px rgba(255,255,255,0.28);
+}
+
+.btn-hero-secondary {
+  background:    var(--color-accent);
+  color:         var(--color-surface);
+  padding:       0.875rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-weight:   700;
+  font-size:     1rem;
+  border:        2px solid rgba(255,255,255,0.25);
+  transition:    transform 160ms ease, background 160ms ease;
+  display:       inline-flex;
+  align-items:   center;
+  gap:           var(--space-2);
+  cursor:        pointer;
+  text-decoration: none;
+}
+
+.btn-hero-secondary:hover {
+  transform:  translateY(-2px);
+  background: var(--color-accent-dark);
+}
+
+/* Impact panel */
+.hero-impact-panel {
+  padding: var(--space-6) var(--space-7);
+}
+
+.hero-stat-row {
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--space-1);
+  padding:       var(--space-4) 0;
+  border-bottom: 1px solid rgba(148,163,184,0.12);
+}
+
+.hero-stat-row:last-child {
+  border-bottom: none;
+}
+
+.hero-stat-num {
+  font-family:    var(--font-heading);
+  font-weight:    900;
+  font-size:      2.2rem;
+  color:          var(--color-primary);
+  letter-spacing: -0.03em;
+  line-height:    1;
+}
+
+.hero-stat-label {
+  font-size:   0.85rem;
+  font-weight: 600;
+  color:       var(--color-text-muted);
+}
+
+/* ==========================================================================
+   9. STATISTICS CARDS
+   ========================================================================== */
+
+.stats-grid {
+  display:               grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:                   var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  background:     var(--color-surface);
+  border:         1px solid rgba(148,163,184,0.18);
+  border-radius:  var(--radius-card);
+  box-shadow:     var(--shadow-card);
+  padding:        var(--space-5);
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-3);
+  text-align:     center;
+  position:       relative;
+  overflow:       hidden;
+  transition:     transform 160ms ease, box-shadow 160ms ease;
+}
+
+.stat-card::after {
+  content:       '';
+  position:      absolute;
+  bottom:        0;
+  left:          0;
+  right:         0;
+  height:        3px;
+  background:    var(--color-accent);
+  transform:     scaleX(0);
+  transition:    transform 200ms ease;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+}
+
+.stat-card:hover {
+  transform:  translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.stat-card:hover::after {
+  transform: scaleX(1);
+}
+
+.stat-card-icon {
+  width:           3rem;
+  height:          3rem;
+  border-radius:   var(--radius-inner);
+  background:      var(--color-accent-light);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       1.5rem;
+}
+
+.stat-card-value {
+  font-family:    var(--font-heading);
+  font-weight:    900;
+  font-size:      2rem;
+  color:          var(--color-primary);
+  letter-spacing: -0.03em;
+  line-height:    1;
+}
+
+.stat-card-label {
+  font-size:      0.82rem;
+  font-weight:    600;
+  color:          var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ==========================================================================
+   10. BMI PAGE
+   ========================================================================== */
+
+.card-header-gradient {
+  background:    linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  color:         var(--color-surface);
+  padding:       var(--space-5) var(--space-8);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  margin:        calc(-1 * var(--space-8)) calc(-1 * var(--space-8)) var(--space-6);
+}
+
+.advice-callout {
+  border-left:   4px solid var(--color-accent);
+  background:    var(--color-accent-light);
+  border-radius: 0 var(--radius-inner) var(--radius-inner) 0;
+  padding:       var(--space-5);
+  font-size:     0.92rem;
+  line-height:   1.65;
+  color:         var(--color-text);
+}
+
+/* BMI Gauge */
+.bmi-gauge-wrap {
+  position:      relative;
+  width:         10rem;
+  height:        10rem;
+  border-radius: 50%;
+  margin:        0 auto var(--space-5);
+}
+
+.bmi-gauge-track {
+  width:         100%;
+  height:        100%;
+  border-radius: 50%;
+  background:    conic-gradient(
+    #DBEAFE    0%   25%,
+    #D1FAE5   25%   55%,
+    #FEF3C7   55%   75%,
+    #FEE2E2   75%  100%
+  );
+}
+
+.bmi-gauge-centre {
+  position:        absolute;
+  inset:           0.75rem;
+  border-radius:   50%;
+  background:      var(--color-surface);
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  box-shadow:      inset 0 2px 8px rgba(15,23,42,0.06);
+}
+
+.bmi-gauge-value {
+  font-family:    var(--font-heading);
+  font-weight:    900;
+  font-size:      1.8rem;
+  letter-spacing: -0.03em;
+  color:          var(--color-primary);
+  line-height:    1;
+}
+
+@media (max-width: 767px) {
+  .bmi-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   11. MEAL PLANNER
+   ========================================================================== */
+
+.day-cards-grid {
+  display:               grid;
+  gap:                   var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 767px) {
+  .day-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.day-card {
+  background:    var(--color-surface);
+  border:        1px solid rgba(148,163,184,0.18);
+  border-radius: var(--radius-card);
+  box-shadow:    var(--shadow-card);
+  overflow:      hidden;
+}
+
+.day-card-header {
+  background:   linear-gradient(90deg, var(--color-accent-light), transparent);
+  border-bottom: 1px solid rgba(16,185,129,0.15);
+  padding:      var(--space-4) var(--space-5);
+  font-family:  var(--font-heading);
+  font-weight:  800;
+  font-size:    1rem;
+  color:        var(--color-primary);
+  display:      flex;
+  align-items:  center;
+  gap:          var(--space-3);
+}
+
+.meal-row {
+  padding:       var(--space-4) var(--space-5);
+  border-bottom: 1px solid rgba(148,163,184,0.08);
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--space-2);
+}
+
+.meal-row:last-child {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   12. FOOD CATALOG
+   ========================================================================== */
+
+.food-cards-grid {
+  display:               grid;
+  gap:                   var(--space-5);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 640px) {
+  .food-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .food-cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.food-card {
+  background:    var(--color-surface);
+  border:        1px solid rgba(148,163,184,0.18);
+  border-radius: var(--radius-card);
+  box-shadow:    var(--shadow-card);
+  overflow:      hidden;
+  transition:    transform 160ms ease, box-shadow 160ms ease;
+}
+
+.food-card:hover {
+  transform:  translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Filter toolbar */
+.filter-toolbar {
+  display:                   flex;
+  gap:                       var(--space-2);
+  overflow-x:                auto;
+  scrollbar-width:           none;
+  -webkit-overflow-scrolling: touch;
+  flex-wrap:                 nowrap;
+  padding-bottom:            var(--space-1);
+}
+
+.filter-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  flex-shrink:    0;
+  padding:        0.5rem 1rem;
+  border-radius:  var(--radius-pill);
+  border:         1.5px solid rgba(148,163,184,0.25);
+  font-size:      0.82rem;
+  font-weight:    700;
+  color:          var(--color-text-muted);
+  background:     var(--color-surface);
+  cursor:         pointer;
+  transition:     all 150ms ease;
+  white-space:    nowrap;
+}
+
+.filter-chip:hover {
+  border-color: var(--color-accent);
+  color:        var(--color-accent);
+}
+
+.filter-chip.active {
+  background:   var(--color-accent);
+  color:        var(--color-surface);
+  border-color: var(--color-accent);
+}
+
+/* ==========================================================================
+   13. AI ADVISOR
+   ========================================================================== */
+
+.advisor-chat-grid {
+  display: grid;
+  gap:     var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .advisor-chat-grid {
+    grid-template-columns: 1.08fr 0.92fr;
+  }
+}
+
+/* Typing indicator — DEFAULT HIDDEN; JS controls visibility */
+.ld-advisor-typing {
+  display: none;
+}
+
+/* ==========================================================================
+   14. SPACING UTILITIES
+   ========================================================================== */
+
+/* Section gap helpers */
+.section-gap {
+  margin-bottom: var(--space-16);
+}
+
+@media (min-width: 1024px) {
+  .section-gap {
+    margin-bottom: var(--space-20);
+  }
+}
+
+/* ==========================================================================
+   15. REDUCED MOTION — disable ALL animations & transitions
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
+
+  /* Specifically zero out named keyframe animations defined in this file */
+  .hero-animate {
+    opacity:   1;
+    animation: none;
+  }
+
+  .stat-card,
+  .stat-card::after,
+  .food-card,
+  .btn-hero-primary,
+  .btn-hero-secondary,
+  .filter-chip,
+  .site-header {
+    transition: none;
+  }
+
+  #mobileNav {
+    transition: none;
+  }
+}

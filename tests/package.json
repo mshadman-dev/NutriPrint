@@ -1,0 +1,12 @@
+{
+  "name": "nutriprint-css-property-tests",
+  "version": "1.0.0",
+  "description": "Property-based tests for NutriPrint SaaS UI redesign CSS",
+  "scripts": {
+    "test": "jest --runInBand"
+  },
+  "devDependencies": {
+    "fast-check": "^3.15.0",
+    "jest": "^29.7.0"
+  }
+}

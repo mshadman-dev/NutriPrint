@@ -27,7 +27,10 @@
       },
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;600;700&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/base.css') }}"/>
   <link rel="stylesheet" href="/static/css/loading.css"/>
   <link rel="stylesheet" href="/static/css/empty_states.css"/>
   <title>{% block title %}NutriPrint V2{% endblock %}</title>
@@ -797,7 +800,7 @@
 
 <!-- Demo Mode — loaded after auth; exposes NutriDemo.activate() / .exit() -->
 <script src="/static/js/demo_mode.js"></script>
-<header class="sticky top-0 z-50 border-b border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.04)]">
+<header class="site-header sticky top-0 z-50 border-b border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.04)]">
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
     <a href="/" class="flex items-center gap-3">
       <img src="/static/images/logo.jpg" alt="NutriPrint" class="h-16 w-auto object-contain"/>
@@ -807,7 +810,7 @@
       </div>
     </a>
 
-    <nav class="hidden items-center gap-1 lg:flex">
+    <nav class="hidden items-center gap-1 lg:flex flex-nowrap">
       <a href="/" class="nav-link {% if current_path == '/' %}nav-link-active{% endif %}" {% if current_path == '/' %}aria-current="page"{% endif %}>Home</a>
       <a href="/bmi" class="nav-link {% if current_path == '/bmi' %}nav-link-active{% endif %}" {% if current_path == '/bmi' %}aria-current="page"{% endif %}>BMI</a>
       <a href="/meal-planner" class="nav-link {% if current_path == '/meal-planner' %}nav-link-active{% endif %}" {% if current_path == '/meal-planner' %}aria-current="page"{% endif %}>Meal Planner</a>
@@ -845,7 +848,7 @@
     </div>
   </div>
 
-  <div id="mobileNav" class="hidden border-t border-slate-100 bg-white px-4 py-3 lg:hidden">
+  <div id="mobileNav" class="border-t border-slate-100 bg-white px-4 py-3 lg:hidden">
     <div class="grid gap-2 sm:grid-cols-2">
       <a href="/" class="nav-link {% if current_path == '/' %}nav-link-active{% endif %}">Home</a>
       <a href="/bmi" class="nav-link {% if current_path == '/bmi' %}nav-link-active{% endif %}">BMI</a>
@@ -1512,9 +1515,19 @@
 
 <script>
   function toggleMobileNav() {
-    const nav = document.getElementById('mobileNav');
+    var nav = document.getElementById('mobileNav');
     if (!nav) return;
-    nav.classList.toggle('hidden');
+    var isOpen = nav.classList.toggle('open');
+    if (isOpen) {
+      setTimeout(function() {
+        document.addEventListener('click', function handler(e) {
+          if (!nav.contains(e.target) && !e.target.closest('[aria-label="Open menu"]') && !e.target.closest('[onclick*="toggleMobileNav"]')) {
+            nav.classList.remove('open');
+            document.removeEventListener('click', handler);
+          }
+        });
+      }, 0);
+    }
   }
 
   function toggleLang() {
@@ -1536,7 +1549,7 @@
     document.querySelectorAll('#mobileNav a').forEach((link) => {
       link.addEventListener('click', () => {
         const nav = document.getElementById('mobileNav');
-        if (nav) nav.classList.add('hidden');
+        if (nav) nav.classList.remove('open');
       });
     });
   });
@@ -1544,5 +1557,11 @@
 
 <script src="/static/js/animations.js"></script>
 {% block scripts %}{% endblock %}
+<script>
+  window.addEventListener('scroll', function() {
+    var header = document.querySelector('.site-header');
+    if (header) header.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+</script>
 </body>
 </html>
