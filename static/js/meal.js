@@ -161,10 +161,7 @@ function _resolveFood(name) {
   // dosa, khichdi, ragi (alias), and the 10 original category files.
   // For everything else we go straight to the verified category fallback.
 
-  const hasDirect = (slug in _FALLBACK) && (_FALLBACK[slug] === slug);
-  if (hasDirect) {
-    return { url: perFoodSvg, emoji: _EMOJI[slug] || _EMOJI.default };
-  }
+  return { url: perFoodSvg, emoji: _EMOJI[slug] || _EMOJI.default };
 
   // 2. category fallback (always a known-existing file)
   const fbSlug = _FALLBACK[slug];
