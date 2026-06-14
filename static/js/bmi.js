@@ -118,8 +118,7 @@ async function calculateBMI() {
         <span id="resultBadge" class="rounded-full px-4 py-2 text-sm font-bold"></span>
       </div>
       <div class="mt-5">
-        <div class="mb-1 flex justify-between text-xs text-slate-400"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
-        <div class="h-3 w-full rounded-full bg-slate-100"><div id="gaugeBar" class="h-3 rounded-full transition-all duration-700" style="width:0%"></div></div>
+        <div id="bmiGaugeContainer"></div>
         <p id="resultPercentile" class="mt-2 text-right text-xs text-slate-500"></p>
       </div>
       <div id="resultAdviceEN" class="mt-5 rounded-2xl bg-emerald-50 p-4 text-sm text-slate-700"></div>
@@ -160,19 +159,90 @@ function showBMIResult(data) {
   badge.textContent  = data.classification.toUpperCase();
   badge.className    = `px-4 py-1.5 rounded-full text-sm font-bold badge-${data.classification}`;
 
-  // Gauge bar
-  const gaugeColors = {
-    underweight: '#3B82F6',
-    normal     : '#10B981',
-    overweight : '#F97316',
-    obese      : '#EF4444',
-  };
-  const bar = document.getElementById('gaugeBar');
-  bar.style.width      = `${Math.min(data.percentile, 99)}%`;
-  bar.style.background = gaugeColors[data.classification];
+  // ── BMI Category Gauge ───────────────────────────────────────────────────
+  // Zone boundaries based on IAP pediatric percentile thresholds used by
+  // bmi_calculator.py:  P5 = underweight/normal, P85 = normal/overweight,
+  // P95 = overweight/obese.
+  //
+  // Visual band allocations (fixed widths so labels align with zones):
+  //   Underweight  →  0 – 12.5%   (percentile  0–5)
+  //   Normal       → 12.5 – 75%   (percentile  5–85)
+  //   Overweight   → 75 – 87.5%   (percentile 85–95)
+  //   Obese        → 87.5 – 100%  (percentile 95–99.9)
+  //
+  // The marker position is derived from the classification and percentile
+  // so it always lands inside the correct coloured band.
+
+  const ZONES = [
+    { key: 'underweight', label: 'Underweight', color: '#3B82F6',
+      pLow:  0,  pHigh:  5,  vLow:  0,   vHigh: 12.5 },
+    { key: 'normal',      label: 'Normal',      color: '#10B981',
+      pLow:  5,  pHigh: 85,  vLow: 12.5, vHigh: 75   },
+    { key: 'overweight',  label: 'Overweight',  color: '#F97316',
+      pLow: 85,  pHigh: 95,  vLow: 75,   vHigh: 87.5 },
+    { key: 'obese',       label: 'Obese',       color: '#EF4444',
+      pLow: 95,  pHigh: 100, vLow: 87.5, vHigh: 100  },
+  ];
+
+  // Find the zone that matches the server-returned classification.
+  const zone = ZONES.find(z => z.key === data.classification) || ZONES[1];
+
+  // Map percentile to a visual position clamped inside the correct zone.
+  const pClamped = Math.max(zone.pLow, Math.min(zone.pHigh - 0.01, data.percentile));
+  const fraction = (zone.pHigh > zone.pLow)
+    ? (pClamped - zone.pLow) / (zone.pHigh - zone.pLow)
+    : 0.5;
+  const markerPct = zone.vLow + fraction * (zone.vHigh - zone.vLow);
+
+  // Build the gauge HTML
+  const gaugeContainer = document.getElementById('bmiGaugeContainer');
+  if (gaugeContainer) {
+    gaugeContainer.innerHTML = `
+      <div style="position:relative; margin-bottom:6px;">
+        <!-- Segmented colour track -->
+        <div style="display:flex; height:14px; border-radius:8px; overflow:hidden; box-shadow:inset 0 1px 3px rgba(0,0,0,.12);">
+          <div style="width:12.5%; background:#93C5FD;" title="Underweight (P0–P5)"></div>
+          <div style="width:62.5%; background:#6EE7B7;" title="Normal (P5–P85)"></div>
+          <div style="width:12.5%; background:#FED7AA;" title="Overweight (P85–P95)"></div>
+          <div style="width:12.5%; background:#FCA5A5;" title="Obese (P95+)"></div>
+        </div>
+        <!-- Active zone highlight overlay -->
+        <div style="
+          position:absolute; top:0; height:14px; border-radius:8px;
+          left:${zone.vLow}%; width:${zone.vHigh - zone.vLow}%;
+          background:${zone.color}; opacity:0.55; pointer-events:none;">
+        </div>
+        <!-- Marker dot with animated drop-in -->
+        <div id="bmiMarker" style="
+          position:absolute; top:50%; transform:translate(-50%, -50%);
+          left:0%;
+          width:20px; height:20px; border-radius:50%;
+          background:${zone.color};
+          border:3px solid #fff;
+          box-shadow:0 2px 6px rgba(0,0,0,.30);
+          transition:left 0.9s cubic-bezier(.34,1.56,.64,1);
+          z-index:10;">
+        </div>
+      </div>
+      <!-- Zone boundary labels aligned to band edges -->
+      <div style="display:flex; font-size:10px; color:#64748b; margin-top:3px; user-select:none;">
+        <span style="width:12.5%; text-align:left;  padding-left:2px;">Underweight</span>
+        <span style="width:62.5%; text-align:center;">Normal</span>
+        <span style="width:12.5%; text-align:center;">Overweight</span>
+        <span style="width:12.5%; text-align:right; padding-right:2px;">Obese</span>
+      </div>`;
+
+    // Animate marker to final position after a short delay (allows CSS transition)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const marker = document.getElementById('bmiMarker');
+        if (marker) marker.style.left = `${markerPct}%`;
+      });
+    });
+  }
 
   document.getElementById('resultPercentile').textContent =
-    `${data.percentile}th percentile`;
+    `${data.percentile}th percentile · ${zone.label}`;
   document.getElementById('resultAdviceEN').textContent = data.advice_en;
   document.getElementById('resultAdviceKN').textContent = data.advice_kn;
 
