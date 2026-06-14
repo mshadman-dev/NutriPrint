@@ -71,6 +71,16 @@ const _FOOD_SLUG = {
   "Banana Sheera"                          : "banana_sheera",
   "Carrot Halwa"                           : "carrot_halwa",
   "Groundnut Laddu"                        : "groundnut_laddu",
+
+  "Sambar"                                : "sambar_rice",
+  "Ragi Roti"                             : "jowar_roti",
+  "Coconut Ladoo"                         : "banana_sheera",
+  "Huli"                                  : "horsegram_saaru",
+  "Vegetable Palya"                       : "drumstick_leaves_curry",
+  "Horsegram Curry"                       : "horsegram_saaru",
+  "Ragi Idli"                             : "rava_idli",
+  "Bisi Bele Bath"                        : "bisibelebath",
+
 };
 
 /**
