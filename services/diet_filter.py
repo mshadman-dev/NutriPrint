@@ -1,5 +1,5 @@
 """
-Centralised diet-filtering rules for NutriPrint.
+Centralised diet-filtering rules and shared nutrition constants for NutriPrint.
 
 All modules must import from here so the rules stay in one place.
 """
@@ -10,6 +10,40 @@ from __future__ import annotations
 DIET_VEGETARIAN   = "vegetarian"
 DIET_EGGETARIAN   = "eggetarian"
 DIET_NONVEG       = "non-vegetarian"
+
+# ── ICMR RDA Standards (single source of truth) ───────────────────────────────
+# Source: Indian Council of Medical Research recommended dietary allowances
+ICMR_RDA = {
+    "5-8":   {
+        "calories"   : 1350,
+        "protein_g"  : 20,
+        "calcium_mg" : 600,
+        "iron_mg"    : 13,
+    },
+    "9-12":  {
+        "calories"   : 1700,
+        "protein_g"  : 30,
+        "calcium_mg" : 800,
+        "iron_mg"    : 16,
+    },
+    "13-15": {
+        "calories"   : 2100,
+        "protein_g"  : 45,
+        "calcium_mg" : 800,
+        "iron_mg"    : 22,
+    },
+}
+
+# ── Kannada day-name translations (single source of truth) ────────────────────
+DAYS_KN = {
+    "Monday":    "ಸೋಮವಾರ",
+    "Tuesday":   "ಮಂಗಳವಾರ",
+    "Wednesday": "ಬುಧವಾರ",
+    "Thursday":  "ಗುರುವಾರ",
+    "Friday":    "ಶುಕ್ರವಾರ",
+    "Saturday":  "ಶನಿವಾರ",
+    "Sunday":    "ಭಾನುವಾರ",
+}
 
 # ── Non-veg keyword sets used to detect violations ────────────────────────────
 _MEAT_KEYWORDS = {

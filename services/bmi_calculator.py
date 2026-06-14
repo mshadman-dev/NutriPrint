@@ -1,6 +1,6 @@
 import math
 from models.schemas import BMIResult, BMIClass
-from services.diet_filter import get_fix_foods, DIET_VEGETARIAN
+from services.diet_filter import get_fix_foods, DIET_VEGETARIAN, ICMR_RDA, DAYS_KN
 
 # ─── IAP Pediatric BMI Percentile Tables ─────────────────
 # Source: Indian Academy of Pediatrics growth charts
@@ -34,16 +34,6 @@ IAP_GIRLS = {
     15: [17.5, 22.9, 25.1],
 }
 
-# Kannada days (used elsewhere too)
-DAYS_KN = {
-    "Monday":    "ಸೋಮವಾರ",
-    "Tuesday":   "ಮಂಗಳವಾರ",
-    "Wednesday": "ಬುಧವಾರ",
-    "Thursday":  "ಗುರುವಾರ",
-    "Friday":    "ಶುಕ್ರವಾರ",
-    "Saturday":  "ಶನಿವಾರ",
-    "Sunday":    "ಭಾನುವಾರ",
-}
 
 # ─── Advice Text ──────────────────────────────────────────
 
@@ -124,50 +114,6 @@ def calculate_bmi(
         advice_kn      = advice["kn"],
         color          = advice["color"],
     )
-# ─── ICMR RDA Standards ──────────────────────────────────
-
-ICMR_RDA = {
-    "5-8":   {
-        "calories"   : 1350,
-        "protein_g"  : 20,
-        "calcium_mg" : 600,
-        "iron_mg"    : 13,
-    },
-    "9-12":  {
-        "calories"   : 1700,
-        "protein_g"  : 30,
-        "calcium_mg" : 800,
-        "iron_mg"    : 16,
-    },
-    "13-15": {
-        "calories"   : 2100,
-        "protein_g"  : 45,
-        "calcium_mg" : 800,
-        "iron_mg"    : 22,
-    },
-}
-
-# ─── Fix Foods per Deficiency ─────────────────────────────
-# Kept for backward-compat. New code should use diet_filter.get_fix_foods().
-FIX_FOODS = {
-    "calories": {
-        "en": "Ragi Mudde, Groundnut Laddu, Ghee Rice, Banana Sheera",
-        "kn": "ರಾಗಿ ಮುದ್ದೆ, ಕಡಲೆಕಾಯಿ ಉಂಡೆ, ತುಪ್ಪದ ಅನ್ನ, ಬಾಳೆಹಣ್ಣಿನ ಶಿರಾ",
-    },
-    "protein_g": {
-        "en": "Horsegram Saaru, Sprouted Moong, Paneer Sabzi, Avarekalu Saaru",
-        "kn": "ಹುರಳಿ ಸಾರು, ಮೊಳಕೆ ಹೆಸರುಕಾಳು, ಪನೀರ್ ಸಬ್ಜಿ, ಅವರೆಕಾಳು ಸಾರು",
-    },
-    "calcium_mg": {
-        "en": "Drumstick Leaves, Ragi Dosa, Curd Rice, Ragi Malt",
-        "kn": "ನುಗ್ಗೆ ಸೊಪ್ಪು, ರಾಗಿ ದೋಸೆ, ಮೊಸರು ಅನ್ನ, ರಾಗಿ ಮಾಲ್ಟ್",
-    },
-    "iron_mg": {
-        "en": "Banana Flower Curry, Palak Dal, Methi Paratha, Dill Leaves Dal",
-        "kn": "ಬಾಳೆ ಹೂವಿನ ಪಲ್ಯ, ಪಾಲಕ್ ಬೇಳೆ, ಮೆಂತ್ಯ ಪರಾಠ, ಸಬ್ಬಸಿಗೆ ಸೊಪ್ಪು ಬೇಳೆ",
-    },
-}
-
 # ─── Nutrition Gap Calculator ─────────────────────────────
 
 def calculate_nutrition_gap(plan_data: dict, age_group: str,

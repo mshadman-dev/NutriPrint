@@ -1,62 +1,66 @@
 {% extends "base.html" %}
-{% block title %}NutriPrint — Teacher Login{% endblock %}
+{% block title %}NutriPrint — Explore{% endblock %}
 
-{# ── Hide footer on the login page ── #}
+{# ── Hide footer on this page ── #}
 {% block footer_content %}{% endblock %}
 
-{# ── Remove default main padding; login-main CSS takes full control ── #}
+{# ── Remove default main padding; login-main takes full control ── #}
 {% block main_class %}!max-w-none !px-0 !py-0{% endblock %}
 
 {% block head %}
 <style>
-/* ── Override base main padding so we control full height ── */
-main.login-main {
-  min-height: calc(100vh - 68px); /* 68px = navbar height */
+/* ── Full-height centred layout ─────────────────────────────────────────── */
+.login-main {
+  min-height: calc(100vh - 68px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem 1rem;
   background:
-    radial-gradient(ellipse at 20% 30%, rgba(29,158,117,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 30%, rgba(29,158,117,0.09) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 70%, rgba(249,115,22,0.06) 0%, transparent 45%);
 }
 
-/* ── Login card ── */
+/* ── Card ───────────────────────────────────────────────────────────────── */
 .login-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   background: rgba(255,255,255,0.97);
   border: 1px solid rgba(148,163,184,0.18);
   border-radius: 1.75rem;
-  box-shadow:
-    0 4px 6px rgba(15,23,42,0.04),
-    0 20px 50px rgba(15,23,42,0.09);
+  box-shadow: 0 4px 6px rgba(15,23,42,0.04), 0 24px 56px rgba(15,23,42,0.10);
   overflow: hidden;
 }
-
-/* ── Card top accent stripe ── */
 .login-card::before {
   content: '';
   display: block;
   height: 3px;
   background: linear-gradient(90deg, #1D9E75, #34D399, #1D9E75);
 }
+.login-card-body   { padding: 2.5rem 2.5rem 2rem; }
+.login-card-footer {
+  padding: .9rem 2.5rem 1.4rem;
+  border-top: 1px solid rgba(148,163,184,0.1);
+  text-align: center;
+}
+@media (max-width:480px) {
+  .login-card-body   { padding: 2rem 1.5rem 1.5rem; }
+  .login-card-footer { padding: .85rem 1.5rem 1.25rem; }
+}
 
-.login-card-body { padding: 2.5rem 2.5rem 2rem; }
-@media (max-width: 480px) { .login-card-body { padding: 2rem 1.5rem 1.5rem; } }
-
-/* ── Logo block ── */
+/* ── Logo block ─────────────────────────────────────────────────────────── */
 .login-logo-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
+  text-align: center;
 }
 .login-logo-img {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3.75rem;
+  height: 3.75rem;
   object-fit: contain;
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
   filter: drop-shadow(0 4px 12px rgba(29,158,117,0.25));
 }
 .login-eyebrow {
@@ -65,153 +69,85 @@ main.login-main {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #1D9E75;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
 }
 .login-title {
   font-family: Poppins, sans-serif;
   font-weight: 900;
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   letter-spacing: -0.03em;
   color: #0F172A;
   line-height: 1.15;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
 }
-.login-subtitle { font-size: 0.85rem; color: #64748B; }
+.login-subtitle { font-size: 0.88rem; color: #64748B; line-height: 1.55; }
 
-/* ── Info banner (protected redirect) ── */
+/* ── Info banner (redirect from protected page) ─────────────────────────── */
 .login-banner {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
   padding: 0.75rem 0.9rem;
   border-radius: 0.85rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   font-size: 0.83rem;
   font-weight: 600;
   line-height: 1.5;
 }
-.login-banner--info  { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; }
-.login-banner--error { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+.login-banner--info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; }
 
-/* ── Form fields ── */
-.login-field { margin-bottom: 1.1rem; }
-.login-label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #374151;
-  margin-bottom: 0.4rem;
-}
-.login-input {
+/* ── Primary CTA — Demo button ──────────────────────────────────────────── */
+.login-demo-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
   width: 100%;
-  border: 1.5px solid rgba(148,163,184,0.3);
-  border-radius: 0.85rem;
-  padding: 0.75rem 1rem;
-  font-size: 0.9rem;
-  outline: none;
-  background: #F8FAFC;
-  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
-  color: #0F172A;
-}
-.login-input:focus {
-  border-color: rgba(29,158,117,0.65);
-  box-shadow: 0 0 0 3px rgba(29,158,117,0.1);
-  background: white;
-}
-.login-input::placeholder { color: #CBD5E1; }
-
-/* Password wrapper */
-.login-pw-wrap { position: relative; }
-.login-pw-toggle {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #94A3B8;
-  padding: 0.25rem;
-  transition: color 140ms ease;
-  line-height: 0;
-}
-.login-pw-toggle:hover { color: #475569; }
-
-/* ── Submit button ── */
-.login-submit {
-  width: 100%;
-  padding: 0.85rem;
+  padding: 1rem 1.25rem;
   border-radius: 9999px;
   background: #1D9E75;
   color: white;
   font-family: Poppins, sans-serif;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1rem;
   border: none;
   cursor: pointer;
+  box-shadow: 0 6px 22px rgba(29,158,117,0.32);
   transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
-  box-shadow: 0 6px 20px rgba(29,158,117,0.28);
-  margin-top: 0.4rem;
 }
-.login-submit:hover:not(:disabled) {
+.login-demo-primary:hover {
   background: #166F53;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px rgba(29,158,117,0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(29,158,117,0.38);
 }
-.login-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
 
-/* ── Demo Mode button ── */
-.login-demo-btn {
-  width: 100%;
-  padding: .75rem;
-  border-radius: 9999px;
-  background: #FEF3C7;
-  color: #78350F;
-  font-family: Poppins, sans-serif;
-  font-weight: 800;
-  font-size: .88rem;
-  border: 1.5px solid #FDE68A;
-  cursor: pointer;
-  transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
-  margin-top: .65rem;
+/* ── Feature pills ──────────────────────────────────────────────────────── */
+.login-features {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: .3rem;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
 }
-.login-demo-btn:hover {
-  background: #FDE68A;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(251,191,36,.28);
-}
-
-/* ── Card footer ── */
-.login-card-footer {
-  padding: 1rem 2.5rem 1.5rem;
-  border-top: 1px solid rgba(148,163,184,0.1);
-  text-align: center;
-}
-.login-hint {
-  font-size: 0.72rem;
-  color: #94A3B8;
-  line-height: 1.6;
-}
-.login-hint strong { color: #64748B; }
-
-/* ── Credentials demo badge ── */
-.login-demo-badge {
+.login-feature-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  background: rgba(29,158,117,0.07);
-  border: 1px solid rgba(29,158,117,0.15);
-  border-radius: 0.6rem;
-  padding: 0.4rem 0.7rem;
+  gap: 0.3rem;
+  padding: 0.28rem 0.7rem;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 9999px;
   font-size: 0.7rem;
+  font-weight: 700;
   color: #065F46;
-  font-weight: 600;
-  margin-top: 0.5rem;
-  font-family: monospace;
+}
+
+/* ── Footer hint ────────────────────────────────────────────────────────── */
+.login-hint { font-size: 0.72rem; color: #94A3B8; line-height: 1.65; }
+.login-hint strong { color: #64748B; }
+
+@media (prefers-reduced-motion: reduce) {
+  .login-demo-primary { transition: none !important; }
 }
 </style>
 {% endblock %}
@@ -223,98 +159,51 @@ main.login-main {
 
       <!-- Logo + heading -->
       <div class="login-logo-wrap">
-        <img src="/static/images/logo.jpg" alt="NutriPrint logo" class="login-logo-img"/>
-        <div class="login-eyebrow">Secure Teacher Access</div>
-        <h1 class="login-title">Teacher Login</h1>
-        <p class="login-subtitle">Sign in to access your NutriPrint dashboard</p>
+        <img src="/static/images/logo.svg" alt="NutriPrint" class="login-logo-img"/>
+        <div class="login-eyebrow">Karnataka School Nutrition · AI Platform</div>
+        <h1 class="login-title">Welcome to NutriPrint</h1>
+        <p class="login-subtitle">
+          Explore the complete platform instantly —<br/>
+          no account or data entry required.
+        </p>
       </div>
 
-      <!-- Banner (info or error — hidden by default) -->
-      <div id="loginError" class="login-banner login-banner--error hidden" role="alert">
+      <!-- Info banner — shown only when redirected from a protected page -->
+      <div id="loginError" class="login-banner login-banner--info hidden" role="alert">
         <svg class="h-4 w-4 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5
+                   0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.75.75 0 100-1.5.75.75 0 000 1.5z"
                 clip-rule="evenodd"/>
         </svg>
-        <span id="loginErrorMsg">Invalid email or password.</span>
+        <span id="loginErrorMsg">Please start Demo Mode to continue using NutriPrint.</span>
       </div>
 
-      <!-- Form -->
-      <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+      <!-- Primary CTA -->
+      <button onclick="NutriDemo.activate()"
+              class="login-demo-primary"
+              aria-label="Explore NutriPrint in Demo Mode — no account needed">
+        <span aria-hidden="true">🚀</span>
+        Explore NutriPrint in Demo Mode
+      </button>
 
-        <!-- Email -->
-        <div class="login-field">
-          <label for="loginEmail" class="login-label">Email Address</label>
-          <input id="loginEmail"
-                 type="email"
-                 autocomplete="email"
-                 placeholder="teacher@school.com"
-                 required
-                 class="login-input"/>
-        </div>
-
-        <!-- Password -->
-        <div class="login-field">
-          <label for="loginPassword" class="login-label">Password</label>
-          <div class="login-pw-wrap">
-            <input id="loginPassword"
-                   type="password"
-                   autocomplete="current-password"
-                   placeholder="••••••"
-                   required
-                   class="login-input"
-                   style="padding-right:2.75rem;"/>
-            <button type="button"
-                    onclick="togglePasswordVisibility()"
-                    class="login-pw-toggle"
-                    aria-label="Toggle password visibility">
-              <svg id="eyeIcon" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478
-                         0 8.268 2.943 9.542 7-1.274 4.057-5.064
-                         7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <button type="submit" id="loginSubmitBtn" class="login-submit">
-          Sign In
-        </button>
-
-        <!-- Demo Mode shortcut -->
-        <div style="position:relative;text-align:center;margin-top:1rem;">
-          <div style="position:absolute;inset-x-0;top:50%;height:1px;background:rgba(148,163,184,.2);"></div>
-          <span style="position:relative;background:white;padding:0 .75rem;
-                       font-size:.7rem;font-weight:600;color:#94A3B8;">or</span>
-        </div>
-        <button type="button"
-                onclick="NutriDemo.activate()"
-                class="login-demo-btn"
-                aria-label="Try Demo Mode — explore with pre-loaded sample data">
-          🚀 Try Demo Mode
-          <span style="font-size:.68rem;font-weight:600;opacity:.75;margin-left:.25rem;">
-            — No account needed
-          </span>
-        </button>
-
-      </form>
+      <!-- What's included pills -->
+      <div class="login-features" aria-label="What's included in demo">
+        <span class="login-feature-pill">⚖️ BMI Assessment</span>
+        <span class="login-feature-pill">🤖 AI Meal Plans</span>
+        <span class="login-feature-pill">📊 Analytics Dashboard</span>
+        <span class="login-feature-pill">📈 Progress Tracking</span>
+        <span class="login-feature-pill">⬜ QR Recipes</span>
+        <span class="login-feature-pill">📋 Parent Reports</span>
+      </div>
 
     </div>
 
     <!-- Card footer -->
     <div class="login-card-footer">
       <p class="login-hint">
-        <strong>Demo credentials</strong>
-      </p>
-      <div class="login-demo-badge">
-        teacher@school.com &nbsp;/&nbsp; 123456
-      </div>
-      <p class="login-hint" style="margin-top:0.75rem;">
-        NutriPrint V2 · Yenepoya Institute of Technology
+        Pre-loaded with sample students, meal plans, and analytics.<br/>
+        <strong>NutriPrint V2</strong> · Yenepoya Institute of Technology, Moodbidri
       </p>
     </div>
 
@@ -323,84 +212,22 @@ main.login-main {
 {% endblock %}
 
 {% block scripts %}
-<script src="/static/js/auth.js"></script>
 <script>
-  // If already logged in, skip to dashboard
-  if (NutriAuth && NutriAuth.isLoggedIn()) {
-    window.location.replace('/dashboard');
-  }
+  // If already in demo / logged in, skip straight to dashboard
+  document.addEventListener('DOMContentLoaded', function () {
+    if ((typeof NutriAuth !== 'undefined' && NutriAuth.isLoggedIn()) ||
+        (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo())) {
+      window.location.replace('/dashboard');
+    }
+  });
 
-  // Show "please login" banner when redirected from a protected page
+  // Show info banner when redirected from a protected page
   (function () {
     const params = new URLSearchParams(window.location.search);
     if (params.get('msg') === 'protected') {
       const banner = document.getElementById('loginError');
-      const msg    = document.getElementById('loginErrorMsg');
-      if (banner && msg) {
-        msg.textContent = 'Please login to continue using NutriPrint.';
-        banner.classList.remove('hidden');
-        // Switch to info (blue) styling
-        banner.classList.remove('login-banner--error');
-        banner.classList.add('login-banner--info');
-      }
+      if (banner) banner.classList.remove('hidden');
     }
   })();
-
-  function handleLogin(e) {
-    e.preventDefault();
-
-    const email    = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const errorEl  = document.getElementById('loginError');
-    const errorMsg = document.getElementById('loginErrorMsg');
-    const btn      = document.getElementById('loginSubmitBtn');
-
-    // Loading state
-    btn.disabled    = true;
-    btn.textContent = 'Signing in…';
-    errorEl.classList.add('hidden');
-
-    // Small delay for UX realism
-    setTimeout(() => {
-      const result = NutriAuth.login(email, password);
-      if (result.ok) {
-        // Redirect to originally intended page, or dashboard
-        const dest = sessionStorage.getItem('np_login_redirect') || '/dashboard';
-        sessionStorage.removeItem('np_login_redirect');
-        window.location.replace(dest);
-      } else {
-        errorEl.classList.remove('hidden');
-        errorMsg.textContent = result.error;
-        btn.disabled    = false;
-        btn.textContent = 'Sign In';
-        document.getElementById('loginPassword').value = '';
-        document.getElementById('loginPassword').focus();
-      }
-    }, 350);
-  }
-
-  function togglePasswordVisibility() {
-    const input   = document.getElementById('loginPassword');
-    const icon    = document.getElementById('eyeIcon');
-    const isHidden = input.type === 'password';
-    input.type = isHidden ? 'text' : 'password';
-    // Swap icon: eye-off when visible
-    icon.innerHTML = isHidden
-      ? `<path stroke-linecap="round" stroke-linejoin="round"
-               d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478
-                  0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029
-                  m5.858.908a3 3 0 114.243 4.243M9.878 9.878
-                  l4.242 4.242M9.88 9.88l-3.29-3.29m7.532
-                  7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953
-                  9.953 0 0112 5c4.478 0 8.268 2.943 9.542
-                  7a10.025 10.025 0 01-4.132 5.411m0
-                  0L21 21"/>`
-      : `<path stroke-linecap="round" stroke-linejoin="round"
-               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-         <path stroke-linecap="round" stroke-linejoin="round"
-               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478
-                  0 8.268 2.943 9.542 7-1.274 4.057-5.064
-                  7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
-  }
 </script>
 {% endblock %}

@@ -5,11 +5,11 @@ vegetarian/eggetarian users never see non-compliant food suggestions.
 """
 
 from services.bmi_calculator import (
-    calculate_nutrition_gap, ICMR_RDA, ADVICE as BMI_ADVICE,
+    calculate_nutrition_gap, ADVICE as BMI_ADVICE,
 )
 from services.food_equivalents import get_food_equivalents, estimate_meal_macros
 from services.food_images import get_food_icon, NUTRIENT_ICONS
-from services.diet_filter import DIET_VEGETARIAN, validate_and_fix_plan
+from services.diet_filter import DIET_VEGETARIAN, validate_and_fix_plan, ICMR_RDA
 
 
 def _serialize_week(week) -> list:

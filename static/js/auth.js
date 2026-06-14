@@ -1,20 +1,19 @@
 /**
- * NutriPrint — Teacher Authentication
- * Simple localStorage-based auth (no server dependency).
+ * NutriPrint — Auth helpers
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Session is written by demo_mode.js (NutriDemo.activate) and cleared by
+ * NutriAuth.logout().  The real Supabase OTP backend (routers/auth.py) is not
+ * yet connected to the frontend; this file handles client-side session state.
  *
- * Credentials: teacher@school.com / 123456
  * Session key: np_teacher_session
  */
 (function () {
   'use strict';
 
   const SESSION_KEY = 'np_teacher_session';
-  const VALID_EMAIL = 'teacher@school.com';
-  const VALID_PASS  = '123456';
-
-  // ── Public API ──────────────────────────────────────────────────────────────
 
   const NutriAuth = {
+
     /** Returns the stored session object, or null. */
     getSession() {
       try {
@@ -29,38 +28,6 @@
       return this.getSession() !== null;
     },
 
-    /**
-     * Attempt login with email + password.
-     * Returns { ok: true } or { ok: false, error: string }.
-     */
-    login(email, password) {
-      const emailLower = email.trim().toLowerCase();
-      if (emailLower === 'demo@nutriprint.in') {
-        const session = {
-          email     : 'demo@nutriprint.in',
-          name      : 'Demo Teacher',
-          loggedInAt: Date.now(),
-        };
-        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-        if (typeof NutriDemo !== 'undefined') NutriDemo.activate();
-        return { ok: true };
-      }
-      
-      if (
-        emailLower === VALID_EMAIL &&
-        password === VALID_PASS
-      ) {
-        const session = {
-          email     : VALID_EMAIL,
-          name      : 'Teacher',
-          loggedInAt: Date.now(),
-        };
-        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-        return { ok: true };
-      }
-      return { ok: false, error: 'Invalid email or password.' };
-    },
-
     /** Clear the session. */
     logout() {
       localStorage.removeItem(SESSION_KEY);
@@ -72,51 +39,41 @@
      * Returns true when authenticated.
      */
     requireAuth() {
-      if (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo()) {
-        return true;
-      }
       if (!this.isLoggedIn()) {
-        // Preserve intended destination so we can redirect back after login
         sessionStorage.setItem('np_login_redirect', window.location.pathname);
-        window.location.replace('/login');
+        window.location.replace('/login?msg=protected');
         return false;
       }
       return true;
     },
 
-    /** Update the navbar button state (Login ↔ Logout + teacher badge + Dashboard visibility). */
+    /** Update the navbar button state (Login ↔ Logout + teacher/demo badge). */
     updateNavbar() {
-      const session    = this.getSession();
-      const loginBtn   = document.getElementById('loginBtn');
-      const logoutBtn  = document.getElementById('logoutBtn');
-      const badge      = document.getElementById('teacherBadge');
-      const demoBadge  = document.getElementById('demoBadge');
+      const session   = this.getSession();
+      const loginBtn  = document.getElementById('loginBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const badge     = document.getElementById('teacherBadge');
+      const demoBadge = document.getElementById('demoBadge');
 
-      // Dashboard links (desktop + mobile)
-      const dashLinks  = document.querySelectorAll('.nav-dashboard-link');
+      const dashLinks = document.querySelectorAll('.nav-dashboard-link');
 
       if (session) {
         if (loginBtn)  loginBtn.style.display  = 'none';
         if (logoutBtn) logoutBtn.style.display = '';
 
-        // Teacher badge — hide when demo badge is visible to avoid crowding
         const inDemo = (typeof NutriDemo !== 'undefined') && NutriDemo.isDemo();
         if (badge) {
-          if (inDemo) {
-            badge.style.display = 'none';
-          } else {
-            badge.style.display = '';
-            badge.textContent   = '👩‍🏫 Teacher';
-          }
+          badge.style.display = inDemo ? 'none' : '';
+          if (!inDemo) badge.textContent = '👩‍🏫 Teacher';
         }
         if (demoBadge) demoBadge.style.display = inDemo ? '' : 'none';
-        dashLinks.forEach(function (el) { el.style.display = ''; });
+        dashLinks.forEach(el => { el.style.display = ''; });
       } else {
         if (loginBtn)  loginBtn.style.display  = '';
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (badge)     badge.style.display     = 'none';
         if (demoBadge) demoBadge.style.display = 'none';
-        dashLinks.forEach(function (el) { el.style.display = 'none'; });
+        dashLinks.forEach(el => { el.style.display = 'none'; });
       }
     },
   };

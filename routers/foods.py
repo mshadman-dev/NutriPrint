@@ -10,13 +10,12 @@ router = APIRouter(prefix="/api/foods", tags=["Foods"])
 
 _FOODS_FILE = Path("data/foods.json")
 
-
-def _food_count() -> int:
-    try:
-        with open(_FOODS_FILE, "r", encoding="utf-8") as f:
-            return len(json.load(f))
-    except Exception:
-        return 53
+# Load once at import time — same pattern as services/fallback_engine.py
+try:
+    with open(_FOODS_FILE, "r", encoding="utf-8") as _f:
+        _ALL_FOODS: list = json.load(_f)
+except Exception:
+    _ALL_FOODS = []
 
 
 @router.get("")
@@ -31,10 +30,8 @@ async def get_foods(
     limit: int = Query(12, ge=1, le=50),
 ):
     try:
-        foods_file = _FOODS_FILE
-
-        with open(foods_file, "r", encoding="utf-8") as f:
-            foods = json.load(f)
+        # Work on a shallow copy so we never mutate the cached list.
+        foods = list(_ALL_FOODS)
 
         if diet:
             foods = [food for food in foods if food.get("diet_type") == diet]
@@ -85,7 +82,7 @@ async def get_foods(
 
 @router.get("/impact")
 async def impact():
-    total_foods = _food_count()
+    total_foods = len(_ALL_FOODS) or 53
     try:
         plans = supabase.table("meal_plans").select("id", count="exact").execute()
         students = supabase.table("students").select("id", count="exact").execute()

@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from models.db import supabase
 from models.schemas import MealPlan
 from services.poster_context import build_poster_context
+from routers.deps import safe_error_detail
 
 import io
 import json
@@ -93,7 +94,7 @@ async def plan_public(
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=str(e)
+            detail=safe_error_detail(e)
         )
 
 @router.get("/report/{share_token}", response_class=HTMLResponse)
@@ -123,7 +124,7 @@ async def health_report(
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=str(e)
+            detail=safe_error_detail(e)
         )
 
 
@@ -152,7 +153,7 @@ async def poster_print(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 
 @router.get("/api/plans/qr")
@@ -193,7 +194,7 @@ async def plan_qr(url: str, request: Request):
             },
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=safe_error_detail(e))
 
 @router.get("/poster/{share_token}/pdf")
 async def download_pdf(
@@ -240,5 +241,5 @@ async def download_pdf(
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=str(e)
+            detail=safe_error_detail(e)
         )

@@ -6,8 +6,7 @@ All public functions now accept an optional `diet_pref` parameter so that
 vegetarian users never see chicken, egg, or fish suggestions.
 """
 
-from services.bmi_calculator import ICMR_RDA
-from services.diet_filter import filter_food_servings, DIET_VEGETARIAN
+from services.diet_filter import filter_food_servings, DIET_VEGETARIAN, ICMR_RDA
 
 NUTRIENT_LABELS = {
     "protein_g": {"label": "Protein",        "unit": "g",  "icon": "💪"},

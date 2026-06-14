@@ -262,16 +262,27 @@ async def dashboard_students(teacher_id: str, request: Request):
             .eq("is_active", True)\
             .execute()
 
+        # Fetch all bmi_records for this teacher's students in one query,
+        # ordered so the most-recent record for each student comes first.
+        student_ids = [s["id"] for s in students.data]
+        all_records = []
+        if student_ids:
+            all_records = supabase.table("bmi_records")\
+                .select("student_id, bmi_value, classification, assessed_at")\
+                .in_("student_id", student_ids)\
+                .order("assessed_at", desc=True)\
+                .execute().data
+
+        # Keep only the first (latest) record seen per student.
+        latest_map: dict = {}
+        for rec in all_records:
+            sid = rec["student_id"]
+            if sid not in latest_map:
+                latest_map[sid] = rec
+
         result = []
         for s in students.data:
-            latest = supabase.table("bmi_records")\
-                .select("bmi_value, classification, assessed_at")\
-                .eq("student_id", s["id"])\
-                .order("assessed_at", desc=True)\
-                .limit(1)\
-                .execute()
-
-            rec = latest.data[0] if latest.data else {}
+            rec = latest_map.get(s["id"], {})
             result.append({
                 "id"            : s["id"],
                 "name"          : s["name"],

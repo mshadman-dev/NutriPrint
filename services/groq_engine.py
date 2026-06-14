@@ -2,19 +2,14 @@ import json
 from groq import Groq
 from config import GROQ_API_KEY
 from models.schemas import MealPlan, MealDay, MealItem, AIRecommendation
-from services.fallback_engine import generate_fallback_plan, DAYS_KN
+from services.fallback_engine import generate_fallback_plan
 from services.diet_filter import (
     DIET_VEGETARIAN, DIET_EGGETARIAN, DIET_NONVEG,
     get_strategy_note, validate_and_fix_plan,
+    ICMR_RDA, DAYS_KN,
 )
 
 client = Groq(api_key=GROQ_API_KEY)
-
-ICMR_RDA = {
-    "5-8":   {"calories": 1350, "protein_g": 20, "calcium_mg": 600,  "iron_mg": 13},
-    "9-12":  {"calories": 1700, "protein_g": 30, "calcium_mg": 800,  "iron_mg": 16},
-    "13-15": {"calories": 2100, "protein_g": 45, "calcium_mg": 800,  "iron_mg": 22},
-}
 
 
 def _build_prompt(data: dict) -> str:

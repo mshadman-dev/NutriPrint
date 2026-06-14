@@ -2,6 +2,7 @@ import json
 import random
 from pathlib import Path
 from models.schemas import MealPlan, MealDay, MealItem
+from services.diet_filter import DAYS_KN
 
 # Load foods once at startup
 FOODS_PATH = Path(__file__).parent.parent / "data" / "foods.json"
@@ -9,11 +10,6 @@ with open(FOODS_PATH, encoding="utf-8") as f:
     ALL_FOODS = json.load(f)
 
 DAYS_EN = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-DAYS_KN = {
-    "Monday":"ಸೋಮವಾರ","Tuesday":"ಮಂಗಳವಾರ",
-    "Wednesday":"ಬುಧವಾರ","Thursday":"ಗುರುವಾರ",
-    "Friday":"ಶುಕ್ರವಾರ","Saturday":"ಶನಿವಾರ","Sunday":"ಭಾನುವಾರ"
-}
 
 def _filter_foods(region, diet, meal_type, month):
     results = []
@@ -57,33 +53,98 @@ def generate_fallback_plan(
     month            : str,
     strategy         : str,
     bmi_class        : str = None,
+    allergies        : list = None,
     ai_recommendations: list = None,
 ) -> MealPlan:
     if ai_recommendations is None:
         ai_recommendations = []
+    if allergies is None:
+        allergies = []
 
-    # Hardcoded fallback as requested
-    hardcoded_schedule = [
-        ("Monday",    "Ragi mudde+Sambar", "Rice+Dal+Sabzi", "Chapati+Palya",   142),
-        ("Tuesday",   "Avalakki upma",     "Bisibelebath",   "Rice+Rasam",      138),
-        ("Wednesday", "Idli+Chutney",      "Rice+Rajma",     "Roti+Dal",        145),
-        ("Thursday",  "Dosa+Sambar",       "Pulao+Raita",    "Rice+Sambar",     140),
-        ("Friday",    "Upma+Chutney",      "Rice+Curry",     "Chapati+Sabzi",   143),
-        ("Saturday",  "Poha+Banana",       "Curd rice",      "Khichdi",         135),
-        ("Sunday",    "Puri+Sabzi",        "Special rice",   "Khichdi+Ghee",    148),
-    ]
+    # Normalize allergy keywords for case-insensitive matching
+    allergy_keywords = [a.strip().lower() for a in allergies if a.strip()]
 
+    def _is_allergic(food: dict) -> bool:
+        """Return True if this food should be excluded due to allergies."""
+        if not allergy_keywords:
+            return False
+        name_lower = food["name_en"].lower()
+        # Also check highlights and description as extra signal
+        extra = " ".join(food.get("highlights", [])).lower()
+        for kw in allergy_keywords:
+            if kw in name_lower or kw in extra:
+                return True
+        return False
+
+    def _get_pool(meal_type: str) -> list:
+        """
+        Return a filtered food pool for the given meal_type.
+        Cascade: region+month → region+all → bare hardcoded item.
+        """
+        pool = [f for f in _filter_foods(region, diet_pref, meal_type, month)
+                if not _is_allergic(f)]
+        if not pool:
+            # Try season-agnostic fallback
+            pool = [f for f in _filter_foods(region, diet_pref, meal_type, "all")
+                    if not _is_allergic(f)]
+        return pool
+
+    # Hardcoded last-resort items (one per meal_type) used only when the
+    # filtered pool is completely empty even after the "all" cascade.
+    _last_resort = {
+        "breakfast": MealItem(
+            name_en="Avalakki Upma", name_kn="ಅವಲಕ್ಕಿ ಉಪ್ಮಾ",
+            ingredients=["Avalakki Upma"],
+            calories=350, protein_g=9, calcium_mg=180, iron_mg=4,
+            cost_inr=20, prep_time_min=15,
+        ),
+        "lunch": MealItem(
+            name_en="Rice+Dal+Sabzi", name_kn="ಅನ್ನ+ದಾಲ್+ಸಬ್ಜಿ",
+            ingredients=["Rice", "Dal", "Sabzi"],
+            calories=600, protein_g=18, calcium_mg=300, iron_mg=8,
+            cost_inr=35, prep_time_min=30,
+        ),
+        "dinner": MealItem(
+            name_en="Chapati+Palya", name_kn="ಚಪಾತಿ+ಪಲ್ಯ",
+            ingredients=["Chapati", "Palya"],
+            calories=500, protein_g=14, calcium_mg=220, iron_mg=6,
+            cost_inr=25, prep_time_min=25,
+        ),
+    }
+
+    # Build per-meal-type pools once
+    breakfast_pool = _get_pool("breakfast")
+    lunch_pool     = _get_pool("lunch")
+    dinner_pool    = _get_pool("dinner")
+
+    # Track usage counts to enforce the "no item repeated more than twice" rule
+    usage: dict[str, int] = {}
+
+    def _pick(pool: list, meal_type: str) -> MealItem:
+        """
+        Pick a food from pool that has been used fewer than twice.
+        Falls back to least-used item, then to last-resort sentinel.
+        """
+        if not pool:
+            return _last_resort[meal_type]
+
+        # Filter to items used < 2 times; if none left, allow least-used
+        eligible = [f for f in pool if usage.get(f["name_en"], 0) < 2]
+        if not eligible:
+            eligible = sorted(pool, key=lambda f: usage.get(f["name_en"], 0))
+
+        # Shuffle eligible set so days are varied
+        random.shuffle(eligible)
+        chosen = eligible[0]
+        usage[chosen["name_en"]] = usage.get(chosen["name_en"], 0) + 1
+        return _to_meal_item(chosen)
+
+    # Assemble the 7-day week
     week = []
-    total_cost = 0
-
-    for day_en, b_name, l_name, d_name, cost in hardcoded_schedule:
-        cost_per_meal = cost / 3
-        
-        b = MealItem(name_en=b_name, name_kn="", ingredients=[], calories=400, protein_g=12, calcium_mg=200, iron_mg=5, cost_inr=cost_per_meal, prep_time_min=20)
-        l = MealItem(name_en=l_name, name_kn="", ingredients=[], calories=600, protein_g=18, calcium_mg=300, iron_mg=8, cost_inr=cost_per_meal, prep_time_min=30)
-        d = MealItem(name_en=d_name, name_kn="", ingredients=[], calories=500, protein_g=15, calcium_mg=250, iron_mg=6, cost_inr=cost_per_meal, prep_time_min=25)
-
-        total_cost += cost
+    for day_en in DAYS_EN:
+        b = _pick(breakfast_pool, "breakfast")
+        l = _pick(lunch_pool,     "lunch")
+        d = _pick(dinner_pool,    "dinner")
 
         week.append(MealDay(
             day       = day_en,
@@ -92,6 +153,23 @@ def generate_fallback_plan(
             lunch     = l,
             dinner    = d,
         ))
+
+    # ── Aggregate nutritional & cost stats from actual selected items ──────
+    all_items = [day.breakfast for day in week] + \
+                [day.lunch     for day in week] + \
+                [day.dinner    for day in week]
+
+    num_days      = len(DAYS_EN)          # 7
+    total_cal     = sum(i.calories  for i in all_items)
+    total_protein = sum(i.protein_g for i in all_items)
+    total_calcium = sum(i.calcium_mg for i in all_items)
+    total_iron    = sum(i.iron_mg    for i in all_items)
+    total_cost    = sum(i.cost_inr   for i in all_items)
+
+    avg_daily_cal  = total_cal     / num_days
+    avg_protein_g  = total_protein / num_days
+    avg_calcium_mg = total_calcium / num_days
+    avg_iron_mg    = total_iron    / num_days
 
     return MealPlan(
         student_name      = student_name,
@@ -103,12 +181,13 @@ def generate_fallback_plan(
         month             = month,
         strategy          = strategy,
         bmi_class         = bmi_class,
+        allergies         = allergies,
         week              = week,
-        avg_daily_cal     = 1500.0,
-        avg_protein_g     = 45.0,
-        avg_calcium_mg    = 750.0,
-        avg_iron_mg       = 19.0,
-        total_cost_inr    = float(total_cost),
+        avg_daily_cal     = round(avg_daily_cal,  1),
+        avg_protein_g     = round(avg_protein_g,  1),
+        avg_calcium_mg    = round(avg_calcium_mg, 1),
+        avg_iron_mg       = round(avg_iron_mg,    2),
+        total_cost_inr    = round(total_cost,     2),
         generated_by      = "fallback",
         ai_recommendations= ai_recommendations,
     )

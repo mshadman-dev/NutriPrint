@@ -41,6 +41,8 @@ from reportlab.platypus import (
     TableStyle,
 )
 
+from services.diet_filter import DAYS_KN
+
 # ─── Palette ─────────────────────────────────────────────────────────────────
 C_GREEN      = colors.HexColor("#1D9E75")
 C_GREEN_DARK = colors.HexColor("#0F5E46")
@@ -527,13 +529,6 @@ def _build_meal_plan(plan: dict) -> list:
                 fontName="Helvetica-Bold", leading=10)
     meta_s = _s("MPMt",  fontSize=6.5, textColor=C_MUTED,
                 fontName="Helvetica", leading=9)
-
-    DAYS_KN = {
-        "Monday": "ಸೋಮವಾರ", "Tuesday": "ಮಂಗಳವಾರ",
-        "Wednesday": "ಬುಧವಾರ", "Thursday": "ಗುರುವಾರ",
-        "Friday": "ಶುಕ್ರವಾರ", "Saturday": "ಶನಿವಾರ",
-        "Sunday": "ಭಾನುವಾರ",
-    }
 
     col_w = [BODY_W * 0.12, BODY_W * 0.22, BODY_W * 0.22,
              BODY_W * 0.22, BODY_W * 0.22]

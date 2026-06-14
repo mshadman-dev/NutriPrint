@@ -128,6 +128,7 @@ async def generate_meal(data: MealInput):
                 month=data.month,
                 strategy=data.strategy.value,
                 bmi_class=data.bmi_class.value if data.bmi_class else None,
+                allergies=data.allergies,
                 ai_recommendations=[
                     rec.model_dump() if hasattr(rec, "model_dump") else rec.dict()
                     for rec in data.ai_recommendations
