@@ -24,8 +24,8 @@
 
   /* ── Demo session object ────────────────────────────────────────────────── */
   const DEMO_SESSION = {
-    email      : 'demo@nutriprint.app',
-    name       : 'Demo Teacher',
+    email      : 'teacher@nutriprint.app',
+    name       : 'Smt. Kavitha Rao',
     school     : 'Government Higher Primary School, Bengaluru',
     loggedInAt : Date.now(),
     isDemo     : true,
@@ -130,7 +130,7 @@
   };
 
   /* ── Meal plan token stubs (for plan count display) ─────────────────────── */
-  const DEMO_PLAN_TOKENS = Array.from({ length: 8 }, (_, i) => `demo_plan_${i}`);
+  const DEMO_PLAN_TOKENS = Array.from({ length: 8 }, (_, i) => `pilot_plan_${i + 1000}`);
 
   /* ── Dashboard override stats ────────────────────────────────────────────── */
   const DEMO_STATS = {
@@ -139,7 +139,7 @@
     total_assessments : 50,
     total_foods       : 72,
     plans_this_month  : 18,
-    teacher_name      : 'Demo Teacher',
+    teacher_name      : 'Smt. Kavitha Rao',
     school_name       : 'Government Higher Primary School, Bengaluru',
   };
 
@@ -265,13 +265,13 @@
     banner.setAttribute('aria-live', 'polite');
     banner.innerHTML = `
       <span style="display:inline-flex;align-items:center;gap:.4rem;">
-        <span style="width:.55rem;height:.55rem;background:#F97316;border-radius:50%;
+        <span style="width:.55rem;height:.55rem;background:#10B981;border-radius:50%;
                      animation:demoPulse 1.8s ease-in-out infinite;flex-shrink:0;"
               aria-hidden="true"></span>
-        🎓 Demo Mode Active
+        👩‍🏫 Platform Preview Active
       </span>
       <span style="font-size:.7rem;font-weight:600;opacity:.75;margin-left:.25rem;">
-        — Pre-loaded with sample school data
+        — Pilot programme data loaded
       </span>
       <button onclick="NutriDemo.exit()"
               style="margin-left:auto;background:rgba(0,0,0,.12);border:1px solid rgba(0,0,0,.2);
@@ -279,8 +279,8 @@
                      border-radius:9999px;cursor:pointer;transition:background 150ms;"
               onmouseover="this.style.background='rgba(0,0,0,.22)'"
               onmouseout="this.style.background='rgba(0,0,0,.12)'"
-              aria-label="Exit demo mode">
-        ✕ Exit Demo
+              aria-label="Exit platform preview">
+        ✕ Exit Preview
       </button>`;
 
     Object.assign(banner.style, {
@@ -365,12 +365,12 @@
      FULL AUTO-DEMO NAVIGATION LOGIC
      ═════════════════════════════════════════════════════════════════════════ */
   const DEMO_STEPS = [
-    { path: '/', title: 'Home', text: 'Step 1 of 6 — Home: Viewing impact counters...', delay: 4000 },
-    { path: '/bmi', title: 'BMI Assessment', text: 'Step 2 of 6 — BMI Assessment: Calculating BMI for student Rahul Kumar...', delay: 4000, action: 'fillBmi' },
-    { path: '/meal-planner', title: 'Meal Planner', text: 'Step 3 of 6 — Meal Planner: Generating 7-day Karnataka meal plan...', delay: 4000, action: 'fillMeal' },
-    { path: '/food-catalog', title: 'Food Catalog', text: 'Step 4 of 6 — Food Catalog: Browsing Karnataka foods...', delay: 4000, action: 'scrollCatalog' },
-    { path: '/dashboard', title: 'Dashboard', text: 'Step 5 of 6 — Dashboard: Tracking class health...', delay: 4000 },
-    { path: '/about', title: 'About', text: 'Step 6 of 6 — About: Project information...', delay: 2000, action: 'skipSplash' }
+    { path: '/', title: 'Home', text: 'Step 1 of 6 — Landing Page', delay: 4000 },
+    { path: '/bmi', title: 'BMI Assessment', text: 'Step 2 of 6 — BMI Assessment', delay: 4000, action: 'fillBmi' },
+    { path: '/meal-planner', title: 'Meal Planner', text: 'Step 3 of 6 — Meal Planner: Generating 7-day Karnataka meal plan…', delay: 4000, action: 'fillMeal' },
+    { path: '/food-catalog', title: 'Food Catalog', text: 'Step 4 of 6 — Nutrition Catalog: Karnataka foods database', delay: 4000, action: 'scrollCatalog' },
+    { path: '/dashboard', title: 'Dashboard', text: 'Step 5 of 6 — Analytics Dashboard: Class health overview', delay: 4000 },
+    { path: '/about', title: 'About', text: 'Step 6 of 6 — About the Platform', delay: 2000, action: 'skipSplash' }
   ];
 
   function getDemoState() {

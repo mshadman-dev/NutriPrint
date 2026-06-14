@@ -47,7 +47,7 @@
       return true;
     },
 
-    /** Update the navbar button state (Login ↔ Logout + teacher/demo badge). */
+    /** Update the navbar button state (Login ↔ Logout + teacher badge). */
     updateNavbar() {
       const session   = this.getSession();
       const loginBtn  = document.getElementById('loginBtn');
