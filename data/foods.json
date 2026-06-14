@@ -33,7 +33,8 @@
       "high-iron",
       "traditional",
       "gluten-free"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Ragi Dosa",
@@ -68,7 +69,8 @@
       "fermented",
       "probiotic",
       "gluten-free"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Jowar Roti",
@@ -102,7 +104,8 @@
       "traditional",
       "gluten-free",
       "north-karnataka"
-    ]
+    ],
+    "serving_size_g": 180
   },
   {
     "name_en": "Coconut Rice",
@@ -134,7 +137,8 @@
       "coastal",
       "gluten-free",
       "easy-digest"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Upma",
@@ -168,7 +172,8 @@
       "quick",
       "easy-digest",
       "vegetable-rich"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Idli with Sambar",
@@ -202,7 +207,8 @@
       "probiotic",
       "low-fat",
       "protein-rich"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Akki Roti",
@@ -236,7 +242,8 @@
       "gluten-free",
       "traditional",
       "rice-based"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Bisibelebath",
@@ -270,7 +277,8 @@
       "one-pot",
       "balanced",
       "traditional"
-    ]
+    ],
+    "serving_size_g": 300
   },
   {
     "name_en": "Jolada Rotti with Ennegayi",
@@ -301,7 +309,8 @@
       "north-karnataka",
       "high-iron",
       "traditional"
-    ]
+    ],
+    "serving_size_g": 300
   },
   {
     "name_en": "Neer Dosa",
@@ -333,7 +342,8 @@
       "coastal",
       "gluten-free",
       "easy-digest"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Sabudana Khichdi",
@@ -364,7 +374,8 @@
     "highlights": [
       "energy-dense",
       "nut-protein"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Palak Dal",
@@ -406,7 +417,8 @@
       "high-iron",
       "high-calcium",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Moong Dal Payasam",
@@ -439,7 +451,8 @@
       "high-protein",
       "calcium-rich",
       "jaggery-based"
-    ]
+    ],
+    "serving_size_g": 150
   },
   {
     "name_en": "Groundnut Chutney Rice",
@@ -471,7 +484,8 @@
       "high-protein",
       "peanut",
       "affordable"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Sambar Rice",
@@ -505,7 +519,8 @@
       "balanced",
       "vegetable-rich",
       "protein-lentil"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Drumstick Leaves Curry",
@@ -548,7 +563,8 @@
       "moringa",
       "superfood",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Horsegram Saaru",
@@ -588,7 +604,8 @@
       "high-iron",
       "high-calcium",
       "winter"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Wheat Dosa",
@@ -619,7 +636,8 @@
     "highlights": [
       "whole-grain",
       "high-fiber"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Banana Sheera",
@@ -652,7 +670,8 @@
       "energy-dense",
       "kid-favorite",
       "quick"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Poha",
@@ -685,7 +704,8 @@
       "iron-fortified",
       "quick",
       "light"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Jackfruit Curry",
@@ -723,7 +743,8 @@
       "high-fiber",
       "meat-substitute",
       "summer"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Avarekalu Saaru",
@@ -760,7 +781,8 @@
       "very-high-protein",
       "high-calcium",
       "seasonal"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Curd Rice",
@@ -803,7 +825,8 @@
       "cooling",
       "summer",
       "dairy"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Egg Curry with Rice",
@@ -839,7 +862,8 @@
       "high-protein",
       "eggetarian",
       "iron-rich"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Boiled Egg with Ragi Mudde",
@@ -873,7 +897,8 @@
       "high-iron",
       "eggetarian",
       "school-nutrition"
-    ]
+    ],
+    "serving_size_g": 300
   },
   {
     "name_en": "Omelette with Bread",
@@ -906,7 +931,8 @@
       "high-protein",
       "quick",
       "eggetarian"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Fish Curry with Rice",
@@ -939,7 +965,8 @@
       "coastal",
       "high-protein",
       "non-vegetarian"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Chicken Saaru with Jolada Rotti",
@@ -971,7 +998,8 @@
       "very-high-protein",
       "non-vegetarian",
       "north-karnataka"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Prawn Ghee Roast with Neer Dosa",
@@ -1007,7 +1035,8 @@
       "coastal",
       "non-vegetarian",
       "winter-special"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Kelyache Shiite (Banana Flower Curry)",
@@ -1041,7 +1070,8 @@
       "coastal",
       "plant-based",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Groundnut Laddu",
@@ -1075,7 +1105,8 @@
       "energy-dense",
       "jaggery",
       "snack"
-    ]
+    ],
+    "serving_size_g": 80
   },
   {
     "name_en": "Methi Paratha",
@@ -1112,7 +1143,8 @@
       "fenugreek",
       "winter-special",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Tomato Gojju with Rice",
@@ -1144,7 +1176,8 @@
       "vitamin-c",
       "affordable",
       "quick"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Colocasia Fry",
@@ -1180,7 +1213,8 @@
       "calcium-rich",
       "malnad",
       "seasonal"
-    ]
+    ],
+    "serving_size_g": 200
   },
   {
     "name_en": "Mixed Veg Khichdi",
@@ -1215,7 +1249,8 @@
       "balanced",
       "protein-lentil",
       "kid-friendly"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Girmit",
@@ -1246,7 +1281,8 @@
       "north-karnataka",
       "quick",
       "iron-fortified"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Sweet Potato Curry",
@@ -1283,7 +1319,8 @@
       "beta-carotene",
       "eye-health",
       "winter"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Green Gram Sprouted Salad",
@@ -1318,7 +1355,8 @@
       "high-protein",
       "live-enzymes",
       "no-cook"
-    ]
+    ],
+    "serving_size_g": 180
   },
   {
     "name_en": "Pongal",
@@ -1350,7 +1388,8 @@
       "ghee",
       "probiotic",
       "kid-friendly"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Ambat (Goan-Mangalorean Curry)",
@@ -1382,7 +1421,8 @@
       "coastal",
       "protein-lentil",
       "tamarind"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Ragi Malt",
@@ -1418,7 +1458,8 @@
       "quick",
       "school-friendly",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Shavige Bath",
@@ -1450,7 +1491,8 @@
       "quick",
       "vegetable-rich",
       "kid-friendly"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Beans Curry with Chapati",
@@ -1486,7 +1528,8 @@
       "high-fiber",
       "winter-special",
       "seasonal"
-    ]
+    ],
+    "serving_size_g": 280
   },
   {
     "name_en": "Mudde Saaru (Finger Millet with Rasam)",
@@ -1519,7 +1562,8 @@
       "traditional",
       "affordable",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 300
   },
   {
     "name_en": "Carrot Halwa",
@@ -1556,7 +1600,8 @@
       "calcium-rich",
       "winter-special",
       "dairy"
-    ]
+    ],
+    "serving_size_g": 120
   },
   {
     "name_en": "Koli Saaru (Chicken Soup)",
@@ -1590,7 +1635,8 @@
       "very-high-protein",
       "warming",
       "non-vegetarian"
-    ]
+    ],
+    "serving_size_g": 300
   },
   {
     "name_en": "Dill Leaves Dal",
@@ -1627,7 +1673,8 @@
       "malnad",
       "monsoon",
       "anti-anaemia"
-    ]
+    ],
+    "serving_size_g": 380
   },
   {
     "name_en": "Pathrode",
@@ -1664,7 +1711,8 @@
       "monsoon",
       "high-iron",
       "traditional"
-    ]
+    ],
+    "serving_size_g": 200
   },
   {
     "name_en": "Chapati with Chana Masala",
@@ -1697,7 +1745,8 @@
       "complete-protein",
       "high-fiber",
       "iron-rich"
-    ]
+    ],
+    "serving_size_g": 280
   },
   {
     "name_en": "Vangi Bath",
@@ -1729,7 +1778,8 @@
       "traditional",
       "aromatic",
       "kid-friendly"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Rava Idli",
@@ -1760,7 +1810,8 @@
       "quick",
       "no-fermentation",
       "kid-friendly"
-    ]
+    ],
+    "serving_size_g": 250
   },
   {
     "name_en": "Lemon Rice",
@@ -1793,7 +1844,8 @@
       "iron-absorption",
       "peanut-protein",
       "affordable"
-    ]
+    ],
+    "serving_size_g": 350
   },
   {
     "name_en": "Toor Dal with Ghee Rice",
@@ -1829,6 +1881,7 @@
       "ghee",
       "balanced",
       "comforting"
-    ]
+    ],
+    "serving_size_g": 350
   }
 ]

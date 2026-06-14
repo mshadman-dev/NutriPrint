@@ -332,7 +332,7 @@ class TestFallbackEngineDietCompliance:
     def _check_plan_for_diet(self, diet: str):
         plan = generate_fallback_plan(
             school_name="Test", student_name="Student", teacher_name="",
-            age_group="9-12", diet_pref=diet, region="mangalore",
+            age_group="9-12", gender="boy", diet_pref=diet, region="mangalore",
             month="june", strategy="standard",
         )
         violations = []
@@ -354,7 +354,7 @@ class TestFallbackEngineDietCompliance:
     def test_fallback_has_7_days(self):
         plan = generate_fallback_plan(
             school_name="T", student_name="S", teacher_name="",
-            age_group="9-12", diet_pref=DIET_VEGETARIAN, region="bengaluru_rural",
+            age_group="9-12", gender="boy", diet_pref=DIET_VEGETARIAN, region="bengaluru_rural",
             month="january", strategy="standard",
         )
         assert len(plan.week) == 7
@@ -362,7 +362,7 @@ class TestFallbackEngineDietCompliance:
     def test_diet_pref_stored_correctly(self):
         plan = generate_fallback_plan(
             school_name="T", student_name="S", teacher_name="",
-            age_group="9-12", diet_pref=DIET_VEGETARIAN, region="mangalore",
+            age_group="9-12", gender="boy", diet_pref=DIET_VEGETARIAN, region="mangalore",
             month="june", strategy="standard",
         )
         assert plan.diet_pref == DIET_VEGETARIAN

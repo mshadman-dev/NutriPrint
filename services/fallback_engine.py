@@ -30,14 +30,27 @@ def _filter_foods(region, diet, meal_type, month):
     return results
 
 def _to_meal_item(f) -> MealItem:
+    serving_size_g = f.get("serving_size_g", 100)
+    factor = serving_size_g / 100.0
+
+    calories = round(f["calories_per_100g"] * factor)
+    protein_g = round(f["protein_g"] * factor, 2)
+    calcium_mg = round(f["calcium_mg"] * factor, 1)
+    iron_mg = round(f["iron_mg"] * factor, 2)
+
+    # Scale optional per-100g fields if present
+    carbs_g = round(f["carbs_g"] * factor, 2) if "carbs_g" in f else None
+    fat_g = round(f["fat_g"] * factor, 2) if "fat_g" in f else None
+    fiber_g = round(f["fiber_g"] * factor, 2) if "fiber_g" in f else None
+
     return MealItem(
         name_en       = f["name_en"],
         name_kn       = f["name_kn"],
         ingredients   = [f["name_en"]],  # simplified
-        calories      = f["calories_per_100g"],
-        protein_g     = f["protein_g"],
-        calcium_mg    = f["calcium_mg"],
-        iron_mg       = f["iron_mg"],
+        calories      = calories,
+        protein_g     = protein_g,
+        calcium_mg    = calcium_mg,
+        iron_mg       = iron_mg,
         cost_inr      = f["cost_inr"],
         prep_time_min = f["prep_time_min"],
     )
