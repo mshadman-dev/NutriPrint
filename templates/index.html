@@ -1369,13 +1369,6 @@
       <a href="/meal-planner" class="hp-cta-secondary">
         <span aria-hidden="true">🗓️</span> Generate Meal Plan
       </a>
-      <button onclick="NutriDemo.activate()"
-              class="hp-cta-ghost"
-              style="background:rgba(252,211,77,0.2);border-color:rgba(252,211,77,0.55);
-                     color:rgba(255,255,255,.95);font-weight:800;cursor:pointer;"
-              aria-label="Try Demo Mode">
-        <span aria-hidden="true">🚀</span> Try Demo Mode
-      </button>
     </div>
   </div>
 </section>
@@ -1408,9 +1401,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     const foods    = data.total_foods    ?? 53;
 
     /* Hero card (original IDs — unchanged) */
-    await animateCount('metricPlans',    plans);
-    await animateCount('metricStudents', students);
-    await animateCount('metricFoods',    foods);
+    await Promise.all([
+      animateCount('metricPlans',    plans),
+      animateCount('metricStudents', students),
+      animateCount('metricFoods',    foods)
+    ]);
 
     /* Stats strip (new IDs) */
     const fmt = (n, fallback) => {
@@ -1420,11 +1415,17 @@ window.addEventListener('DOMContentLoaded', async () => {
     const ss = document.getElementById('statStudents');
     const sp = document.getElementById('statPlans');
     const sf = document.getElementById('statFoods');
-    if (ss) ss.textContent = fmt(students, '500+');
-    if (sp) sp.textContent = fmt(plans,    '1,000+');
+    if (ss) ss.textContent = fmt(students, '583+');
+    if (sp) sp.textContent = fmt(plans,    '1.2k+');
     if (sf) sf.textContent = foods + '+';
 
-  } catch (_) { /* fallback values already in HTML */ }
+  } catch (_) {
+    await Promise.all([
+      animateCount('metricPlans',    1247),
+      animateCount('metricStudents', 583),
+      animateCount('metricFoods',    53)
+    ]);
+  }
 });
 
 /* ── Intersection Observer — scroll-reveal ────────────────────────────────── */

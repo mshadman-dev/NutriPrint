@@ -51,6 +51,7 @@ def generate_fallback_plan(
     student_name     : str,
     teacher_name     : str,
     age_group        : str,
+    gender           : str,
     diet_pref        : str,
     region           : str,
     month            : str,
@@ -61,40 +62,32 @@ def generate_fallback_plan(
     if ai_recommendations is None:
         ai_recommendations = []
 
-    breakfasts = _filter_foods(region, diet_pref, "breakfast", month)
-    lunches    = _filter_foods(region, diet_pref, "lunch",     month)
-    dinners    = _filter_foods(region, diet_pref, "dinner",    month)
-
-    # Fallback to all regions if not enough local foods
-    if len(breakfasts) < 7:
-        breakfasts += _filter_foods("bengaluru_rural", diet_pref, "breakfast", month)
-    if len(lunches) < 7:
-        lunches    += _filter_foods("bengaluru_rural", diet_pref, "lunch",     month)
-    if len(dinners) < 7:
-        dinners    += _filter_foods("bengaluru_rural", diet_pref, "dinner",    month)
-
-    # Shuffle and pick 7 unique per meal type
-    random.shuffle(breakfasts)
-    random.shuffle(lunches)
-    random.shuffle(dinners)
+    # Hardcoded fallback as requested
+    hardcoded_schedule = [
+        ("Monday",    "Ragi mudde+Sambar", "Rice+Dal+Sabzi", "Chapati+Palya",   142),
+        ("Tuesday",   "Avalakki upma",     "Bisibelebath",   "Rice+Rasam",      138),
+        ("Wednesday", "Idli+Chutney",      "Rice+Rajma",     "Roti+Dal",        145),
+        ("Thursday",  "Dosa+Sambar",       "Pulao+Raita",    "Rice+Sambar",     140),
+        ("Friday",    "Upma+Chutney",      "Rice+Curry",     "Chapati+Sabzi",   143),
+        ("Saturday",  "Poha+Banana",       "Curd rice",      "Khichdi",         135),
+        ("Sunday",    "Puri+Sabzi",        "Special rice",   "Khichdi+Ghee",    148),
+    ]
 
     week = []
-    total_cal = total_pro = total_cal_mg = total_iron = total_cost = 0
+    total_cost = 0
 
-    for i, day in enumerate(DAYS_EN):
-        b = _to_meal_item(breakfasts[i % len(breakfasts)])
-        l = _to_meal_item(lunches[i    % len(lunches)])
-        d = _to_meal_item(dinners[i    % len(dinners)])
+    for day_en, b_name, l_name, d_name, cost in hardcoded_schedule:
+        cost_per_meal = cost / 3
+        
+        b = MealItem(name_en=b_name, name_kn="", ingredients=[], calories=400, protein_g=12, calcium_mg=200, iron_mg=5, cost_inr=cost_per_meal, prep_time_min=20)
+        l = MealItem(name_en=l_name, name_kn="", ingredients=[], calories=600, protein_g=18, calcium_mg=300, iron_mg=8, cost_inr=cost_per_meal, prep_time_min=30)
+        d = MealItem(name_en=d_name, name_kn="", ingredients=[], calories=500, protein_g=15, calcium_mg=250, iron_mg=6, cost_inr=cost_per_meal, prep_time_min=25)
 
-        total_cal   += b.calories  + l.calories  + d.calories
-        total_pro   += b.protein_g + l.protein_g + d.protein_g
-        total_cal_mg+= b.calcium_mg+ l.calcium_mg+ d.calcium_mg
-        total_iron  += b.iron_mg   + l.iron_mg   + d.iron_mg
-        total_cost  += b.cost_inr  + l.cost_inr  + d.cost_inr
+        total_cost += cost
 
         week.append(MealDay(
-            day       = day,
-            day_kn    = DAYS_KN[day],
+            day       = day_en,
+            day_kn    = DAYS_KN.get(day_en, ""),
             breakfast = b,
             lunch     = l,
             dinner    = d,
@@ -111,11 +104,11 @@ def generate_fallback_plan(
         strategy          = strategy,
         bmi_class         = bmi_class,
         week              = week,
-        avg_daily_cal     = round(total_cal   / 7, 1),
-        avg_protein_g     = round(total_pro   / 7, 2),
-        avg_calcium_mg    = round(total_cal_mg/ 7, 1),
-        avg_iron_mg       = round(total_iron  / 7, 2),
-        total_cost_inr    = round(total_cost,  2),
+        avg_daily_cal     = 1500.0,
+        avg_protein_g     = 45.0,
+        avg_calcium_mg    = 750.0,
+        avg_iron_mg       = 19.0,
+        total_cost_inr    = float(total_cost),
         generated_by      = "fallback",
         ai_recommendations= ai_recommendations,
     )

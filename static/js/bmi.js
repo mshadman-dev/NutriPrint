@@ -131,48 +131,7 @@ async function calculateBMI() {
 
   } catch (err) {
     console.error('BMI error:', err);
-    if (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo()) {
-      const h_m = parseFloat(height) / 100;
-      const calc_bmi = parseFloat(weight) / (h_m * h_m);
-      const fallbackData = {
-        student_name: name,
-        age: parseInt(age),
-        gender: gender,
-        bmi_value: calc_bmi.toFixed(1),
-        classification: 'normal',
-        z_score: 0.5,
-        percentile: 65,
-        advice_en: "This student is within a healthy weight range. Maintain a balanced diet rich in local Karnataka vegetables and whole grains.",
-        advice_kn: "ಈ ವಿದ್ಯಾರ್ಥಿಯ ತೂಕ ಆರೋಗ್ಯಕರವಾಗಿದೆ. ಸಮತೋಲಿತ ಆಹಾರ ಮತ್ತು ತರಕಾರಿಗಳನ್ನು ಮುಂದುವರಿಸಿ."
-      };
-      
-      lastBMIResult = fallbackData;
-      window.lastBMIResult = fallbackData;
-      try {
-        localStorage.setItem('nutriprint_last_bmi', JSON.stringify(fallbackData));
-      } catch (_) {}
-      
-      resultEl.innerHTML = `
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <h3 id="resultName" class="heading text-2xl font-bold text-slate-900"></h3>
-            <p id="resultBMI" class="mt-1 text-sm text-slate-500"></p>
-          </div>
-          <span id="resultBadge" class="rounded-full px-4 py-2 text-sm font-bold"></span>
-        </div>
-        <div class="mt-5">
-          <div class="mb-1 flex justify-between text-xs text-slate-400"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
-          <div class="h-3 w-full rounded-full bg-slate-100"><div id="gaugeBar" class="h-3 rounded-full transition-all duration-700" style="width:0%"></div></div>
-          <p id="resultPercentile" class="mt-2 text-right text-xs text-slate-500"></p>
-        </div>
-        <div id="resultAdviceEN" class="mt-5 rounded-2xl bg-emerald-50 p-4 text-sm text-slate-700"></div>
-        <div id="resultAdviceKN" class="kn mt-3 rounded-2xl bg-amber-50 p-4 text-sm text-slate-700"></div>
-        <button onclick="prefillMealForm()" class="btn-secondary mt-6 w-full py-3">Generate Meal Plan for this Student</button>`;
 
-      showBMIResult(fallbackData);
-      showGrowthChart(fallbackData.student_name);
-      return;
-    }
     
     if (resultEl) {
       resultEl.classList.remove('hidden');
@@ -228,13 +187,11 @@ function showBMIResult(data) {
 
 function prefillMealForm() {
   if (!lastBMIResult) return;
-  try {
-    localStorage.setItem('prefill_name', lastBMIResult.student_name || '');
-    localStorage.setItem('prefill_age', String(lastBMIResult.age || ''));
-    localStorage.setItem('prefill_gender', lastBMIResult.gender || 'boy');
-    localStorage.setItem('nutriprint_last_bmi', JSON.stringify(lastBMIResult));
-  } catch (_) {}
-  window.location.href = '/meal-planner';
+  const url = new URL(window.location.origin + '/meal-planner');
+  url.searchParams.set('name', lastBMIResult.student_name || '');
+  url.searchParams.set('category', lastBMIResult.classification || '');
+  url.searchParams.set('bmi', lastBMIResult.bmi_value || '');
+  window.location.href = url.toString();
 }
 
 // Voice input
@@ -345,66 +302,10 @@ async function showGrowthChart(studentName) {
   });
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
-async function typeInto(id, text) {
-  const el = document.getElementById(id);
-  el.value = '';
-  for (const ch of text) {
-    el.value += ch;
-    await sleep(50);
-  }
-}
-
-async function runDemo() {
-  document.querySelector('#bmi').scrollIntoView({behavior:'smooth'});
-  await sleep(800);
-
-  await typeInto('bmiName',   'Priya Shetty');
-  await typeInto('bmiAge',    '10');
-  document.getElementById('bmiGender').value = 'girl';
-  await typeInto('bmiHeight', '132');
-  await typeInto('bmiWeight', '24');
-  await sleep(500);
-
-  await calculateBMI();
-  await sleep(1500);
-
-  document.querySelector('#meal').scrollIntoView({behavior:'smooth'});
-  await sleep(800);
-
-  await typeInto('mealSchool',   'Govt High School Mangalore');
-  await typeInto('mealStudent',  'Priya Shetty');
-  document.getElementById('mealDiet').value     = 'vegetarian';
-  document.getElementById('mealRegion').value   = 'mangalore';
-  document.getElementById('mealStrategy').value = 'calcium_iron';
-  await sleep(500);
-
-  await generateMeal();
-}
 
 // Restore prefill from dashboard reassess on page load
 window.addEventListener('DOMContentLoaded', () => {
-  // ── Demo mode: auto-fill first demo student ────────────────────────────
-  if (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo()) {
-    const students = NutriDemo.getStudents();
-    if (students.length) {
-      const s = students[0]; // Rohan Kumar — underweight
-      const get = id => document.getElementById(id);
-      if (get('bmiName'))   get('bmiName').value   = s.name;
-      if (get('bmiAge'))    get('bmiAge').value     = s.age;
-      if (get('bmiGender')) get('bmiGender').value  = s.gender;
-      // height + weight live on the full student object in DEMO_HISTORY context
-      const raw = JSON.parse(
-        localStorage.getItem('bmi_history_' + s.name) || '[]'
-      );
-      // We know the first demo student is Rohan: 140cm / 32kg
-      if (get('bmiHeight')) get('bmiHeight').value = 140;
-      if (get('bmiWeight')) get('bmiWeight').value = 32;
-    }
-  }
 
   const prefillName   = localStorage.getItem('prefill_name');
   const prefillAge    = localStorage.getItem('prefill_age');

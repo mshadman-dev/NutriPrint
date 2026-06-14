@@ -43,12 +43,12 @@ async def generate_meal(data: MealInput):
 
             return MealPlan(**plan_json)
 
-        # Generate fresh plan
         plan = generate_groq_plan(
             school_name=data.school_name,
             student_name=data.student_name,
             teacher_name=data.teacher_name or "",
             age_group=data.age_group.value,
+            gender=data.gender.value if data.gender else "student",
             diet_pref=data.diet_pref.value,
             region=data.region.value,
             month=data.month,
@@ -122,6 +122,7 @@ async def generate_meal(data: MealInput):
                 student_name=data.student_name,
                 teacher_name=data.teacher_name or "",
                 age_group=data.age_group.value,
+                gender=data.gender.value if data.gender else "student",
                 diet_pref=data.diet_pref.value,
                 region=data.region.value,
                 month=data.month,
@@ -172,6 +173,7 @@ async def regenerate_day(plan_id: str, data: RegenerateDay):
             student_name=row.get("student_name", "Student"),
             teacher_name=row.get("teacher_name", ""),
             age_group=row.get("age_group", "9-12"),
+            gender="student",
             diet_pref=row.get("diet_pref", "vegetarian"),
             region=row.get("region", "mangalore"),
             month=row.get("month", "january"),

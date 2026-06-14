@@ -795,8 +795,7 @@
 <!-- Auth — loaded early so every page can guard itself -->
 <script src="/static/js/auth.js"></script>
 
-<!-- Demo Mode — loaded immediately after auth -->
-<script src="/static/js/demo.js"></script>
+
 
 <header class="sticky top-0 z-50 border-b border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.04)]">
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
@@ -824,20 +823,9 @@
             style="display:none">
         👩‍🏫 Teacher
       </span>
-      <!-- Demo Mode badge (shown only in demo mode) -->
-      <span id="demoBadge"
-            style="display:none;align-items:center;gap:.35rem;padding:.28rem .75rem;
-                   background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:9999px;
-                   font-size:.7rem;font-weight:800;color:#92400E;white-space:nowrap;">
-        🎓 Demo
-      </span>
       <button onclick="toggleLang()" class="hidden rounded-full border border-primary/20 bg-white px-3 py-2 text-xs font-semibold text-primary shadow-sm transition hover:bg-primary/5 sm:inline-flex">
         <span class="lang-en">ಕನ್ನಡ</span>
         <span class="lang-kn">English</span>
-      </button>
-      <button id="startDemoBtn" onclick="window.startDemo && window.startDemo()"
-              class="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 shadow-sm transition hover:bg-indigo-100">
-        🎓 Auto Demo
       </button>
       <!-- Login / Logout buttons (auth.js toggles visibility) -->
       <a href="/login" id="loginBtn"

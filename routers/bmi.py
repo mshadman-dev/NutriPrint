@@ -22,15 +22,34 @@ async def bmi_calculate(data: BMIInput):
             weight_kg    = data.weight_kg,
         )
 
+        # Save assessment to Supabase students table
+        # Works without login (teacher_id will be None if anonymous)
+        student_data = {
+            "name": data.student_name,
+            "age": data.age,
+            "gender": data.gender.value,
+            "height": data.height_cm,
+            "weight": data.weight_kg,
+            "bmi": float(result.bmi_value),
+            "category": result.classification.value,
+        }
         if data.teacher_id:
+            student_data["teacher_id"] = data.teacher_id
+
+        # Insert into students table
+        student_res = supabase.table("students").insert(student_data).execute()
+        student_id = student_res.data[0]["id"] if student_res.data else None
+
+        if data.teacher_id and student_id:
+            # Optionally also store in bmi_records for history tracking
             supabase.table("bmi_records").insert({
-                "student_id"     : data.student_id,
+                "student_id"     : student_id,
                 "teacher_id"     : data.teacher_id,
                 "height_cm"      : data.height_cm,
                 "weight_kg"      : data.weight_kg,
-                "bmi_value"      : result.bmi_value,
-                "percentile"     : result.percentile,
-                "z_score"        : result.z_score,
+                "bmi_value"      : float(result.bmi_value),
+                "percentile"     : float(result.percentile),
+                "z_score"        : float(result.z_score),
                 "classification" : result.classification.value,
                 "advice_en"      : result.advice_en,
                 "advice_kn"      : result.advice_kn,

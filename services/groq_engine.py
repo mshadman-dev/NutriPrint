@@ -18,48 +18,34 @@ ICMR_RDA = {
 
 
 def _build_prompt(data: dict) -> str:
-    rda           = ICMR_RDA.get(data["age_group"], ICMR_RDA["9-12"])
-    diet_pref     = data["diet_pref"]
-    strategy_note = get_strategy_note(data["strategy"], diet_pref)
+    # User's exact requested prompt:
+    # "You are a Karnataka school nutrition expert. Generate a 7-day meal plan for a {age}-year-old {gender} student with {category} BMI. Use only Karnataka regional foods (ragi, rice, dal, sambar, coconut, avalakki, bisibelebath, etc). Keep daily budget under ₹150. Format as JSON with days array, each having breakfast, lunch, dinner, and daily_cost."
+    
+    # We maintain the strict JSON schema required by the parsing code while applying the user's text verbatim where possible.
+    return f"""You are a Karnataka school nutrition expert. Generate a 7-day meal plan for a {data['age_group']}-year-old {data['gender']} student with {data.get('bmi_class', 'normal')} BMI. Use only Karnataka regional foods (ragi, rice, dal, sambar, coconut, avalakki, bisibelebath, etc). Keep daily budget under ₹150. Format as JSON with days array, each having breakfast, lunch, dinner, and daily_cost.
 
-    # Build explicit diet block for the prompt
-    if diet_pref == DIET_VEGETARIAN:
-        diet_block = (
-            "DIET: vegetarian — ABSOLUTELY NO eggs, meat, chicken, fish, seafood, mutton, "
-            "prawn, or any animal flesh in ANY meal across ALL 7 days. "
-            "Use only: dal, paneer, curd, milk, vegetables, fruits, grains, nuts, legumes, "
-            "Ragi Mudde, Jowar Roti, Idli, Dosa, Upma, Sambar, Horsegram, Sprouted Moong, "
-            "Avarekalu, Bisibelebath, Khichdi, Curd Rice."
-        )
-    elif diet_pref == DIET_EGGETARIAN:
-        diet_block = (
-            "DIET: eggetarian — Eggs are allowed. ABSOLUTELY NO meat, chicken, fish, seafood, "
-            "mutton, prawn, or any other animal flesh. "
-            "Use: eggs, dal, paneer, curd, milk, vegetables, fruits, grains, nuts, legumes."
-        )
-    else:
-        diet_block = (
-            "DIET: non-vegetarian — All foods allowed including eggs, chicken, fish, seafood."
-        )
-
-    return f"""You are a certified child nutritionist for Karnataka schools, India.
-Generate a 7-day weekly meal plan as valid JSON only.
-
-STUDENT PROFILE:
-- Age Group: {data['age_group']} years
-- Region: {data['region']} (Karnataka)
-- Month: {data['month']} (use seasonal ingredients)
-- BMI Classification: {data.get('bmi_class', 'normal')}
-- Strategy: {data['strategy']} — {strategy_note}
-- Allergies to avoid: {data.get('allergies', [])}
-
-{diet_block}
-
-ICMR DAILY TARGETS:
-- Calories: {rda['calories']} kcal
-- Protein: {rda['protein_g']}g
-- Calcium: {rda['calcium_mg']}mg
-- Iron: {rda['iron_mg']}mg
+JSON SCHEMA REQUIREMENT (to parse correctly in the system):
+{{
+  "week": [
+    {{
+      "day": "Monday",
+      "day_kn": "ಸೋಮವಾರ",
+      "breakfast": {{
+        "name_en": "...",
+        "name_kn": "...",
+        "ingredients": ["...", "..."],
+        "calories": 0,
+        "protein_g": 0,
+        "calcium_mg": 0,
+        "iron_mg": 0,
+        "cost_inr": 0,
+        "prep_time_min": 0
+      }},
+      "lunch": {{ "name_en": "...", "name_kn": "...", "ingredients": [], "calories": 0, "protein_g": 0, "calcium_mg": 0, "iron_mg": 0, "cost_inr": 0, "prep_time_min": 0 }},
+      "dinner": {{ "name_en": "...", "name_kn": "...", "ingredients": [], "calories": 0, "protein_g": 0, "calcium_mg": 0, "iron_mg": 0, "cost_inr": 0, "prep_time_min": 0 }}
+    }}
+  ]
+}}
 
 STRICT RULES:
 1. Use ONLY locally available Karnataka foods for the {data['region']} region.
@@ -101,6 +87,7 @@ def generate_groq_plan(
     student_name      : str,
     teacher_name      : str,
     age_group         : str,
+    gender            : str,
     diet_pref         : str,
     region            : str,
     month             : str,
@@ -119,6 +106,7 @@ def generate_groq_plan(
 
     prompt_data = {
         "age_group": age_group,
+        "gender":    gender,
         "diet_pref": diet_pref,
         "region":    region,
         "month":     month,
@@ -209,7 +197,7 @@ def generate_groq_plan(
         print(f"⚠️ Groq failed: {e} — switching to fallback engine")
         return generate_fallback_plan(
             school_name, student_name, teacher_name,
-            age_group, diet_pref, region, month, strategy, bmi_class,
+            age_group, gender, diet_pref, region, month, strategy, bmi_class,
             ai_recommendations=ai_recommendations,
         )
 
