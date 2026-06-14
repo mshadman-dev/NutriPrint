@@ -1,2 +1,2 @@
 # NutriPrint
-AI-powered nutrition and meal planning platform for Karnataka school children. Academic interdisciplinary project.
+AI-powered nutrition recommendation system for children aged 5–15 years.
