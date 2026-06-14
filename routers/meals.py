@@ -16,33 +16,6 @@ legacy_router = APIRouter(prefix="/api/meals", tags=["Meals"])
 @router.post("/generate", response_model=MealPlan)
 async def generate_meal(data: MealInput):
     try:
-        # Cache disabled for now to avoid stale student data
-        cached = (
-            supabase.table("meal_plans")
-            .select("*")
-            .eq("age_group", data.age_group.value)
-            .eq("diet_pref", data.diet_pref.value)
-            .eq("region", data.region.value)
-            .eq("month", data.month)
-            .eq("strategy", data.strategy.value)
-            .limit(1)
-            .execute()
-        )
-
-        # Keep disabled until caching is redesigned
-        if False and cached.data:
-            row = cached.data[0]
-
-            plan_json = row["plan_json"]
-
-            if isinstance(plan_json, str):
-                plan_json = json.loads(plan_json)
-
-            plan_json["plan_id"] = str(row["id"])
-            plan_json["share_token"] = str(row["share_token"])
-
-            return MealPlan(**plan_json)
-
         plan = generate_groq_plan(
             school_name=data.school_name,
             student_name=data.student_name,

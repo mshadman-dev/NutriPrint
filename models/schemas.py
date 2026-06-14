@@ -121,6 +121,7 @@ class MealInput(BaseModel):
     student_name : Optional[str] = "Student"
     student_id   : Optional[str] = None
     age_group    : AgeGroup
+    gender       : Optional[Gender] = None
     diet_pref    : DietPref
     region       : Region
     month        : str
