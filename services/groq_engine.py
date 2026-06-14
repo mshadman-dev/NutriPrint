@@ -133,7 +133,7 @@ def generate_groq_plan(
         response = client.chat.completions.create(
             model           = "llama-3.1-8b-instant",
             messages        = [{"role": "user", "content": _build_prompt(prompt_data)}],
-            max_tokens      = 3000,
+            max_tokens      = 4096,   # was 3000 — caused truncation & fallback on ~2/3 requests
             temperature     = 0.4,
             response_format = {"type": "json_object"},
         )
