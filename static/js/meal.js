@@ -72,6 +72,19 @@ const _FOOD_SLUG = {
   "Carrot Halwa"                           : "carrot_halwa",
   "Groundnut Laddu"                        : "groundnut_laddu",
 
+  "Moong Sprouts"                          : "green_gram_sprouted_salad",
+  "Rajma"                                  : "mixed_veg_khichdi",
+  "Horsegram Dal"                          : "horsegram_saaru",
+  "Full Cream Milk"                        : "ragi_malt",
+  "Chapati"                                : "chapati_with_chana_masala",
+  "Banana"                                 : "banana_sheera",
+  "Ghee"                                   : "toor_dal_with_ghee_rice",
+  "Coconut"                                : "coconut_rice",
+  "Vegetables"                             : "drumstick_leaves_curry",
+  "Fruits"                                 : "banana_sheera",
+  "Curd"                                   : "curd_rice",
+
+
   "Sambar"                                : "sambar_rice",
   "Ragi Roti"                             : "jowar_roti",
   "Coconut Ladoo"                         : "banana_sheera",
