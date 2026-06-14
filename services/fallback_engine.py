@@ -3,6 +3,7 @@ import random
 from pathlib import Path
 from models.schemas import MealPlan, MealDay, MealItem
 from services.diet_filter import DAYS_KN
+from services.allergen_map import get_excluded_keywords
 
 # Load foods once at startup
 FOODS_PATH = Path(__file__).parent.parent / "data" / "foods.json"
@@ -76,16 +77,28 @@ def generate_fallback_plan(
 
     # Normalize allergy keywords for case-insensitive matching
     allergy_keywords = [a.strip().lower() for a in allergies if a.strip()]
+    
+    # Expand allergy keywords using allergen category mapping
+    excluded_keywords = get_excluded_keywords(allergy_keywords)
 
     def _is_allergic(food: dict) -> bool:
-        """Return True if this food should be excluded due to allergies."""
-        if not allergy_keywords:
+        """
+        Return True if this food should be excluded due to allergies.
+        
+        Uses expanded allergen categories to match ingredient keywords
+        in food names and highlights. For example, a "milk" allergy
+        will match "curd" and "yogurt".
+        """
+        if not excluded_keywords:
             return False
-        name_lower = food["name_en"].lower()
-        # Also check highlights and description as extra signal
-        extra = " ".join(food.get("highlights", [])).lower()
-        for kw in allergy_keywords:
-            if kw in name_lower or kw in extra:
+        
+        combined_text = (
+            food["name_en"] + " " +
+            " ".join(food.get("highlights", []))
+        ).lower()
+        
+        for kw in excluded_keywords:
+            if kw in combined_text:
                 return True
         return False
 
