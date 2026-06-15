@@ -279,7 +279,7 @@
         </div>
 
         <!-- Primary CTA -->
-        <button onclick="window.location.href='/login'"
+        <button onclick="NutriStart.begin()"
                 class="login-cta-primary"
                 aria-label="Get started with NutriPrint">
           <span aria-hidden="true">🚀</span>
@@ -313,14 +313,12 @@
 
 {% block scripts %}
 <script>
-  // If already logged in, skip straight to dashboard
   document.addEventListener('DOMContentLoaded', function () {
     if (typeof NutriAuth !== 'undefined' && NutriAuth.isLoggedIn()) {
       window.location.replace('/dashboard');
     }
   });
 
-  // Show info banner when redirected from a protected page
   (function () {
     const params = new URLSearchParams(window.location.search);
     if (params.get('msg') === 'protected') {
@@ -328,5 +326,24 @@
       if (banner) banner.classList.remove('hidden');
     }
   })();
+
+  const NutriStart = {
+    SESSION_KEY: 'np_teacher_session',
+
+    begin() {
+      const session = {
+        name: 'Guest Teacher',
+        is_guest: true,
+        created_at: new Date().toISOString()
+      };
+
+      localStorage.setItem(
+        this.SESSION_KEY,
+        JSON.stringify(session)
+      );
+
+      window.location.replace('/dashboard');
+    }
+  };
 </script>
 {% endblock %}
