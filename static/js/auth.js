@@ -1,7 +1,6 @@
 /**
  * NutriPrint — Auth helpers
  * ─────────────────────────────────────────────────────────────────────────────
-<<<<<<< HEAD
  * Session is written into localStorage (np_teacher_session) on login and
  * cleared by NutriAuth.logout().  The real Supabase OTP backend
  * (routers/auth.py) is not yet connected to the frontend; this file handles

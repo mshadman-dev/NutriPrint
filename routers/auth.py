@@ -1,11 +1,7 @@
 import os
 
 # NOTE: This Supabase OTP auth backend is not yet connected to the frontend UI.
-<<<<<<< HEAD
 # The frontend currently uses client-side localStorage session state for access.
-=======
-# The frontend supports Supabase OTP and a local pilot workspace for screenshots.
->>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel
