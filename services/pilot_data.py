@@ -178,6 +178,7 @@ def _ensure_default_plan(token: str = "pilot-plan-aarav") -> str:
         bmi_class=student[1],
         ai_recommendations=[
             {
+                "id": "pilot_rec_001",
                 "title": "Strengthen weekday protein",
                 "short_action": "Add dal, ragi, curd, and sprouted moong across the week.",
                 "detailed_explanation": "The plan prioritises affordable Karnataka foods that support growth, iron intake, and steady school-day energy.",
