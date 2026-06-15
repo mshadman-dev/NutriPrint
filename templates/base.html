@@ -798,8 +798,7 @@
 <!-- Auth — loaded early so every page can guard itself -->
 <script src="/static/js/auth.js"></script>
 
-<!-- Platform preview mode — exposes NutriDemo.activate() / .exit() -->
-<script src="/static/js/demo_mode.js"></script>
+
 <header class="site-header sticky top-0 z-50 border-b border-white/70 bg-white/85 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.04)]">
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
     <a href="/" class="flex items-center gap-3">
@@ -864,16 +863,7 @@
   </div>
 </header>
 
-<div id="demoModeBanner" class="hidden w-full bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white shadow-md z-[60] relative">
-  <div class="flex items-center justify-between max-w-7xl mx-auto">
-    <span>👩‍🏫 Platform Preview — NutriPrint · AI-Powered School Nutrition Platform <span id="demoProgressText" class="ml-2 opacity-80 text-xs font-bold"></span></span>
-    <div class="flex gap-2">
-      <button id="pauseDemoBtn" onclick="window.pauseAutoDemo && window.pauseAutoDemo()" class="rounded bg-indigo-800 px-2 py-1 text-xs hover:bg-indigo-700">⏸ Pause Demo</button>
-      <button id="resumeDemoBtn" onclick="window.resumeAutoDemo && window.resumeAutoDemo()" class="hidden rounded bg-indigo-800 px-2 py-1 text-xs hover:bg-indigo-700">▶ Resume Demo</button>
-      <button onclick="window.stopAutoDemo && window.stopAutoDemo()" class="rounded bg-red-600 px-2 py-1 text-xs hover:bg-red-500">Stop</button>
-    </div>
-  </div>
-</div>
+
 
 <main class="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8 {% block main_class %}{% endblock %}">
   {% block content %}{% endblock %}

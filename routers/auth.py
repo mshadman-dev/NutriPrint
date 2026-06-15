@@ -1,7 +1,7 @@
 import os
 
 # NOTE: This Supabase OTP auth backend is not yet connected to the frontend UI.
-# The frontend currently uses demo_mode.js (localStorage session) for access.
+# The frontend currently uses client-side localStorage session state for access.
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel

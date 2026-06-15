@@ -1,9 +1,10 @@
 /**
  * NutriPrint — Auth helpers
  * ─────────────────────────────────────────────────────────────────────────────
- * Session is written by demo_mode.js (NutriDemo.activate) and cleared by
- * NutriAuth.logout().  The real Supabase OTP backend (routers/auth.py) is not
- * yet connected to the frontend; this file handles client-side session state.
+ * Session is written into localStorage (np_teacher_session) on login and
+ * cleared by NutriAuth.logout().  The real Supabase OTP backend
+ * (routers/auth.py) is not yet connected to the frontend; this file handles
+ * client-side session state.
  *
  * Session key: np_teacher_session
  */
@@ -53,7 +54,6 @@
       const loginBtn  = document.getElementById('loginBtn');
       const logoutBtn = document.getElementById('logoutBtn');
       const badge     = document.getElementById('teacherBadge');
-      const demoBadge = document.getElementById('demoBadge');
 
       const dashLinks = document.querySelectorAll('.nav-dashboard-link');
 
@@ -61,18 +61,15 @@
         if (loginBtn)  loginBtn.style.display  = 'none';
         if (logoutBtn) logoutBtn.style.display = '';
 
-        const inDemo = (typeof NutriDemo !== 'undefined') && NutriDemo.isDemo();
         if (badge) {
-          badge.style.display = inDemo ? 'none' : '';
-          if (!inDemo) badge.textContent = '👩‍🏫 Teacher';
+          badge.style.display = '';
+          badge.textContent = '👩‍🏫 Teacher';
         }
-        if (demoBadge) demoBadge.style.display = inDemo ? '' : 'none';
         dashLinks.forEach(el => { el.style.display = ''; });
       } else {
         if (loginBtn)  loginBtn.style.display  = '';
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (badge)     badge.style.display     = 'none';
-        if (demoBadge) demoBadge.style.display = 'none';
         dashLinks.forEach(el => { el.style.display = 'none'; });
       }
     },

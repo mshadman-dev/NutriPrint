@@ -279,7 +279,7 @@
         </div>
 
         <!-- Primary CTA -->
-        <button onclick="NutriDemo.activate()"
+        <button onclick="window.location.href='/login'"
                 class="login-cta-primary"
                 aria-label="Get started with NutriPrint">
           <span aria-hidden="true">🚀</span>
@@ -313,10 +313,9 @@
 
 {% block scripts %}
 <script>
-  // If already in demo / logged in, skip straight to dashboard
+  // If already logged in, skip straight to dashboard
   document.addEventListener('DOMContentLoaded', function () {
-    if ((typeof NutriAuth !== 'undefined' && NutriAuth.isLoggedIn()) ||
-        (typeof NutriDemo !== 'undefined' && NutriDemo.isDemo())) {
+    if (typeof NutriAuth !== 'undefined' && NutriAuth.isLoggedIn()) {
       window.location.replace('/dashboard');
     }
   });

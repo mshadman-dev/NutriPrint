@@ -219,15 +219,11 @@ nutriprint-v2/
 | `GET` | `/about` | About page |
 | `GET` | `/ping` | Health check — returns `{"status": "ok"}` |
 
-## Demo Mode
+## Access
 
-The login page includes a **"Try Demo Mode"** option. Clicking it sets a local browser session (via `localStorage`) that bypasses Supabase authentication entirely. This lets anyone explore the BMI assessment, meal planner, food catalog, and poster generation without needing an account or email OTP.
+The login page lets any user access the full platform instantly — no registration or email OTP required. A client-side session is written to `localStorage` on the first visit, granting access to BMI assessment, meal planning, food catalog, poster generation, and the teacher dashboard.
 
-Demo mode is handled client-side by `static/js/demo_mode.js`. Plans generated in demo mode receive a `demo-` prefixed plan ID and share token, and are not linked to a teacher account, so they will not appear in any dashboard.
-
-To exit demo mode, log out from the navigation menu or clear `localStorage` in your browser's developer tools.
-
-> **Note:** The Supabase OTP authentication backend is implemented but not yet wired to the production frontend UI. Demo mode is the primary access path for the current build.
+> **Note:** The Supabase OTP authentication backend is implemented but not yet wired to the production frontend UI. Client-side session state is the current access path for this build.
 
 ## Credits
 

@@ -208,42 +208,19 @@
 
     try {
       let data;
-      if (sessionStorage.getItem('demo_active') === 'true') {
-        await new Promise(r => setTimeout(r, 1500)); // Simulate network delay
-        data = {
-          answer: "In demo mode, the AI Advisor helps you optimize child nutrition. For Rahul, a balanced diet of Ragi, Toor Dal, and greens is highly recommended to maintain his healthy BMI. Always ensure adequate hydration during school hours.",
-          recommendations: [
-            {
-              title: "Include Ragi Daily",
-              short_action: "Add Ragi mudde or malt",
-              detailed_explanation: "Ragi is rich in calcium and iron, essential for growing children like Rahul.",
-              parent_guidance: "Provide one serving of Ragi daily, either as porridge for breakfast or mudde for lunch.",
-              language: language === 'kn' ? 'kn' : 'en'
-            },
-            {
-              title: "Increase Hydration",
-              short_action: "Drink 6-8 glasses of water",
-              detailed_explanation: "Hydration improves concentration and digestion. Ensure Rahul carries a water bottle to school.",
-              parent_guidance: "Encourage drinking water before and after play time.",
-              language: language === 'kn' ? 'kn' : 'en'
-            }
-          ]
-        };
-      } else {
-        const res = await fetch('/api/ai-advisor/chat', {
-          method : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body   : JSON.stringify({
-            question,
-            language,
-            profile: buildProfile(),
-            history: state.history.slice(0, -1).slice(-10), // last 5 turns
-          }),
-        });
+      const res = await fetch('/api/ai-advisor/chat', {
+        method : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body   : JSON.stringify({
+          question,
+          language,
+          profile: buildProfile(),
+          history: state.history.slice(0, -1).slice(-10), // last 5 turns
+        }),
+      });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        data = await res.json();
-      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      data = await res.json();
 
       if (!data.answer) throw new Error('Empty response');
 
