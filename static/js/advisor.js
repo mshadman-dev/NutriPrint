@@ -208,7 +208,6 @@
 
     try {
       let data;
-<<<<<<< HEAD
       const res = await fetch('/api/ai-advisor/chat', {
         method : 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -219,40 +218,6 @@
           history: state.history.slice(0, -1).slice(-10), // last 5 turns
         }),
       });
-=======
-      if (sessionStorage.getItem('pilot_workspace_active') === 'true') {
-        await new Promise(r => setTimeout(r, 400));
-        data = {
-          answer: "For Aarav, continue balanced Karnataka meals with ragi, toor dal, curd rice, and seasonal greens to maintain a healthy BMI. Ensure adequate hydration during school hours.",
-          recommendations: [
-            {
-              title: "Include Ragi Daily",
-              short_action: "Add Ragi mudde or malt",
-              detailed_explanation: "Ragi is rich in calcium and iron, which supports school-age growth and bone health.",
-              parent_guidance: "Provide one serving of Ragi daily, either as porridge for breakfast or mudde for lunch.",
-              language: language === 'kn' ? 'kn' : 'en'
-            },
-            {
-              title: "Increase Hydration",
-              short_action: "Drink 6-8 glasses of water",
-              detailed_explanation: "Hydration improves concentration and digestion. Ensure Rahul carries a water bottle to school.",
-              parent_guidance: "Encourage drinking water before and after play time.",
-              language: language === 'kn' ? 'kn' : 'en'
-            }
-          ]
-        };
-      } else {
-        const res = await fetch('/api/ai-advisor/chat', {
-          method : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body   : JSON.stringify({
-            question,
-            language,
-            profile: buildProfile(),
-            history: state.history.slice(0, -1).slice(-10), // last 5 turns
-          }),
-        });
->>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       data = await res.json();

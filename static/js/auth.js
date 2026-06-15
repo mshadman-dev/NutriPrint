@@ -5,10 +5,6 @@
  * cleared by NutriAuth.logout().  The real Supabase OTP backend
  * (routers/auth.py) is not yet connected to the frontend; this file handles
  * client-side session state.
-=======
- * Session state is shared by the Supabase-backed auth flow and the pilot
- * workspace used for report screenshots and expo review.
->>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
  *
  * Session key: np_teacher_session
  */
@@ -52,36 +48,22 @@
       return true;
     },
 
-<<<<<<< HEAD
     /** Update the navbar button state (Login ↔ Logout + teacher badge). */
-=======
-    /** Update the navbar button state. */
->>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
     updateNavbar() {
       const session   = this.getSession();
       const loginBtn  = document.getElementById('loginBtn');
       const logoutBtn = document.getElementById('logoutBtn');
       const badge     = document.getElementById('teacherBadge');
-<<<<<<< HEAD
 
-=======
->>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
       const dashLinks = document.querySelectorAll('.nav-dashboard-link');
 
       if (session) {
         if (loginBtn)  loginBtn.style.display  = 'none';
         if (logoutBtn) logoutBtn.style.display = '';
 
-<<<<<<< HEAD
         if (badge) {
           badge.style.display = '';
           badge.textContent = '👩‍🏫 Teacher';
-=======
-        const inPilot = (typeof NutriPilot !== 'undefined') && NutriPilot.isActive();
-        if (badge) {
-          badge.style.display = '';
-          badge.textContent = inPilot ? 'Pilot Workspace' : 'Teacher';
->>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
         }
         dashLinks.forEach(el => { el.style.display = ''; });
       } else {
