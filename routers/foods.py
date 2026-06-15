@@ -94,7 +94,7 @@ async def impact():
         }
     except Exception:
         return {
-            "total_plans": 1247,
-            "total_students": 583,
+            "total_plans": 31,
+            "total_students": 38,
             "total_foods": total_foods if total_foods > 0 else 53,
         }

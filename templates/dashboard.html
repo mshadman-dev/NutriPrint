@@ -809,7 +809,11 @@
 'use strict';
 
 // ── Auth guard (runs synchronously before render) ────────────────────────────
+<<<<<<< HEAD
 if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
+=======
+if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn() && !(typeof NutriPilot !== 'undefined' && NutriPilot.isActive())) {
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
   sessionStorage.setItem('np_login_redirect', '/dashboard');
   window.location.replace('/login');
 }
@@ -967,6 +971,20 @@ function daAnimateCount(id, target) {
 }
 
 function daRenderStats(d) {
+<<<<<<< HEAD
+=======
+  // In pilot workspace use the pre-set realistic stats for the overview KPI cards
+  if (typeof NutriPilot !== 'undefined' && NutriPilot.isActive()) {
+    const ds = NutriPilot.getStats();
+    daAnimateCount('ovStudents',    ds.total_students);
+    daAnimateCount('ovHealthy',     ds.total_students - ds.total_assessments + Math.round(ds.total_students * 0.46));
+    daAnimateCount('ovUnderweight', Math.round(ds.total_students * 0.32));
+    daAnimateCount('ovOverweight',  Math.round(ds.total_students * 0.22));
+    daAnimateCount('ovPlans',       ds.total_plans);
+    return;
+  }
+
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
   const dist  = d.distribution;
   const total = (dist.underweight + dist.normal + dist.overweight + dist.obese);
 
@@ -1246,12 +1264,31 @@ async function daLoadDashboard() {
   if (!data) {
     const lsData = lsBuildDataset();
 
+<<<<<<< HEAD
+=======
+    // In pilot workspace, enrich with realistic pre-set stats
+    const pilotStats = (typeof NutriPilot !== 'undefined' && NutriPilot.isActive())
+      ? NutriPilot.getStats()
+      : null;
+
+    // In pilot workspace also use the full pilot student set
+    const students = (typeof NutriPilot !== 'undefined' && NutriPilot.isActive())
+      ? NutriPilot.getStudents()
+      : lsData.students;
+
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
     data = {
       students     : lsData.students,
       distribution : lsData.distribution,
+<<<<<<< HEAD
       total_plans  : lsData.total_plans,
       teacher_name : '',
       school_name  : '',
+=======
+      total_plans  : pilotStats ? pilotStats.total_plans  : lsData.total_plans,
+      teacher_name : pilotStats ? pilotStats.teacher_name : '',
+      school_name  : pilotStats ? pilotStats.school_name  : '',
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
     };
   }
 
@@ -1322,7 +1359,11 @@ function daInitReveal() {
 
 /* ── Boot ───────────────────────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded', async () => {
+<<<<<<< HEAD
   if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
+=======
+  if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn() && !(typeof NutriPilot !== 'undefined' && NutriPilot.isActive())) {
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
     document.getElementById('notLoggedIn').classList.remove('hidden');
     return;
   }

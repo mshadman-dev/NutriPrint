@@ -3,6 +3,7 @@ from models.schemas import MealInput, MealPlan, RegenerateDay
 from models.db import supabase
 from services.groq_engine import generate_groq_plan
 from services.fallback_engine import generate_fallback_plan
+from services.pilot_data import register_pilot_plan
 from routers.deps import safe_error_detail
 
 import secrets
@@ -107,8 +108,9 @@ async def generate_meal(data: MealInput):
                     for rec in data.ai_recommendations
                 ],
             )
-            plan.plan_id = "demo-" + secrets.token_hex(4)
-            plan.share_token = "demo-" + secrets.token_hex(8)
+            plan.plan_id = "pilot-" + secrets.token_hex(4)
+            plan.share_token = "pilot-" + secrets.token_hex(8)
+            register_pilot_plan(plan)
             return plan
         except Exception as fallback_e:
             print("FALLBACK ERROR:", repr(fallback_e))

@@ -4,6 +4,7 @@ from models.schemas import BMIInput, BMIResult
 from models.db import supabase
 from services.bmi_calculator import calculate_bmi, calculate_nutrition_gap
 from services.food_equivalents import get_food_equivalents
+from services.pilot_data import get_pilot_plan
 from routers.deps import require_teacher_access, safe_error_detail
 from datetime import datetime
 
@@ -150,6 +151,17 @@ async def export_csv(teacher_id: str, request: Request):
 @router.get("/nutrition-gap")
 async def nutrition_gap(plan_id: str, age_group: str, diet_pref: str = ""):
     try:
+        pilot_plan = get_pilot_plan(plan_id)
+        if pilot_plan:
+            _, plan = pilot_plan
+            try:
+                plan_json = plan.model_dump()
+            except AttributeError:
+                plan_json = plan.dict()
+            safe_diet = (diet_pref or plan.diet_pref or "vegetarian").lower().strip()
+            gaps = calculate_nutrition_gap(plan_json, age_group, safe_diet)
+            return {"gaps": gaps, "age_group": age_group}
+
         result = supabase.table("meal_plans")\
             .select("plan_json, diet_pref")\
             .eq("id", plan_id)\

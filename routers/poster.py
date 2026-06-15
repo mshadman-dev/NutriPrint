@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from models.db import supabase
 from models.schemas import MealPlan
 from services.poster_context import build_poster_context
+from services.pilot_data import get_pilot_plan
 from routers.deps import safe_error_detail
 
 import io
@@ -34,6 +35,10 @@ def _validate_qr_url(url: str, request: Request) -> str:
 
 
 def _get_plan_by_token(token: str):
+    pilot_plan = get_pilot_plan(token)
+    if pilot_plan:
+        return pilot_plan
+
     result = (
         supabase.table("meal_plans")
         .select("*")

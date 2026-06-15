@@ -155,8 +155,13 @@
 }
 .login-banner--info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; }
 
+<<<<<<< HEAD
 /* ── Primary CTA ─────────────────────────────────────────────────────────── */
 .login-cta-primary {
+=======
+/* ── Primary CTA — workspace button ─────────────────────────────────────── */
+.login-workspace-primary {
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,7 +179,11 @@
   box-shadow: 0 6px 22px rgba(29,158,117,0.32);
   transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
+<<<<<<< HEAD
 .login-cta-primary:hover {
+=======
+.login-workspace-primary:hover {
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
   background: #166F53;
   transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(29,158,117,0.38);
@@ -205,7 +214,11 @@
 .login-hint { font-size: 0.72rem; color: #94A3B8; line-height: 1.65; }
 
 @media (prefers-reduced-motion: reduce) {
+<<<<<<< HEAD
   .login-cta-primary { transition: none !important; }
+=======
+  .login-workspace-primary { transition: none !important; }
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
 }
 </style>
 {% endblock %}
@@ -214,6 +227,7 @@
 <div class="login-main">
   <div class="login-wrapper">
 
+<<<<<<< HEAD
     <!-- Left pitch panel -->
     <div class="login-pitch">
       <h1 class="login-pitch-title">
@@ -307,15 +321,74 @@
       </div>
 
     </div>
+=======
+      <!-- Logo + heading -->
+      <div class="login-logo-wrap">
+        <img src="/static/images/logo.jpg" alt="NutriPrint" class="login-logo-img"/>
+        <div class="login-eyebrow">Karnataka School Nutrition · AI Platform</div>
+        <h1 class="login-title">Welcome to NutriPrint</h1>
+        <p class="login-subtitle">
+          Explore the complete platform instantly —<br/>
+          no account or data entry required.
+        </p>
+      </div>
+
+      <!-- Info banner — shown only when redirected from a protected page -->
+      <div id="loginError" class="login-banner login-banner--info hidden" role="alert">
+        <svg class="h-4 w-4 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5
+                   0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                clip-rule="evenodd"/>
+        </svg>
+        <span id="loginErrorMsg">Start the pilot workspace to continue using NutriPrint.</span>
+      </div>
+
+      <!-- Primary CTA -->
+      <button onclick="NutriPilot.activate()"
+              class="login-workspace-primary"
+              aria-label="Open NutriPrint pilot workspace">
+        <span aria-hidden="true">→</span>
+        Open Pilot Workspace
+      </button>
+
+      <!-- What's included pills -->
+      <div class="login-features" aria-label="Pilot workspace capabilities">
+        <span class="login-feature-pill">BMI Assessment</span>
+        <span class="login-feature-pill">AI Meal Plans</span>
+        <span class="login-feature-pill">Analytics Dashboard</span>
+        <span class="login-feature-pill">Progress Tracking</span>
+        <span class="login-feature-pill">QR Recipes</span>
+        <span class="login-feature-pill">Parent Reports</span>
+      </div>
+
+    </div>
+
+    <!-- Card footer -->
+    <div class="login-card-footer">
+      <p class="login-hint">
+        Configured with realistic pilot-program records for school nutrition review.<br/>
+        <strong>NutriPrint V2</strong> · Karnataka School Nutrition Platform
+      </p>
+    </div>
+
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
+<<<<<<< HEAD
   // If already logged in, skip straight to dashboard
   document.addEventListener('DOMContentLoaded', function () {
     if (typeof NutriAuth !== 'undefined' && NutriAuth.isLoggedIn()) {
+=======
+  // If already authenticated, skip straight to dashboard
+  document.addEventListener('DOMContentLoaded', function () {
+    if ((typeof NutriAuth !== 'undefined' && NutriAuth.isLoggedIn()) ||
+        (typeof NutriPilot !== 'undefined' && NutriPilot.isActive())) {
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
       window.location.replace('/dashboard');
     }
   });

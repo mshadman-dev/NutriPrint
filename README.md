@@ -219,11 +219,23 @@ nutriprint-v2/
 | `GET` | `/about` | About page |
 | `GET` | `/ping` | Health check — returns `{"status": "ok"}` |
 
+<<<<<<< HEAD
 ## Access
 
 The login page lets any user access the full platform instantly — no registration or email OTP required. A client-side session is written to `localStorage` on the first visit, granting access to BMI assessment, meal planning, food catalog, poster generation, and the teacher dashboard.
 
 > **Note:** The Supabase OTP authentication backend is implemented but not yet wired to the production frontend UI. Client-side session state is the current access path for this build.
+=======
+## pilot workspace
+
+The login page includes a **"Try pilot workspace"** option. Clicking it sets a local browser session (via `localStorage`) that bypasses Supabase authentication entirely. This lets anyone explore the BMI assessment, meal planner, food catalog, and poster generation without needing an account or email OTP.
+
+pilot workspace is handled client-side by `static/js/demo_mode.js`. Plans generated in pilot workspace receive a `demo-` prefixed plan ID and share token, and are not linked to a teacher account, so they will not appear in any dashboard.
+
+To exit pilot workspace, log out from the navigation menu or clear `localStorage` in your browser's developer tools.
+
+> **Note:** The Supabase OTP authentication backend is implemented but not yet wired to the production frontend UI. pilot workspace is the primary access path for the current build.
+>>>>>>> 0c5200c (Remove demo mode and implement guest access workflow)
 
 ## Credits
 

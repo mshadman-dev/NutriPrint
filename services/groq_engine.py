@@ -9,7 +9,11 @@ from services.diet_filter import (
     ICMR_RDA, DAYS_KN,
 )
 
-client = Groq(api_key=GROQ_API_KEY)
+
+def _groq_client() -> Groq:
+    if not GROQ_API_KEY:
+        raise RuntimeError("GROQ_API_KEY is not configured")
+    return Groq(api_key=GROQ_API_KEY)
 
 
 def _build_prompt(data: dict) -> str:
@@ -130,7 +134,7 @@ def generate_groq_plan(
     }
 
     try:
-        response = client.chat.completions.create(
+        response = _groq_client().chat.completions.create(
             model           = "llama-3.1-8b-instant",
             messages        = [{"role": "user", "content": _build_prompt(prompt_data)}],
             max_tokens      = 4096,   # was 3000 — caused truncation & fallback on ~2/3 requests
@@ -322,7 +326,7 @@ def ask_nutrition_advisor(
     try:
         prompt = _build_advisor_prompt(question, profile, history or [], language)
 
-        response = client.chat.completions.create(
+        response = _groq_client().chat.completions.create(
             model       = "llama-3.1-8b-instant",
             messages    = [{"role": "user", "content": prompt}],
             max_tokens  = 1200,
