@@ -1,1341 +1,972 @@
 {% extends "base.html" %}
-{% block title %}NutriPrint — AI-Powered School Nutrition Platform{% endblock %}
+{% block title %}NutriPrint — Karnataka School Nutrition Platform{% endblock %}
 {% block page_id %}home{% endblock %}
 
 {% block head %}
 <style>
 /* ═══════════════════════════════════════════════════════════════════════════
-   Homepage — hp- prefix, self-contained
+   NutriPrint Homepage v3 — Dark Premium Health-Tech
+   Design tokens: np3- prefix, self-contained
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Shared scroll-reveal ─────────────────────────────────────────────────── */
-.hp-reveal {
+/* ── Tokens ──────────────────────────────────────────────────────────────── */
+:root {
+  --bg:        #060a0e;
+  --surface:   #0d1117;
+  --border:    #1a2332;
+  --border-hi: #253347;
+  --green:     #1D9E75;
+  --green-hi:  #3EFFA8;
+  --saffron:   #F97316;
+  --text:      #E2E8F0;
+  --muted:     #94A3B8;
+  --dim:       #4A5568;
+  --white:     #FFFFFF;
+}
+
+/* ── Page base ───────────────────────────────────────────────────────────── */
+body { background: var(--bg) !important; color: var(--text) !important; }
+
+/* ── Scroll-reveal ───────────────────────────────────────────────────────── */
+.np3-reveal {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 500ms cubic-bezier(0.22,1,0.36,1),
-              transform 500ms cubic-bezier(0.22,1,0.36,1);
+  transform: translateY(20px);
+  transition: opacity 500ms cubic-bezier(.22,1,.36,1),
+              transform 500ms cubic-bezier(.22,1,.36,1);
 }
-.hp-reveal.hp-visible { opacity: 1; transform: translateY(0); }
-.hp-d1 { transition-delay:  60ms; }
-.hp-d2 { transition-delay: 120ms; }
-.hp-d3 { transition-delay: 180ms; }
-.hp-d4 { transition-delay: 240ms; }
-.hp-d5 { transition-delay: 300ms; }
+.np3-reveal.np3-in { opacity: 1; transform: none; }
+.np3-d1 { transition-delay:  60ms; }
+.np3-d2 { transition-delay: 130ms; }
+.np3-d3 { transition-delay: 200ms; }
+.np3-d4 { transition-delay: 270ms; }
 
-/* ── Section wrapper ──────────────────────────────────────────────────────── */
-.hp-section { margin-top: 5rem; }
+/* ── Section shell ───────────────────────────────────────────────────────── */
+.np3-section {
+  padding: 5rem 0;
+  border-top: 1px solid var(--border);
+}
 
-/* ── Kicker label ─────────────────────────────────────────────────────────── */
-.hp-kicker {
+/* ── Label / eyebrow ─────────────────────────────────────────────────────── */
+.np3-label {
   display: inline-block;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #1D9E75;
-  margin-bottom: 0.55rem;
+  color: var(--green);
+  margin-bottom: 0.75rem;
 }
 
-/* ── Section title ────────────────────────────────────────────────────────── */
-.hp-title {
+/* ── Display heading ─────────────────────────────────────────────────────── */
+.np3-display {
   font-family: Poppins, sans-serif;
   font-weight: 900;
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  letter-spacing: -0.03em;
-  color: #0F172A;
-  line-height: 1.2;
+  font-size: clamp(1.85rem, 4.5vw, 3rem);
+  letter-spacing: -0.05em;
+  line-height: 1.08;
+  color: var(--white);
 }
-
-.hp-sub {
-  margin-top: 0.6rem;
-  font-size: 0.95rem;
-  line-height: 1.8;
-  color: #475569;
-  max-width: 58ch;
-}
-
-/* ── Divider ──────────────────────────────────────────────────────────────── */
-.hp-divider {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
-}
-.hp-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, #E2E8F0, transparent);
-}
-
-/* ═══════════ § 1 HERO ═══════════════════════════════════════════════════ */
-
-.hp-hero {
-  position: relative;
-  overflow: hidden;
-  border-radius: 2rem;
-  background: linear-gradient(135deg, #071f17 0%, #0F5E46 38%, #1D9E75 72%, #136B4F 100%);
-  color: white;
-  padding: 4rem 2.5rem;
-}
-
-/* Decorative layers */
-.hp-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 15% 40%, rgba(249,115,22,0.14) 0%, transparent 38%),
-    radial-gradient(ellipse at 85% 15%, rgba(255,255,255,0.07) 0%, transparent 32%),
-    radial-gradient(ellipse at 60% 110%, rgba(29,158,117,0.18) 0%, transparent 45%);
-  pointer-events: none;
-}
-.hp-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-}
-
-.hp-hero-inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 2.5rem;
-  align-items: center;
-}
-@media (min-width: 1024px) {
-  .hp-hero-inner { grid-template-columns: 1.2fr 0.8fr; }
-}
-
-/* Left side */
-.hp-hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.3rem 0.85rem;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 9999px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.82);
-  margin-bottom: 1.5rem;
-  backdrop-filter: blur(6px);
-}
-
-.hp-hero-headline {
-  font-family: Poppins, sans-serif;
-  font-weight: 900;
-  font-size: clamp(1.9rem, 5vw, 3.2rem);
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  color: white;
-  margin-bottom: 1.1rem;
-}
-
-.hp-hero-headline .hp-hl-accent {
-  background: linear-gradient(135deg, #6EE7B7, #34D399 45%, #10B981 100%);
+.np3-display .np3-accent {
+  background: linear-gradient(90deg, var(--green-hi) 0%, var(--green) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.np3-display .np3-dim { color: var(--muted); }
 
-.hp-hero-tagline {
-  font-size: clamp(0.9rem, 2vw, 1.05rem);
+/* ── Body copy ───────────────────────────────────────────────────────────── */
+.np3-body {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.np3-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.75rem 1.35rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 150ms ease;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+}
+.np3-btn-primary {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 0 24px rgba(29,158,117,.35);
+}
+.np3-btn-primary:hover { background: #18876A; box-shadow: 0 0 32px rgba(62,255,168,.3); transform: translateY(-1px); }
+
+.np3-btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border-hi);
+  color: var(--text);
+}
+.np3-btn-ghost:hover { border-color: var(--green); color: var(--green-hi); background: rgba(29,158,117,.06); }
+
+.np3-btn-saffron {
+  background: rgba(249,115,22,.12);
+  border: 1px solid rgba(249,115,22,.3);
+  color: #FCA06A;
+}
+.np3-btn-saffron:hover { background: rgba(249,115,22,.2); border-color: rgba(249,115,22,.5); }
+
+/* ── Glass card ──────────────────────────────────────────────────────────── */
+.np3-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.np3-card:hover {
+  border-color: var(--border-hi);
+  box-shadow: 0 0 40px rgba(29,158,117,.06);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   § 1  HERO
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.np3-hero {
+  position: relative;
+  padding: 6rem 0 5rem;
+  overflow: hidden;
+}
+
+/* Noise texture */
+.np3-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Glow orbs */
+.np3-hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+}
+.np3-hero-orb--1 {
+  width: 600px; height: 600px;
+  left: -200px; top: -150px;
+  background: radial-gradient(circle, rgba(29,158,117,.14) 0%, transparent 65%);
+}
+.np3-hero-orb--2 {
+  width: 400px; height: 400px;
+  right: -100px; bottom: -100px;
+  background: radial-gradient(circle, rgba(249,115,22,.08) 0%, transparent 65%);
+}
+.np3-hero-orb--3 {
+  width: 300px; height: 300px;
+  right: 20%; top: 10%;
+  background: radial-gradient(circle, rgba(62,255,168,.05) 0%, transparent 65%);
+}
+
+.np3-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .np3-hero-inner { grid-template-columns: 1.15fr 0.85fr; }
+}
+
+/* Eyebrow pill */
+.np3-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0.85rem;
+  background: rgba(29,158,117,.1);
+  border: 1px solid rgba(29,158,117,.25);
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green-hi);
+  margin-bottom: 1.5rem;
+}
+.np3-eyebrow-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green-hi);
+  animation: np3-pulse 2s ease-in-out infinite;
+}
+@keyframes np3-pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.8); }
+}
+
+/* Hero headline */
+.np3-hero-hl {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+}
+.np3-hero-hl .np3-hl-green {
+  background: linear-gradient(90deg, #3EFFA8, #1D9E75 60%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.np3-hero-hl .np3-hl-dim { color: var(--muted); }
+
+.np3-hero-sub {
+  font-size: 1rem;
   line-height: 1.8;
-  color: rgba(255,255,255,0.75);
-  max-width: 52ch;
+  color: var(--muted);
+  max-width: 50ch;
   margin-bottom: 2rem;
 }
 
-.hp-hero-cta {
+.np3-hero-cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.65rem;
   margin-bottom: 2.5rem;
 }
 
-.hp-cta-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background: white;
-  color: #0F5E46;
-  font-weight: 800;
-  font-size: 0.88rem;
-  padding: 0.8rem 1.5rem;
-  border-radius: 9999px;
-  text-decoration: none;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  transition: transform 150ms ease, box-shadow 150ms ease;
-}
-.hp-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,0,0,0.22); }
-
-.hp-cta-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background: #1D9E75;
-  color: white;
-  font-weight: 800;
-  font-size: 0.88rem;
-  padding: 0.8rem 1.5rem;
-  border-radius: 9999px;
-  text-decoration: none;
-  box-shadow: 0 8px 24px rgba(29,158,117,0.35);
-  transition: transform 150ms ease, background 150ms ease;
-}
-.hp-cta-secondary:hover { transform: translateY(-2px); background: #166F53; }
-
-.hp-cta-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.22);
-  color: rgba(255,255,255,0.88);
-  font-weight: 700;
-  font-size: 0.88rem;
-  padding: 0.8rem 1.35rem;
-  border-radius: 9999px;
-  text-decoration: none;
-  transition: background 150ms ease;
-}
-.hp-cta-ghost:hover { background: rgba(255,255,255,0.18); }
-
-/* Hero mini-stats */
-.hp-hero-pills {
+/* Feature pills row */
+.np3-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
-.hp-hero-pill {
+.np3-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.7rem;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
   border-radius: 9999px;
   font-size: 0.68rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.72);
+  color: var(--dim);
 }
 
-/* Right side — live impact card */
-.hp-hero-card {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 1.5rem;
-  padding: 1.5rem;
-  backdrop-filter: blur(16px);
-}
-.hp-hero-card-label {
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 1rem;
-}
-.hp-live-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-.hp-live-tile {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.12);
+/* ── Terminal card (right side of hero — the signature element) ─────────── */
+.np3-terminal {
+  background: #0b1120;
+  border: 1px solid var(--border-hi);
   border-radius: 1rem;
-  padding: 1rem;
-  text-align: center;
-  transition: background 140ms ease;
-}
-.hp-live-tile:hover { background: rgba(255,255,255,0.16); }
-.hp-live-value {
-  font-family: Poppins, sans-serif;
-  font-weight: 900;
-  font-size: 1.75rem;
-  color: white;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-.hp-live-label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.6);
-  margin-top: 0.3rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  line-height: 1.3;
-}
-
-/* ═══════════ § 2 IMPACT STATISTICS ════════════════════════════════════ */
-
-.hp-stats-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
-}
-@media (min-width: 640px) { .hp-stats-grid { grid-template-columns: repeat(4, 1fr); } }
-
-.hp-stat-card {
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(148,163,184,0.16);
-  border-radius: 1.5rem;
-  padding: 1.5rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(15,23,42,0.05);
-  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
-  position: relative;
   overflow: hidden;
-}
-.hp-stat-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #1D9E75, #34D399);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 220ms ease;
-}
-.hp-stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(15,23,42,0.09); border-color: rgba(29,158,117,0.2); }
-.hp-stat-card:hover::after { transform: scaleX(1); }
-
-.hp-stat-icon { font-size: 1.85rem; line-height: 1; }
-.hp-stat-value {
-  font-family: Poppins, sans-serif;
-  font-weight: 900;
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  color: #0F172A;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-.hp-stat-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  line-height: 1.3;
-}
-
-/* ═══════════ § 3 WHY NUTRIPRINT ════════════════════════════════════════ */
-
-.hp-why-grid {
-  display: grid;
-  gap: 1.25rem;
-}
-@media (min-width: 900px) { .hp-why-grid { grid-template-columns: 1fr 1fr; align-items: start; } }
-
-.hp-why-card {
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(148,163,184,0.16);
-  border-radius: 1.5rem;
-  padding: 1.75rem;
-  box-shadow: 0 10px 28px rgba(15,23,42,0.04);
-}
-
-.hp-problem-list, .hp-solution-list {
-  list-style: none;
-  margin: 1.1rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.hp-problem-item, .hp-solution-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.8rem 0.95rem;
-  border-radius: 0.9rem;
-  font-size: 0.88rem;
-  line-height: 1.5;
-}
-
-.hp-problem-item {
-  background: #FEF2F2;
-  border: 1px solid #FECACA;
-  color: #374151;
-}
-.hp-solution-item {
-  background: #F0FDF4;
-  border: 1px solid #BBF7D0;
-  color: #1a3c2e;
-}
-
-.hp-pi { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
-
-/* ═══════════ § 4 CORE FEATURES ═════════════════════════════════════════ */
-
-.hp-features-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
-}
-@media (min-width: 768px)  { .hp-features-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1280px) { .hp-features-grid { grid-template-columns: repeat(3, 1fr); } }
-
-.hp-feat-card {
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(148,163,184,0.15);
-  border-radius: 1.25rem;
-  padding: 1.35rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
-  text-decoration: none;
-  color: inherit;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  box-shadow:
+    0 0 0 1px rgba(62,255,168,.05),
+    0 32px 80px rgba(0,0,0,.5),
+    0 0 60px rgba(29,158,117,.08);
   position: relative;
-  overflow: hidden;
 }
-.hp-feat-card::before {
+
+/* Animated gradient top border */
+.np3-terminal::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #1D9E75, #34D399);
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--green) 30%, var(--green-hi) 50%, var(--green) 70%, transparent 100%);
+  background-size: 200% 100%;
+  animation: np3-shimmer 3s linear infinite;
+}
+@keyframes np3-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.np3-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.025);
+}
+.np3-term-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.np3-term-title {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-left: auto;
+  letter-spacing: 0.04em;
+}
+
+.np3-term-body {
+  padding: 1.25rem 1.25rem 1rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+.np3-t-comment { color: #3B5268; }
+.np3-t-key { color: #7DD3FC; }
+.np3-t-str { color: #86EFAC; }
+.np3-t-num { color: #FCA5A5; }
+.np3-t-green { color: var(--green-hi); }
+.np3-t-orange { color: #FDB87D; }
+.np3-t-dim { color: var(--dim); }
+.np3-t-line { display: block; margin: 0.06rem 0; }
+
+/* Typing cursor */
+.np3-cursor {
+  display: inline-block;
+  width: 7px; height: 13px;
+  background: var(--green-hi);
+  border-radius: 1px;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: np3-blink 1.1s step-end infinite;
+}
+@keyframes np3-blink {
+  0%,100% { opacity: 1; } 50% { opacity: 0; }
+}
+
+/* Result block */
+.np3-term-result {
+  margin: 0.75rem 0 0;
+  padding: 0.85rem 1rem;
+  background: rgba(29,158,117,.08);
+  border: 1px solid rgba(29,158,117,.18);
+  border-radius: 0.65rem;
+}
+.np3-term-result-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--green);
+  margin-bottom: 0.45rem;
+}
+.np3-term-result-val {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--green-hi);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.np3-term-result-sub {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+/* Meter bar inside terminal */
+.np3-meter {
+  margin-top: 0.7rem;
+  height: 5px;
+  background: rgba(255,255,255,.06);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+.np3-meter-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #1D9E75, #3EFFA8);
+  width: 0%;
+  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 0 8px rgba(62,255,168,.5);
+}
+.np3-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  font-size: 0.58rem;
+  color: var(--dim);
+}
+
+/* Action chips inside terminal */
+.np3-term-actions {
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  flex-wrap: wrap;
+}
+.np3-term-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border-hi);
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 140ms ease;
+  cursor: pointer;
+}
+.np3-term-chip:hover { border-color: var(--green); color: var(--green-hi); background: rgba(29,158,117,.08); }
+.np3-term-chip--green {
+  background: rgba(29,158,117,.14);
+  border-color: rgba(29,158,117,.3);
+  color: var(--green-hi);
+}
+.np3-term-chip--green:hover { background: rgba(29,158,117,.25); }
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   § 2  STATS STRIP
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.np3-stats {
+  padding: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.np3-stats-inner {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 640px) { .np3-stats-inner { grid-template-columns: repeat(4, 1fr); } }
+
+.np3-stat {
+  padding: 1.75rem 1.5rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: background 160ms ease;
+}
+.np3-stat:last-child { border-right: none; }
+.np3-stat:hover { background: rgba(29,158,117,.04); }
+
+.np3-stat-val {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  letter-spacing: -0.04em;
+  color: var(--white);
+  line-height: 1;
+}
+.np3-stat-val span { color: var(--green); }
+.np3-stat-key {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   § 3  WHY NUTRIPRINT
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.np3-why-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+@media (min-width: 768px) { .np3-why-grid { grid-template-columns: 1fr 1fr; } }
+
+.np3-why-col {
+  background: var(--surface);
+  padding: 2rem;
+}
+.np3-why-col:hover { background: #0f1923; }
+
+.np3-why-col-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.np3-why-col-icon {
+  width: 2rem; height: 2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.np3-why-col-icon--red { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.2); }
+.np3-why-col-icon--green { background: rgba(29,158,117,.12); border: 1px solid rgba(29,158,117,.2); }
+.np3-why-col-title {
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.np3-why-col-title--red { color: #F87171; }
+.np3-why-col-title--green { color: var(--green-hi); }
+
+.np3-why-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.np3-why-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.65rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text);
+  border: 1px solid transparent;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.np3-why-item:hover { border-color: var(--border-hi); background: rgba(255,255,255,.02); }
+.np3-why-item--red { background: rgba(239,68,68,.05); }
+.np3-why-item--green { background: rgba(29,158,117,.05); }
+.np3-why-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   § 4  FEATURES
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.np3-feat-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .np3-feat-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .np3-feat-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.np3-feat {
+  background: var(--surface);
+  padding: 1.75rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background 160ms ease;
+  position: relative;
+  overflow: hidden;
+}
+.np3-feat:hover { background: #0f1923; }
+.np3-feat:hover .np3-feat-arrow { transform: translateX(3px); opacity: 1; }
+
+/* Top accent line on hover */
+.np3-feat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--green-hi));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 200ms ease;
 }
-.hp-feat-card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px rgba(15,23,42,0.1); border-color: rgba(29,158,117,0.22); }
-.hp-feat-card:hover::before { transform: scaleX(1); }
+.np3-feat:hover::before { transform: scaleX(1); }
 
-.hp-feat-icon-wrap {
-  width: 2.8rem;
-  height: 2.8rem;
-  border-radius: 0.9rem;
-  background: linear-gradient(135deg, rgba(29,158,117,0.12), rgba(29,158,117,0.06));
-  border: 1px solid rgba(29,158,117,0.15);
+.np3-feat-icon {
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 0.75rem;
+  background: rgba(29,158,117,.1);
+  border: 1px solid rgba(29,158,117,.18);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  transition: background 160ms ease, border-color 160ms ease;
 }
-.hp-feat-title {
+.np3-feat:hover .np3-feat-icon {
+  background: rgba(29,158,117,.2);
+  border-color: rgba(62,255,168,.35);
+}
+
+.np3-feat-name {
   font-family: Poppins, sans-serif;
   font-weight: 800;
-  font-size: 0.9rem;
-  color: #0F172A;
+  font-size: 0.92rem;
+  color: var(--white);
   line-height: 1.3;
 }
-.hp-feat-desc {
-  font-size: 0.78rem;
-  color: #64748B;
-  line-height: 1.6;
+.np3-feat-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.65;
   flex: 1;
 }
-.hp-feat-arrow {
+.np3-feat-arrow {
   font-size: 0.75rem;
-  color: #1D9E75;
+  color: var(--green);
   font-weight: 700;
-  align-self: flex-end;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 160ms ease, transform 160ms ease;
-}
-.hp-feat-card:hover .hp-feat-arrow { opacity: 1; transform: translateX(0); }
-
-/* ═══════════ § 5 SDG ALIGNMENT ═════════════════════════════════════════ */
-
-.hp-sdg-wrap {
-  background: linear-gradient(135deg, #0F172A 0%, #0F5E46 55%, #1D9E75 100%);
-  border-radius: 2rem;
-  padding: 3.5rem 2.5rem;
-  position: relative;
-  overflow: hidden;
-  color: white;
-}
-.hp-sdg-wrap::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 10% 60%, rgba(249,115,22,0.1) 0%, transparent 38%),
-    radial-gradient(ellipse at 90% 10%, rgba(255,255,255,0.06) 0%, transparent 30%);
-  pointer-events: none;
+  opacity: 0.4;
+  transition: transform 160ms ease, opacity 160ms ease;
+  align-self: flex-start;
 }
 
-.hp-sdg-inner { position: relative; z-index: 1; }
 
-.hp-sdg-cards {
+/* ════════════════════════════════════════════════════════════════════════════
+   § 5  SDG
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.np3-sdg-grid {
   display: grid;
   gap: 1rem;
-  margin-top: 2rem;
   grid-template-columns: 1fr;
+  margin-top: 2.5rem;
 }
-@media (min-width: 640px) { .hp-sdg-cards { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 640px) { .np3-sdg-grid { grid-template-columns: repeat(3, 1fr); } }
 
-.hp-sdg-card {
-  border-radius: 1.35rem;
-  padding: 1.5rem;
+.np3-sdg-card {
+  padding: 1.75rem;
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
   transition: transform 150ms ease, box-shadow 150ms ease;
 }
-.hp-sdg-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.2); }
+.np3-sdg-card:hover { transform: translateY(-3px); }
 
-.hp-sdg-card--2 { background: rgba(252,211,77,0.14); border: 1px solid rgba(252,211,77,0.28); }
-.hp-sdg-card--3 { background: rgba(52,211,153,0.14); border: 1px solid rgba(52,211,153,0.28); }
-.hp-sdg-card--4 { background: rgba(249,115,22,0.14); border: 1px solid rgba(249,115,22,0.28); }
+.np3-sdg-card--2 {
+  background: rgba(252,211,77,.06);
+  border: 1px solid rgba(252,211,77,.18);
+  box-shadow: 0 0 40px rgba(252,211,77,.04);
+}
+.np3-sdg-card--3 {
+  background: rgba(62,255,168,.06);
+  border: 1px solid rgba(62,255,168,.18);
+  box-shadow: 0 0 40px rgba(62,255,168,.04);
+}
+.np3-sdg-card--4 {
+  background: rgba(249,115,22,.06);
+  border: 1px solid rgba(249,115,22,.18);
+  box-shadow: 0 0 40px rgba(249,115,22,.04);
+}
 
-.hp-sdg-num {
+.np3-sdg-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.5rem; height: 2.5rem;
   border-radius: 50%;
   font-family: Poppins, sans-serif;
   font-weight: 900;
-  font-size: 1.1rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
-.hp-sdg-card--2 .hp-sdg-num { background: #F59E0B; color: white; }
-.hp-sdg-card--3 .hp-sdg-num { background: #10B981; color: white; }
-.hp-sdg-card--4 .hp-sdg-num { background: #F97316; color: white; }
+.np3-sdg-card--2 .np3-sdg-badge { background: #D97706; color: #fff; }
+.np3-sdg-card--3 .np3-sdg-badge { background: var(--green); color: #fff; }
+.np3-sdg-card--4 .np3-sdg-badge { background: #EA580C; color: #fff; }
 
-.hp-sdg-goal {
-  font-size: 0.65rem;
-  font-weight: 700;
+.np3-sdg-label {
+  font-size: 0.62rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.14em;
+  color: var(--dim);
 }
-.hp-sdg-title {
+.np3-sdg-title {
   font-family: Poppins, sans-serif;
   font-weight: 800;
   font-size: 1rem;
-  color: white;
+  color: var(--white);
   line-height: 1.25;
 }
-.hp-sdg-desc {
+.np3-sdg-desc {
   font-size: 0.82rem;
-  color: rgba(255,255,255,0.7);
+  color: var(--muted);
   line-height: 1.65;
 }
 
-/* ═══════════ § 6 TEACHER WORKFLOW ══════════════════════════════════════ */
 
-.hp-flow-wrap {
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(148,163,184,0.16);
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 10px 28px rgba(15,23,42,0.05);
-  overflow: hidden;
-}
+/* ════════════════════════════════════════════════════════════════════════════
+   § 6  WORKFLOW
+   ════════════════════════════════════════════════════════════════════════════ */
 
-.hp-flow-steps {
+.np3-flow {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: 0;
-  margin-top: 1.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
-.hp-flow-step {
+.np3-flow-step {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.55rem;
   flex: 1;
-  min-width: 100px;
+  min-width: 90px;
   padding: 0.5rem;
   text-align: center;
+  position: relative;
 }
 
-.hp-flow-step-icon {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
-  border: 1.5px solid #BBF7D0;
+.np3-flow-step + .np3-flow-step::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 1.4rem;
+  width: 1px; height: 1.2rem;
+  background: var(--border);
+}
+
+.np3-flow-icon {
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 12px rgba(29,158,117,0.12);
-  transition: transform 150ms ease, background 150ms ease;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  transition: all 150ms ease;
+  position: relative;
+  z-index: 1;
 }
-.hp-flow-step:hover .hp-flow-step-icon {
-  background: linear-gradient(135deg, #1D9E75, #0F5E46);
-  transform: scale(1.1);
+.np3-flow-step:hover .np3-flow-icon {
+  background: rgba(29,158,117,.15);
+  border-color: rgba(62,255,168,.35);
+  box-shadow: 0 0 20px rgba(29,158,117,.25);
 }
-.hp-flow-step:hover .hp-flow-step-icon span { filter: brightness(10); }
 
-.hp-flow-step-num {
-  font-family: Poppins, sans-serif;
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #1D9E75;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+.np3-flow-connector {
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 0 0.15rem;
+  padding-bottom: 1.5rem;
+  color: var(--border-hi);
+  font-size: 0.85rem;
 }
-.hp-flow-step-label {
-  font-size: 0.78rem;
+
+.np3-flow-num {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--green);
+}
+.np3-flow-label {
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #0F172A;
+  color: var(--text);
   line-height: 1.3;
 }
-.hp-flow-step-sub {
-  font-size: 0.68rem;
-  color: #64748B;
-  line-height: 1.4;
-  max-width: 10ch;
+.np3-flow-sub {
+  font-size: 0.65rem;
+  color: var(--dim);
+  line-height: 1.3;
 }
 
-.hp-flow-arrow {
-  color: #CBD5E1;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  align-self: flex-start;
-  margin-top: 0.85rem;
-  padding: 0 0.15rem;
-}
 
-@media (max-width: 640px) {
-  .hp-flow-steps { flex-direction: column; align-items: flex-start; gap: 0; }
-  .hp-flow-step { flex-direction: row; min-width: 0; width: 100%; justify-content: flex-start; padding: 0.6rem 0; }
-  .hp-flow-step-icon { flex-shrink: 0; }
-  .hp-flow-step-num, .hp-flow-step-sub { display: none; }
-  .hp-flow-arrow { transform: rotate(90deg); margin: 0 0 0 1.25rem; padding: 0; }
-}
+/* ════════════════════════════════════════════════════════════════════════════
+   § 7  FINAL CTA
+   ════════════════════════════════════════════════════════════════════════════ */
 
-/* ═══════════ § 7 FINAL CTA ════════════════════════════════════════════ */
-
-.hp-cta-section {
-  border-radius: 2rem;
-  background: linear-gradient(135deg, #0F5E46 0%, #1D9E75 55%, #136B4F 100%);
-  padding: 4rem 2rem;
-  text-align: center;
+.np3-cta {
   position: relative;
   overflow: hidden;
-  margin-bottom: 1rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-hi);
+  background: var(--surface);
+  padding: 4rem 2rem;
+  text-align: center;
 }
-.hp-cta-section::before {
+.np3-cta::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(249,115,22,0.12) 0%, transparent 38%),
-    radial-gradient(ellipse at 80% 0%, rgba(255,255,255,0.07) 0%, transparent 30%);
+    radial-gradient(ellipse at 20% 50%, rgba(29,158,117,.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 20%, rgba(249,115,22,.06) 0%, transparent 35%);
   pointer-events: none;
 }
-.hp-cta-inner { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; }
-.hp-cta-title {
+.np3-cta-inner { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; }
+.np3-cta-title {
   font-family: Poppins, sans-serif;
   font-weight: 900;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  letter-spacing: -0.03em;
-  color: white;
-  line-height: 1.2;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  letter-spacing: -0.04em;
+  color: var(--white);
+  line-height: 1.15;
   margin-bottom: 0.75rem;
 }
-.hp-cta-sub {
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.72);
-  line-height: 1.7;
+.np3-cta-sub {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.75;
   margin-bottom: 2rem;
 }
-.hp-cta-btns {
+.np3-cta-btns {
   display: flex;
-  gap: 0.85rem;
+  gap: 0.75rem;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-/* ── Reduced motion ───────────────────────────────────────────────────────── */
+
+/* ── Max-width wrapper ───────────────────────────────────────────────────── */
+.np3-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+@media (min-width: 640px) { .np3-wrap { padding: 0 1.5rem; } }
+@media (min-width: 1024px) { .np3-wrap { padding: 0 2rem; } }
+
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .hp-reveal, .hp-stat-card, .hp-feat-card, .hp-sdg-card,
-  .hp-future-card, .hp-flow-step-icon,
-  .hp-cta-primary, .hp-cta-secondary, .hp-cta-ghost,
-  .hp-it-icon, .hp-it-content, .hp-it-icon--final {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
-/* ═══════════ § 5.5 IMPACT TIMELINE ═════════════════════════════════════ */
-
-.hp-impact-timeline {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.hp-it-step {
-  display: grid;
-  grid-template-columns: 4rem 1fr;
-  gap: 0 1.25rem;
-  align-items: stretch;
-}
-
-/* Dot column — icon + vertical line */
-.hp-it-dot-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hp-it-icon {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
-  border: 2px solid #86EFAC;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(29,158,117,0.14), 0 0 0 4px rgba(29,158,117,0.06);
-  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
-  position: relative;
-  z-index: 1;
-}
-
-.hp-it-step:hover .hp-it-icon {
-  background: linear-gradient(135deg, #1D9E75, #0F5E46);
-  border-color: #1D9E75;
-  transform: scale(1.1);
-  box-shadow: 0 8px 24px rgba(29,158,117,0.3), 0 0 0 6px rgba(29,158,117,0.1);
-}
-.hp-it-step:hover .hp-it-icon { filter: none; }
-
-/* Final outcome step icon — special golden style */
-.hp-it-icon--final {
-  background: linear-gradient(135deg, #1D9E75, #0F5E46) !important;
-  border-color: #1D9E75 !important;
-  box-shadow: 0 8px 28px rgba(29,158,117,0.35), 0 0 0 6px rgba(29,158,117,0.12) !important;
-  animation: hp-pulse-green 2.4s ease-in-out infinite;
-}
-
-@keyframes hp-pulse-green {
-  0%, 100% { box-shadow: 0 8px 28px rgba(29,158,117,0.35), 0 0 0 6px rgba(29,158,117,0.12); }
-  50%       { box-shadow: 0 8px 28px rgba(29,158,117,0.5),  0 0 0 10px rgba(29,158,117,0.08); }
-}
-
-/* Connecting line between steps */
-.hp-it-line {
-  flex: 1;
-  width: 2px;
-  min-height: 1.5rem;
-  background: linear-gradient(to bottom, #BBF7D0, #D1FAE5);
-  margin: 0.2rem 0;
-  border-radius: 1px;
-}
-
-/* Content column */
-.hp-it-content {
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(148,163,184,0.14);
-  border-radius: 1.25rem;
-  padding: 1.25rem 1.4rem;
-  margin-bottom: 0.65rem;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.hp-it-content::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(to bottom, #1D9E75, #34D399);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 220ms ease;
-}
-
-.hp-it-step:hover .hp-it-content {
-  transform: translateX(4px);
-  box-shadow: 0 14px 36px rgba(15,23,42,0.09);
-  border-color: rgba(29,158,117,0.2);
-}
-.hp-it-step:hover .hp-it-content::before { transform: scaleY(1); }
-
-.hp-it-step--last .hp-it-content {
-  background: linear-gradient(135deg, #F0FDF4, #ECFDF5);
-  border-color: rgba(29,158,117,0.22);
-  margin-bottom: 0;
-}
-.hp-it-step--last .hp-it-content::before {
-  background: linear-gradient(to bottom, #1D9E75, #10B981);
-  transform: scaleY(1);
-}
-
-.hp-it-label {
-  font-size: 0.63rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #1D9E75;
-  margin-bottom: 0.25rem;
-}
-
-.hp-it-title {
-  font-family: Poppins, sans-serif;
-  font-weight: 800;
-  font-size: 1rem;
-  color: #0F172A;
-  line-height: 1.3;
-  margin-bottom: 0.45rem;
-}
-
-.hp-it-step--last .hp-it-title { color: #065F46; font-size: 1.05rem; }
-
-.hp-it-desc {
-  font-size: 0.85rem;
-  color: #64748B;
-  line-height: 1.7;
-}
-
-.hp-it-step--last .hp-it-desc { color: #374151; }
-
-/* Two-column layout on wider screens */
-@media (min-width: 768px) {
-  .hp-impact-timeline {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 2rem;
-    align-items: start;
-  }
-
-  /* Full-width last step */
-  .hp-it-step--last {
-    grid-column: 1 / -1;
-  }
-
-  .hp-it-step {
-    grid-template-columns: 3.5rem 1fr;
-    gap: 0 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hp-impact-timeline {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  .hp-it-step--last {
-    grid-column: 1 / -1;
-    max-width: 36rem;
-    justify-self: center;
-  }
+  .np3-reveal, .np3-eyebrow-dot, .np3-meter-fill,
+  .np3-terminal::before, .np3-cursor { animation: none !important; }
+  .np3-feat::before, .np3-feat-arrow,
+  .np3-feat-icon, .np3-flow-icon { transition: none !important; }
 }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 1 — HERO
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-hero" aria-labelledby="hp-hero-headline">
-  <div class="hp-hero-inner">
+<!-- ══ § 1  HERO ═════════════════════════════════════════════════════════════ -->
+<section class="np3-hero" aria-labelledby="np3-hero-hl">
+  <div class="np3-hero-orb np3-hero-orb--1" aria-hidden="true"></div>
+  <div class="np3-hero-orb np3-hero-orb--2" aria-hidden="true"></div>
+  <div class="np3-hero-orb np3-hero-orb--3" aria-hidden="true"></div>
 
-    <!-- Left: copy -->
-    <div>
-      <div class="hp-hero-eyebrow hp-reveal">
-        <span aria-hidden="true">🌿</span> AI-Powered School Nutrition Platform
-      </div>
+  <div class="np3-wrap">
+    <div class="np3-hero-inner">
 
-      <h1 class="hp-hero-headline hp-reveal hp-d1" id="hp-hero-headline">
-        <span class="hp-hl-accent">AI-Powered</span><br/>
-        School Nutrition Platform
-      </h1>
-
-      <p class="hp-hero-tagline hp-reveal hp-d2">
-        NutriPrint helps teachers assess BMI, generate AI-powered meal plans,
-        improve nutrition awareness, and support healthy eating habits in schools.
-      </p>
-
-      <div class="hp-hero-cta hp-reveal hp-d3">
-        <a href="/login" class="hp-cta-primary">
-          <span aria-hidden="true">🚀</span> Get Started
-        </a>
-        <a href="/bmi" class="hp-cta-secondary">
-          <span aria-hidden="true">⚖️</span> BMI Assessment
-        </a>
-        <a href="/about" class="hp-cta-ghost">
-          <span aria-hidden="true">ℹ️</span> Learn More
-        </a>
-      </div>
-
-      <div class="hp-hero-pills hp-reveal hp-d4">
-        <span class="hp-hero-pill">🤖 Groq AI</span>
-        <span class="hp-hero-pill">📍 6 Karnataka Regions</span>
-        <span class="hp-hero-pill">🗣️ EN · ಕನ್ನಡ</span>
-        <span class="hp-hero-pill">₹150/day Budget</span>
-        <span class="hp-hero-pill">⬜ QR Recipes</span>
-        <span class="hp-hero-pill">📊 Analytics Dashboard</span>
-      </div>
-    </div>
-
-    <!-- Right: live impact card -->
-    <div class="hp-hero-card hp-reveal hp-d2">
-      <div class="hp-hero-card-label">Platform Capabilities</div>
-      <div class="hp-live-grid">
-        <div class="hp-live-tile">
-          <div class="hp-live-value" id="metricFoods">53</div>
-          <div class="hp-live-label">Food Items in Catalog</div>
+      <!-- Left copy -->
+      <div>
+        <div class="np3-eyebrow np3-reveal" aria-label="Live platform">
+          <span class="np3-eyebrow-dot" aria-hidden="true"></span>
+          AI-Powered School Nutrition Platform
         </div>
-        <div class="hp-live-tile">
-          <div class="hp-live-value">15+</div>
-          <div class="hp-live-label">Nutrition Metrics Tracked</div>
-        </div>
-        <div class="hp-live-tile">
-          <div class="hp-live-value">6</div>
-          <div class="hp-live-label">Core Platform Modules</div>
-        </div>
-        <div class="hp-live-tile">
-          <div class="hp-live-value">24/7</div>
-          <div class="hp-live-label">Self-Service Access</div>
-        </div>
-      </div>
-    </div>
 
-  </div>
-</section>
+        <h1 class="np3-hero-hl np3-reveal np3-d1" id="np3-hero-hl">
+          Nourishing<br/>
+          <span class="np3-hl-green">Karnataka's Children,</span><br/>
+          <span class="np3-hl-dim">One Meal at a Time</span>
+        </h1>
 
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 2 — IMPACT STATISTICS
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section" aria-label="Platform statistics">
-
-  <div class="hp-stats-grid">
-
-    <div class="hp-stat-card hp-reveal">
-      <div class="hp-stat-icon" aria-hidden="true">🥘</div>
-      <div class="hp-stat-value" id="statFoods">53+</div>
-      <div class="hp-stat-label">Food Items Available</div>
-    </div>
-
-    <div class="hp-stat-card hp-reveal hp-d1">
-      <div class="hp-stat-icon" aria-hidden="true">📊</div>
-      <div class="hp-stat-value">15+</div>
-      <div class="hp-stat-label">Nutrition Metrics Supported</div>
-    </div>
-
-    <div class="hp-stat-card hp-reveal hp-d2">
-      <div class="hp-stat-icon" aria-hidden="true">⚙️</div>
-      <div class="hp-stat-value">6</div>
-      <div class="hp-stat-label">Core Platform Modules</div>
-    </div>
-
-    <div class="hp-stat-card hp-reveal hp-d3">
-      <div class="hp-stat-icon" aria-hidden="true">🗣️</div>
-      <div class="hp-stat-value">EN · ಕನ್ನಡ</div>
-      <div class="hp-stat-label">Bilingual Support</div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 3 — WHY NUTRIPRINT
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section" aria-labelledby="hp-why-title">
-
-  <div class="hp-divider hp-reveal">
-    <span class="hp-kicker">Why NutriPrint</span>
-  </div>
-
-  <div class="hp-reveal" style="margin-bottom: 2rem;">
-    <h2 class="hp-title" id="hp-why-title">A platform built around real school challenges</h2>
-    <p class="hp-sub">Identifying the problem is the first step. NutriPrint closes the gap with targeted digital tools.</p>
-  </div>
-
-  <div class="hp-why-grid">
-
-    <!-- Problems -->
-    <div class="hp-why-card hp-reveal">
-      <div style="display:flex;align-items:center;gap:0.6rem;">
-        <span style="font-size:1.1rem;" aria-hidden="true">⚠️</span>
-        <span class="hp-kicker" style="margin:0;">Challenges</span>
-      </div>
-      <ul class="hp-problem-list" role="list">
-        <li class="hp-problem-item">
-          <span class="hp-pi" aria-hidden="true">😟</span>
-          <span>Childhood malnutrition and micronutrient deficiencies in school-going children</span>
-        </li>
-        <li class="hp-problem-item">
-          <span class="hp-pi" aria-hidden="true">🍽️</span>
-          <span>Poor food awareness — children and parents unaware of balanced nutritional needs</span>
-        </li>
-        <li class="hp-problem-item">
-          <span class="hp-pi" aria-hidden="true">📋</span>
-          <span>Lack of structured nutrition guidance for teachers without clinical training</span>
-        </li>
-        <li class="hp-problem-item">
-          <span class="hp-pi" aria-hidden="true">💸</span>
-          <span>Difficulty planning balanced, affordable meals using locally available regional foods</span>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Solutions -->
-    <div class="hp-why-card hp-reveal hp-d2">
-      <div style="display:flex;align-items:center;gap:0.6rem;">
-        <span style="font-size:1.1rem;" aria-hidden="true">✅</span>
-        <span class="hp-kicker" style="margin:0;">NutriPrint Solutions</span>
-      </div>
-      <ul class="hp-solution-list" role="list">
-        <li class="hp-solution-item">
-          <span class="hp-pi" aria-hidden="true">📐</span>
-          <span><strong>BMI Assessment</strong> — age and gender-specific classification with personalised advice</span>
-        </li>
-        <li class="hp-solution-item">
-          <span class="hp-pi" aria-hidden="true">🤖</span>
-          <span><strong>AI Nutrition Advisor</strong> — Groq-powered bilingual guidance in English and Kannada</span>
-        </li>
-        <li class="hp-solution-item">
-          <span class="hp-pi" aria-hidden="true">🗓️</span>
-          <span><strong>Weekly Meal Planning</strong> — regional, budget-aware 7-day plans generated in seconds</span>
-        </li>
-        <li class="hp-solution-item">
-          <span class="hp-pi" aria-hidden="true">📚</span>
-          <span><strong>Nutrition Education</strong> — printable posters and QR recipes to educate parents and students</span>
-        </li>
-      </ul>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 4 — CORE FEATURES
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section" aria-labelledby="hp-feat-title">
-
-  <div class="hp-divider hp-reveal">
-    <span class="hp-kicker">Core Features</span>
-  </div>
-
-  <div class="hp-reveal" style="margin-bottom: 2rem;">
-    <h2 class="hp-title" id="hp-feat-title">Everything a school needs in one place</h2>
-    <p class="hp-sub">Six integrated modules that take you from student data to nutrition action.</p>
-  </div>
-
-  <div class="hp-features-grid">
-
-    <a href="/bmi" class="hp-feat-card hp-reveal" aria-label="BMI Assessment module">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">📐</div>
-      <div class="hp-feat-title">BMI Assessment</div>
-      <div class="hp-feat-desc">Accurate BMI calculation with age-gender percentile classification and personalised student health advice for every risk level.</div>
-      <div class="hp-feat-arrow">Explore →</div>
-    </a>
-
-    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d1" aria-label="AI Meal Planning module">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">🤖</div>
-      <div class="hp-feat-title">AI Meal Planning</div>
-      <div class="hp-feat-desc">Groq-powered AI generates personalised 7-day meal plans with regional Karnataka foods, bilingual guidance, and nutrition strategy tailoring.</div>
-      <div class="hp-feat-arrow">Explore →</div>
-    </a>
-
-    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d2" aria-label="Nutrition Analytics module">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">📊</div>
-      <div class="hp-feat-title">Nutrition Analytics</div>
-      <div class="hp-feat-desc">Identifies shortfalls in calories, protein, calcium, and iron against age-appropriate daily targets with class-level dashboard insights.</div>
-      <div class="hp-feat-arrow">Explore →</div>
-    </a>
-
-    <a href="/food-catalog" class="hp-feat-card hp-reveal hp-d1" aria-label="Food Catalog module">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">🥗</div>
-      <div class="hp-feat-title">Food Catalog</div>
-      <div class="hp-feat-desc">53+ Karnataka foods with full nutrition data, seasonal filters, region tags, diet-type filters, and individual recipe pages.</div>
-      <div class="hp-feat-arrow">Explore →</div>
-    </a>
-
-    <a href="/food-catalog" class="hp-feat-card hp-reveal hp-d2" aria-label="QR Recipes module">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">⬜</div>
-      <div class="hp-feat-title">QR Recipes</div>
-      <div class="hp-feat-desc">Scan QR codes on any meal plan to instantly open step-by-step recipe pages. Works on any smartphone — no app needed.</div>
-      <div class="hp-feat-arrow">Explore →</div>
-    </a>
-
-    <a href="/meal-planner" class="hp-feat-card hp-reveal hp-d3" aria-label="Parent Reports module">
-      <div class="hp-feat-icon-wrap" aria-hidden="true">📋</div>
-      <div class="hp-feat-title">Parent Reports</div>
-      <div class="hp-feat-desc">Printable parent nutrition awareness packs with BMI status, AI recommendations, weekly meal tables, and shareable QR links.</div>
-      <div class="hp-feat-arrow">Explore →</div>
-    </a>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 5 — SDG ALIGNMENT
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section" aria-labelledby="hp-sdg-title">
-  <div class="hp-sdg-wrap">
-    <div class="hp-sdg-inner">
-
-      <div class="text-center hp-reveal">
-        <span class="hp-kicker" style="color:rgba(255,255,255,0.55)">SDG Alignment</span>
-        <h2 class="hp-title" id="hp-sdg-title"
-            style="color:white;margin-top:0.4rem;">
-          Contributing to Global Development Goals
-        </h2>
-        <p style="color:rgba(255,255,255,0.62);font-size:0.9rem;margin-top:0.6rem;max-width:48ch;margin-left:auto;margin-right:auto;">
-          NutriPrint directly supports three United Nations Sustainable Development Goals.
+        <p class="np3-hero-sub np3-reveal np3-d2">
+          NutriPrint helps teachers assess BMI, generate AI-powered regional meal plans,
+          print bilingual nutrition posters, and track class-wide health trends —
+          no clinical expertise needed.
         </p>
-      </div>
 
-      <div class="hp-sdg-cards" role="list">
-
-        <div class="hp-sdg-card hp-sdg-card--2 hp-reveal hp-d1" role="listitem">
-          <div class="hp-sdg-num">2</div>
-          <div class="hp-sdg-goal">SDG 2</div>
-          <div class="hp-sdg-title">Zero Hunger</div>
-          <div class="hp-sdg-desc">
-            Affordable, locally-sourced meal plans that directly address undernutrition and
-            micronutrient deficiency in Karnataka school children.
-          </div>
+        <div class="np3-hero-cta np3-reveal np3-d3">
+          <a href="/bmi" class="np3-btn np3-btn-primary">
+            <span aria-hidden="true">⚖️</span> Assess Student BMI
+          </a>
+          <a href="/meal-planner" class="np3-btn np3-btn-ghost">
+            <span aria-hidden="true">🗓️</span> Generate Meal Plan
+          </a>
+          <button onclick="NutriDemo.activate()" class="np3-btn np3-btn-saffron" aria-label="Try demo mode">
+            <span aria-hidden="true">🚀</span> Try Demo
+          </button>
         </div>
 
-        <div class="hp-sdg-card hp-sdg-card--3 hp-reveal hp-d2" role="listitem">
-          <div class="hp-sdg-num">3</div>
-          <div class="hp-sdg-goal">SDG 3</div>
-          <div class="hp-sdg-title">Good Health &amp; Well-being</div>
-          <div class="hp-sdg-desc">
-            Early BMI risk identification, balanced diet promotion, and actionable health data
-            empower schools to intervene before problems escalate.
-          </div>
+        <div class="np3-pills np3-reveal np3-d4">
+          <span class="np3-pill">🤖 Groq AI</span>
+          <span class="np3-pill">📍 6 Regions</span>
+          <span class="np3-pill">🗣️ EN · ಕನ್ನಡ</span>
+          <span class="np3-pill">₹150/day</span>
+          <span class="np3-pill">⬜ QR Recipes</span>
+          <span class="np3-pill">🖨️ Print-ready</span>
+        </div>
+      </div>
+
+      <!-- Right: terminal — signature element -->
+      <div class="np3-terminal np3-reveal np3-d2" role="img" aria-label="NutriPrint BMI calculation demo">
+        <div class="np3-term-bar">
+          <span class="np3-term-dot" style="background:#EF4444;"></span>
+          <span class="np3-term-dot" style="background:#F59E0B;"></span>
+          <span class="np3-term-dot" style="background:#22C55E;"></span>
+          <span class="np3-term-title">nutriprint — BMI Assessment</span>
         </div>
 
-        <div class="hp-sdg-card hp-sdg-card--4 hp-reveal hp-d3" role="listitem">
-          <div class="hp-sdg-num">4</div>
-          <div class="hp-sdg-goal">SDG 4</div>
-          <div class="hp-sdg-title">Quality Education</div>
-          <div class="hp-sdg-desc">
-            Bilingual nutrition resources and printable materials improve teacher capacity
-            and create healthier, more focused learning environments.
+        <div class="np3-term-body" aria-hidden="true">
+          <span class="np3-t-line np3-t-comment"># Student: Rohan Kumar, 12y boy</span>
+          <span class="np3-t-line">
+            <span class="np3-t-key">height</span>
+            <span class="np3-t-dim"> = </span>
+            <span class="np3-t-num">140</span>
+            <span class="np3-t-dim">  # cm</span>
+          </span>
+          <span class="np3-t-line">
+            <span class="np3-t-key">weight</span>
+            <span class="np3-t-dim"> = </span>
+            <span class="np3-t-num">32</span>
+            <span class="np3-t-dim">   # kg</span>
+          </span>
+          <span class="np3-t-line">&nbsp;</span>
+          <span class="np3-t-line np3-t-comment"># Computing...</span>
+          <span class="np3-t-line">
+            <span class="np3-t-key">bmi</span>
+            <span class="np3-t-dim"> = weight / (height/100)²</span>
+          </span>
+          <span class="np3-t-line">
+            <span class="np3-t-dim">    → </span>
+            <span class="np3-t-green" id="termBMIVal">16.3</span>
+          </span>
+          <span class="np3-t-line">&nbsp;</span>
+          <span class="np3-t-line">
+            <span class="np3-t-key">classify</span>
+            <span class="np3-t-dim">(bmi, age=</span>
+            <span class="np3-t-num">12</span>
+            <span class="np3-t-dim">, gender=</span>
+            <span class="np3-t-str">"boy"</span>
+            <span class="np3-t-dim">)</span>
+          </span>
+          <span class="np3-t-line">
+            <span class="np3-t-dim">    → </span>
+            <span class="np3-t-orange">"UNDERWEIGHT"</span>
+            <span class="np3-cursor"></span>
+          </span>
+
+          <!-- Result -->
+          <div class="np3-term-result">
+            <div class="np3-term-result-label">IAP Percentile</div>
+            <div class="np3-term-result-val">P12</div>
+            <div class="np3-term-result-sub">Below P15 threshold · Nutrition intervention recommended</div>
+            <div class="np3-meter" role="presentation">
+              <div class="np3-meter-fill" id="termMeter" style="width:0%"></div>
+            </div>
+            <div class="np3-meter-labels">
+              <span>Severely UW</span><span>Normal</span><span>Overweight</span>
+            </div>
+          </div>
+
+          <div class="np3-term-actions">
+            <a href="/meal-planner" class="np3-term-chip np3-term-chip--green">🗓️ Generate meal plan</a>
+            <a href="/bmi" class="np3-term-chip">📋 View full report</a>
           </div>
         </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 5.5 — HOW NUTRIPRINT CREATES IMPACT (workflow timeline)
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section" aria-labelledby="hp-impact-title">
-
-  <div class="hp-divider hp-reveal">
-    <span class="hp-kicker">Real-World Impact</span>
-  </div>
-
-  <div class="hp-reveal" style="margin-bottom: 2.5rem;">
-    <h2 class="hp-title" id="hp-impact-title">How NutriPrint Creates Impact</h2>
-    <p class="hp-sub">From a single teacher assessment to a healthier child — here's the full journey.</p>
-  </div>
-
-  <!-- Timeline grid -->
-  <div class="hp-impact-timeline">
-
-    <!-- Step 1 -->
-    <div class="hp-it-step hp-reveal hp-d1">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">👩‍🏫</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 1</div>
-        <div class="hp-it-title">Teacher Assessment</div>
-        <div class="hp-it-desc">A classroom teacher enters the student's age, gender, height, and weight — no clinical training needed. Takes under a minute.</div>
-      </div>
-    </div>
-
-    <!-- Step 2 -->
-    <div class="hp-it-step hp-reveal hp-d2">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">📊</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 2</div>
-        <div class="hp-it-title">BMI Analysis</div>
-        <div class="hp-it-desc">NutriPrint calculates the BMI using WHO age-gender percentile standards and instantly classifies the student as Underweight, Normal, Overweight, or Obese.</div>
-      </div>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="hp-it-step hp-reveal hp-d3">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">🤖</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 3</div>
-        <div class="hp-it-title">AI Nutrition Advisor</div>
-        <div class="hp-it-desc">Groq-powered AI answers the teacher's nutrition questions in English or Kannada before the plan is generated — helping build dietary understanding.</div>
-      </div>
-    </div>
-
-    <!-- Step 4 -->
-    <div class="hp-it-step hp-reveal hp-d1">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">🍽️</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 4</div>
-        <div class="hp-it-title">Personalized Meal Plan</div>
-        <div class="hp-it-desc">A complete 7-day meal plan is generated using regional Karnataka foods, staying within a ₹150/day budget and matching the student's age group and diet type.</div>
-      </div>
-    </div>
-
-    <!-- Step 5 -->
-    <div class="hp-it-step hp-reveal hp-d2">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">🖨️</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 5</div>
-        <div class="hp-it-title">Nutrition Poster</div>
-        <div class="hp-it-desc">The plan is exported as a printable nutrition poster with nutrient breakdowns, food visuals, and the student's health summary — ready to go home with the child.</div>
-      </div>
-    </div>
-
-    <!-- Step 6 -->
-    <div class="hp-it-step hp-reveal hp-d3">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">📱</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 6</div>
-        <div class="hp-it-title">QR Recipe Access</div>
-        <div class="hp-it-desc">Every meal on the poster has a QR code. Parents scan it on any smartphone to instantly open step-by-step recipes using ingredients available in their local market.</div>
-      </div>
-    </div>
-
-    <!-- Step 7 -->
-    <div class="hp-it-step hp-reveal hp-d1">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon">👨‍👩‍👧</div>
-        <div class="hp-it-line" aria-hidden="true"></div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Step 7</div>
-        <div class="hp-it-title">Parent Awareness</div>
-        <div class="hp-it-desc">Parents receive clear, actionable guidance in their language — understanding what to cook, how much to serve, and why each food matters for their child's growth.</div>
-      </div>
-    </div>
-
-    <!-- Step 8 — no connector line -->
-    <div class="hp-it-step hp-it-step--last hp-reveal hp-d2">
-      <div class="hp-it-dot-col">
-        <div class="hp-it-icon hp-it-icon--final">🥗</div>
-      </div>
-      <div class="hp-it-content">
-        <div class="hp-it-label">Outcome</div>
-        <div class="hp-it-title">Healthier Children</div>
-        <div class="hp-it-desc">Consistent, nutritious meals lead to better energy, improved concentration in class, stronger immunity, and healthier growth — the real-world outcome NutriPrint is built for.</div>
-      </div>
-    </div>
-
-  </div><!-- /.hp-impact-timeline -->
-</section>
-
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 6 — TEACHER WORKFLOW
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section" aria-labelledby="hp-flow-title">
-
-  <div class="hp-divider hp-reveal">
-    <span class="hp-kicker">Teacher Workflow</span>
-  </div>
-
-  <div class="hp-reveal" style="margin-bottom: 2rem;">
-    <h2 class="hp-title" id="hp-flow-title">From login to nutrition awareness in six steps</h2>
-    <p class="hp-sub">A complete, guided workflow designed for teachers with no nutrition expertise required.</p>
-  </div>
-
-  <div class="hp-flow-wrap hp-reveal">
-    <div class="hp-flow-steps" role="list" aria-label="Teacher workflow steps">
-
-      <div class="hp-flow-step" role="listitem">
-        <div class="hp-flow-step-icon"><span aria-hidden="true">🔑</span></div>
-        <div class="hp-flow-step-num">Step 1</div>
-        <div class="hp-flow-step-label">Login</div>
-        <div class="hp-flow-step-sub">OTP email auth</div>
-      </div>
-
-      <div class="hp-flow-arrow" aria-hidden="true">›</div>
-
-      <div class="hp-flow-step" role="listitem">
-        <div class="hp-flow-step-icon"><span aria-hidden="true">📐</span></div>
-        <div class="hp-flow-step-num">Step 2</div>
-        <div class="hp-flow-step-label">BMI Assessment</div>
-        <div class="hp-flow-step-sub">Height · weight · age</div>
-      </div>
-
-      <div class="hp-flow-arrow" aria-hidden="true">›</div>
-
-      <div class="hp-flow-step" role="listitem">
-        <div class="hp-flow-step-icon"><span aria-hidden="true">🤖</span></div>
-        <div class="hp-flow-step-num">Step 3</div>
-        <div class="hp-flow-step-label">AI Analysis</div>
-        <div class="hp-flow-step-sub">Nutrition advice</div>
-      </div>
-
-      <div class="hp-flow-arrow" aria-hidden="true">›</div>
-
-      <div class="hp-flow-step" role="listitem">
-        <div class="hp-flow-step-icon"><span aria-hidden="true">🗓️</span></div>
-        <div class="hp-flow-step-num">Step 4</div>
-        <div class="hp-flow-step-label">Meal Planning</div>
-        <div class="hp-flow-step-sub">7-day AI plan</div>
-      </div>
-
-      <div class="hp-flow-arrow" aria-hidden="true">›</div>
-
-      <div class="hp-flow-step" role="listitem">
-        <div class="hp-flow-step-icon"><span aria-hidden="true">📥</span></div>
-        <div class="hp-flow-step-num">Step 5</div>
-        <div class="hp-flow-step-label">PDF Report</div>
-        <div class="hp-flow-step-sub">Print &amp; share</div>
-      </div>
-
-      <div class="hp-flow-arrow" aria-hidden="true">›</div>
-
-      <div class="hp-flow-step" role="listitem">
-        <div class="hp-flow-step-icon"><span aria-hidden="true">📚</span></div>
-        <div class="hp-flow-step-num">Step 6</div>
-        <div class="hp-flow-step-label">Awareness</div>
-        <div class="hp-flow-step-sub">Parents &amp; students</div>
       </div>
 
     </div>
@@ -1343,25 +974,290 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     § 7 — FINAL CTA
-     ══════════════════════════════════════════════════════════════════════════ -->
-<section class="hp-section hp-cta-section" aria-labelledby="hp-cta-title">
-  <div class="hp-cta-inner hp-reveal">
-    <h2 class="hp-cta-title" id="hp-cta-title">
-      Ready to Improve<br/>School Nutrition?
-    </h2>
-    <p class="hp-cta-sub">
-      NutriPrint gives every school the tools for evidence-based nutrition decisions —
-      from BMI assessment to AI meal planning and parent reports.
-    </p>
-    <div class="hp-cta-btns">
-      <a href="/login" class="hp-cta-primary">
-        <span aria-hidden="true">🚀</span> Get Started
+<!-- ══ § 2  STATS STRIP ══════════════════════════════════════════════════════ -->
+<div class="np3-stats" role="region" aria-label="Platform statistics">
+  <div class="np3-wrap">
+    <div class="np3-stats-inner">
+
+      <div class="np3-stat np3-reveal">
+        <div class="np3-stat-val"><span id="statStudents">—</span></div>
+        <div class="np3-stat-key">Students assessed</div>
+      </div>
+
+      <div class="np3-stat np3-reveal np3-d1">
+        <div class="np3-stat-val"><span id="statPlans">—</span></div>
+        <div class="np3-stat-key">Meal plans generated</div>
+      </div>
+
+      <div class="np3-stat np3-reveal np3-d2">
+        <div class="np3-stat-val"><span id="statFoods">53</span><span style="color:var(--green);font-size:0.7em;font-weight:900;">+</span></div>
+        <div class="np3-stat-key">Karnataka foods in catalog</div>
+      </div>
+
+      <div class="np3-stat np3-reveal np3-d3">
+        <div class="np3-stat-val">6</div>
+        <div class="np3-stat-key">Supported regions</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ § 3  WHY NUTRIPRINT ══════════════════════════════════════════════════ -->
+<section class="np3-section" aria-labelledby="np3-why-title">
+  <div class="np3-wrap">
+
+    <div class="np3-reveal" style="margin-bottom:2.5rem;">
+      <div class="np3-label">Why NutriPrint</div>
+      <h2 class="np3-display" id="np3-why-title">Built for <span class="np3-accent">real classrooms</span></h2>
+      <p class="np3-body" style="margin-top:.6rem;">The gap between nutritional knowledge and school-level action is real. NutriPrint bridges it.</p>
+    </div>
+
+    <div class="np3-why-grid np3-reveal">
+
+      <div class="np3-why-col">
+        <div class="np3-why-col-head">
+          <div class="np3-why-col-icon np3-why-col-icon--red">⚠️</div>
+          <span class="np3-why-col-title np3-why-col-title--red">The problem</span>
+        </div>
+        <div class="np3-why-items">
+          <div class="np3-why-item np3-why-item--red">
+            <span class="np3-why-item-icon">😟</span>
+            <span>Childhood malnutrition and micronutrient deficiencies in school-going children</span>
+          </div>
+          <div class="np3-why-item np3-why-item--red">
+            <span class="np3-why-item-icon">🍽️</span>
+            <span>Parents unaware of age-appropriate nutritional needs and affordable food options</span>
+          </div>
+          <div class="np3-why-item np3-why-item--red">
+            <span class="np3-why-item-icon">📋</span>
+            <span>No structured nutrition tools for teachers without clinical training</span>
+          </div>
+          <div class="np3-why-item np3-why-item--red">
+            <span class="np3-why-item-icon">💸</span>
+            <span>Difficulty planning balanced meals within a school-budget using local foods</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="np3-why-col">
+        <div class="np3-why-col-head">
+          <div class="np3-why-col-icon np3-why-col-icon--green">✅</div>
+          <span class="np3-why-col-title np3-why-col-title--green">NutriPrint's answer</span>
+        </div>
+        <div class="np3-why-items">
+          <div class="np3-why-item np3-why-item--green">
+            <span class="np3-why-item-icon">📐</span>
+            <span><strong style="color:var(--green-hi);">BMI Assessment</strong> — age and gender-specific classification with bilingual advice</span>
+          </div>
+          <div class="np3-why-item np3-why-item--green">
+            <span class="np3-why-item-icon">🤖</span>
+            <span><strong style="color:var(--green-hi);">AI Nutrition Advisor</strong> — Groq-powered guidance in English and Kannada</span>
+          </div>
+          <div class="np3-why-item np3-why-item--green">
+            <span class="np3-why-item-icon">🗓️</span>
+            <span><strong style="color:var(--green-hi);">Weekly Meal Planning</strong> — regional, budget-aware 7-day plans in seconds</span>
+          </div>
+          <div class="np3-why-item np3-why-item--green">
+            <span class="np3-why-item-icon">📚</span>
+            <span><strong style="color:var(--green-hi);">Printable Posters</strong> — bilingual take-home sheets with QR recipe access</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ § 4  FEATURES ══════════════════════════════════════════════════════════ -->
+<section class="np3-section" aria-labelledby="np3-feat-title">
+  <div class="np3-wrap">
+
+    <div class="np3-reveal" style="margin-bottom:2.5rem;">
+      <div class="np3-label">Core Features</div>
+      <h2 class="np3-display" id="np3-feat-title">Everything a school <span class="np3-accent">needs in one place</span></h2>
+      <p class="np3-body" style="margin-top:.6rem;">Six integrated modules that take you from student data to nutrition action.</p>
+    </div>
+
+    <div class="np3-feat-grid np3-reveal">
+
+      <a href="/bmi" class="np3-feat" aria-label="BMI Assessment">
+        <div class="np3-feat-icon">📐</div>
+        <div class="np3-feat-name">BMI Assessment</div>
+        <div class="np3-feat-desc">WHO/ICMR-based BMI calculation with age-gender percentile classification, bilingual advice, and printable health report.</div>
+        <div class="np3-feat-arrow">Try it →</div>
       </a>
-      <a href="/about" class="hp-cta-secondary">
-        <span aria-hidden="true">ℹ️</span> Learn More
+
+      <a href="/meal-planner" class="np3-feat" aria-label="AI Nutrition Advisor">
+        <div class="np3-feat-icon">🤖</div>
+        <div class="np3-feat-name">AI Nutrition Advisor</div>
+        <div class="np3-feat-desc">Ask questions about portions, Karnataka foods, or child health in English or Kannada — powered by Groq LLM before plan generation.</div>
+        <div class="np3-feat-arrow">Ask now →</div>
       </a>
+
+      <a href="/meal-planner" class="np3-feat" aria-label="Weekly Meal Planner">
+        <div class="np3-feat-icon">🗓️</div>
+        <div class="np3-feat-name">Weekly Meal Planner</div>
+        <div class="np3-feat-desc">AI-generated 7-day plans matched to diet type, Karnataka region, age group, BMI status, and allergy notes. Under ₹150/day.</div>
+        <div class="np3-feat-arrow">Plan meals →</div>
+      </a>
+
+      <a href="/food-catalog" class="np3-feat" aria-label="Food Catalog">
+        <div class="np3-feat-icon">🥗</div>
+        <div class="np3-feat-name">Food Catalog</div>
+        <div class="np3-feat-desc">53+ Karnataka foods with full nutrition data, seasonal availability, regional tags, diet filters, and QR-linked step-by-step recipes.</div>
+        <div class="np3-feat-arrow">Browse →</div>
+      </a>
+
+      <a href="/meal-planner" class="np3-feat" aria-label="Nutrition Gap Analysis">
+        <div class="np3-feat-icon">📊</div>
+        <div class="np3-feat-name">Nutrition Gap Analysis</div>
+        <div class="np3-feat-desc">Identifies daily shortfalls in calories, protein, calcium, and iron against ICMR age-appropriate targets — with fix recommendations.</div>
+        <div class="np3-feat-arrow">See gaps →</div>
+      </a>
+
+      <a href="/food-catalog" class="np3-feat" aria-label="QR Recipe System">
+        <div class="np3-feat-icon">⬜</div>
+        <div class="np3-feat-name">QR Recipe System</div>
+        <div class="np3-feat-desc">Every meal on the printed poster has a QR code. Parents scan it to open full recipes — no app, no internet registration needed.</div>
+        <div class="np3-feat-arrow">Explore →</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ § 5  SDG ═══════════════════════════════════════════════════════════════ -->
+<section class="np3-section" aria-labelledby="np3-sdg-title">
+  <div class="np3-wrap">
+
+    <div class="np3-reveal" style="text-align:center;max-width:44ch;margin:0 auto 0;">
+      <div class="np3-label">SDG Alignment</div>
+      <h2 class="np3-display" id="np3-sdg-title">Contributing to <span class="np3-accent">Global Goals</span></h2>
+      <p class="np3-body" style="margin-top:.6rem;margin-left:auto;margin-right:auto;text-align:center;">
+        NutriPrint supports three UN Sustainable Development Goals through measurable school-level nutrition action.
+      </p>
+    </div>
+
+    <div class="np3-sdg-grid np3-reveal">
+
+      <div class="np3-sdg-card np3-sdg-card--2">
+        <div class="np3-sdg-badge">2</div>
+        <div class="np3-sdg-label">SDG 2</div>
+        <div class="np3-sdg-title">Zero Hunger</div>
+        <div class="np3-sdg-desc">Affordable, locally-sourced meal plans directly addressing undernutrition and micronutrient deficiency in Karnataka school children.</div>
+      </div>
+
+      <div class="np3-sdg-card np3-sdg-card--3">
+        <div class="np3-sdg-badge">3</div>
+        <div class="np3-sdg-label">SDG 3</div>
+        <div class="np3-sdg-title">Good Health &amp; Well-being</div>
+        <div class="np3-sdg-desc">Early BMI risk detection, balanced diet promotion, and actionable health data that empowers schools to intervene before problems escalate.</div>
+      </div>
+
+      <div class="np3-sdg-card np3-sdg-card--4">
+        <div class="np3-sdg-badge">4</div>
+        <div class="np3-sdg-label">SDG 4</div>
+        <div class="np3-sdg-title">Quality Education</div>
+        <div class="np3-sdg-desc">Bilingual nutrition resources and printable materials improve teacher capacity and create healthier, more focused learning environments.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ § 6  WORKFLOW ══════════════════════════════════════════════════════════ -->
+<section class="np3-section" aria-labelledby="np3-flow-title">
+  <div class="np3-wrap">
+
+    <div class="np3-reveal" style="margin-bottom:2.5rem;">
+      <div class="np3-label">Teacher Workflow</div>
+      <h2 class="np3-display" id="np3-flow-title">From login to <span class="np3-accent">nutrition action</span> in six steps</h2>
+      <p class="np3-body" style="margin-top:.6rem;">Designed for teachers with zero nutrition expertise. The whole flow takes under three minutes.</p>
+    </div>
+
+    <div class="np3-card np3-reveal" style="padding:2rem;overflow:auto;">
+      <div class="np3-flow" role="list" aria-label="Teacher workflow">
+
+        <div class="np3-flow-step" role="listitem">
+          <div class="np3-flow-icon">🔑</div>
+          <div class="np3-flow-num">Step 1</div>
+          <div class="np3-flow-label">Login</div>
+          <div class="np3-flow-sub">OTP email</div>
+        </div>
+        <div class="np3-flow-connector" aria-hidden="true">›</div>
+
+        <div class="np3-flow-step" role="listitem">
+          <div class="np3-flow-icon">📐</div>
+          <div class="np3-flow-num">Step 2</div>
+          <div class="np3-flow-label">BMI Entry</div>
+          <div class="np3-flow-sub">Height·weight·age</div>
+        </div>
+        <div class="np3-flow-connector" aria-hidden="true">›</div>
+
+        <div class="np3-flow-step" role="listitem">
+          <div class="np3-flow-icon">🤖</div>
+          <div class="np3-flow-num">Step 3</div>
+          <div class="np3-flow-label">AI Advisor</div>
+          <div class="np3-flow-sub">Ask questions</div>
+        </div>
+        <div class="np3-flow-connector" aria-hidden="true">›</div>
+
+        <div class="np3-flow-step" role="listitem">
+          <div class="np3-flow-icon">🗓️</div>
+          <div class="np3-flow-num">Step 4</div>
+          <div class="np3-flow-label">Meal Plan</div>
+          <div class="np3-flow-sub">7-day AI plan</div>
+        </div>
+        <div class="np3-flow-connector" aria-hidden="true">›</div>
+
+        <div class="np3-flow-step" role="listitem">
+          <div class="np3-flow-icon">🖨️</div>
+          <div class="np3-flow-num">Step 5</div>
+          <div class="np3-flow-label">Print Poster</div>
+          <div class="np3-flow-sub">PDF + QR codes</div>
+        </div>
+        <div class="np3-flow-connector" aria-hidden="true">›</div>
+
+        <div class="np3-flow-step" role="listitem">
+          <div class="np3-flow-icon">📚</div>
+          <div class="np3-flow-num">Step 6</div>
+          <div class="np3-flow-label">Parent Awareness</div>
+          <div class="np3-flow-sub">Home with child</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ § 7  FINAL CTA ════════════════════════════════════════════════════════ -->
+<section class="np3-section" style="border-bottom:1px solid var(--border);" aria-labelledby="np3-cta-title">
+  <div class="np3-wrap">
+    <div class="np3-cta np3-reveal">
+      <div class="np3-cta-inner">
+        <h2 class="np3-cta-title" id="np3-cta-title">
+          Ready to improve<br/><span style="color:var(--green-hi);">school nutrition?</span>
+        </h2>
+        <p class="np3-cta-sub">
+          Join schools across Karnataka using NutriPrint to make evidence-based
+          nutrition decisions for every child, every day.
+        </p>
+        <div class="np3-cta-btns">
+          <a href="/bmi" class="np3-btn np3-btn-primary">
+            <span aria-hidden="true">⚖️</span> Assess Student BMI
+          </a>
+          <a href="/meal-planner" class="np3-btn np3-btn-ghost">
+            <span aria-hidden="true">🗓️</span> Generate Meal Plan
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1370,33 +1266,69 @@
 
 {% block scripts %}
 <script>
-/* ── Real platform metrics fetch ─────────────────────────────────────────── */
-window.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const response = await fetch('/api/impact');
-    const data     = await response.json();
-    const foods    = data.total_foods ?? 53;
-    const sf = document.getElementById('statFoods');
-    const mf = document.getElementById('metricFoods');
-    if (sf) sf.textContent = foods + '+';
-    if (mf) mf.textContent = foods;
-  } catch (_) {
-    // keep fallback values already rendered
-  }
+/* ── Terminal meter animation on load ──────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const m = document.getElementById('termMeter');
+    if (m) m.style.width = '22%'; // P12 position on the meter
+  }, 800);
 });
 
-/* ── Intersection Observer — scroll-reveal ────────────────────────────────── */
+/* ── Live stats from API — honest: show dash if no real data ───────────── */
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res  = await fetch('/api/impact');
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const fmt = (n, suffix = '+') => {
+      if (!n || n < 1) return '—';
+      return n >= 1000
+        ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' + suffix
+        : n + suffix;
+    };
+
+    const ss = document.getElementById('statStudents');
+    const sp = document.getElementById('statPlans');
+    const sf = document.getElementById('statFoods');
+
+    if (ss) ss.textContent = fmt(data.total_students);
+    if (sp) sp.textContent = fmt(data.total_plans);
+    if (sf) sf.textContent = (data.total_foods || 53);
+
+    /* Also update hero card */
+    const mp = document.getElementById('metricPlans');
+    const ms = document.getElementById('metricStudents');
+    if (mp && data.total_plans)    animateCount('metricPlans',    data.total_plans);
+    if (ms && data.total_students) animateCount('metricStudents', data.total_students);
+
+  } catch (_) { /* keep dashes — honest about no data */ }
+});
+
+function animateCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el || !target) return;
+  let cur = 0;
+  const step = Math.max(1, Math.ceil(target / 45));
+  const t = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = cur.toLocaleString();
+    if (cur >= target) clearInterval(t);
+  }, 30);
+}
+
+/* ── Scroll-reveal ──────────────────────────────────────────────────────── */
 (function () {
-  const io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.classList.add('hp-visible');
+        e.target.classList.add('np3-in');
         io.unobserve(e.target);
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
 
-  document.querySelectorAll('.hp-reveal').forEach(function (el) { io.observe(el); });
+  document.querySelectorAll('.np3-reveal').forEach(el => io.observe(el));
 }());
 </script>
 {% endblock %}
