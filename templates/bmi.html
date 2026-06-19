@@ -4,48 +4,579 @@
 
 {% block head %}
 <link rel="stylesheet" href="/static/css/advisor.css"/>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   BMI Assessment Page — bmi- prefix, dark premium
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --bg:       #060a0e;
+  --surface:  #0d1117;
+  --border:   #1a2332;
+  --border-hi:#253347;
+  --green:    #1D9E75;
+  --green-hi: #3EFFA8;
+  --text:     #E2E8F0;
+  --muted:    #94A3B8;
+  --dim:      #4A5568;
+}
+
+/* ── Page wrapper ────────────────────────────────────────────────────────── */
+.bmi-page { display: grid; gap: 1.5rem; }
+@media (min-width: 1024px) {
+  .bmi-page { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Hero banner ─────────────────────────────────────────────────────────── */
+.bmi-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-hi);
+  background: linear-gradient(135deg, #071f17 0%, #0a2e1f 40%, #0d3d2a 100%);
+  padding: 2.5rem 2rem;
+  color: white;
+}
+.bmi-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 50%, rgba(29,158,117,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(62,255,168,.07) 0%, transparent 40%);
+  pointer-events: none;
+}
+/* Dot grid texture */
+.bmi-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+.bmi-hero-inner { position: relative; z-index: 1; }
+
+.bmi-hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(62,255,168,.1);
+  border: 1px solid rgba(62,255,168,.2);
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green-hi);
+  margin-bottom: 1.25rem;
+}
+.bmi-hero-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green-hi);
+  animation: bmi-pulse 2s ease-in-out infinite;
+}
+@keyframes bmi-pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:.5; transform:scale(.8); }
+}
+
+.bmi-hero h1 {
+  font-family: Poppins, sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+.bmi-hero h1 span {
+  background: linear-gradient(90deg, #3EFFA8, #1D9E75);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bmi-hero-desc {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,.65);
+  max-width: 48ch;
+  margin-bottom: 1.75rem;
+}
+
+.bmi-hero-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+}
+.bmi-btn-primary {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--green); color: #fff;
+  font-size: .85rem; font-weight: 700;
+  padding: .7rem 1.25rem; border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(29,158,117,.3);
+  transition: all 150ms ease;
+  border: none; cursor: pointer;
+}
+.bmi-btn-primary:hover { background: #18876A; transform: translateY(-1px); }
+.bmi-btn-ghost {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.8);
+  font-size: .85rem; font-weight: 600;
+  padding: .7rem 1.25rem; border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,.14);
+  text-decoration: none; transition: background 150ms ease;
+}
+.bmi-btn-ghost:hover { background: rgba(255,255,255,.14); }
+
+/* Hero stats row */
+.bmi-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.bmi-hero-stat { display: flex; flex-direction: column; gap: .15rem; }
+.bmi-hero-stat-val {
+  font-family: Poppins, sans-serif;
+  font-weight: 900; font-size: 1.3rem;
+  color: var(--green-hi); letter-spacing: -0.03em; line-height: 1;
+}
+.bmi-hero-stat-key {
+  font-size: .65rem; font-weight: 600;
+  color: rgba(255,255,255,.4);
+  text-transform: uppercase; letter-spacing: .1em;
+}
+
+/* ── What you get cards ──────────────────────────────────────────────────── */
+.bmi-features {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.bmi-feat-label {
+  font-size: .65rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .18em;
+  color: var(--green); margin-bottom: .25rem;
+}
+.bmi-feat-item {
+  background: #0b1120;
+  border: 1px solid var(--border);
+  border-radius: .85rem;
+  padding: 1rem 1.15rem;
+  display: flex; gap: .85rem; align-items: flex-start;
+  transition: border-color 150ms ease;
+}
+.bmi-feat-item:hover { border-color: var(--border-hi); }
+.bmi-feat-icon {
+  width: 2.2rem; height: 2.2rem;
+  border-radius: .6rem;
+  background: rgba(29,158,117,.1);
+  border: 1px solid rgba(29,158,117,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.bmi-feat-name {
+  font-weight: 700; font-size: .88rem;
+  color: var(--text); margin-bottom: .2rem;
+}
+.bmi-feat-desc { font-size: .78rem; color: var(--muted); line-height: 1.55; }
+
+/* ── Form section ────────────────────────────────────────────────────────── */
+.bmi-form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 2rem;
+}
+
+.bmi-section-title {
+  font-family: Poppins, sans-serif;
+  font-weight: 900; font-size: 1.4rem;
+  color: var(--text); letter-spacing: -.03em;
+  margin-bottom: 1.5rem;
+}
+
+/* Dark form fields */
+.bmi-label {
+  display: block;
+  font-size: .78rem; font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: .1em;
+  margin-bottom: .45rem;
+}
+.bmi-input, .bmi-select {
+  width: 100%;
+  background: #0b1120;
+  border: 1px solid var(--border-hi);
+  border-radius: .75rem;
+  color: var(--text);
+  padding: .8rem 1rem;
+  font-size: .9rem;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  -webkit-appearance: none;
+}
+.bmi-input::placeholder { color: var(--dim); }
+.bmi-input:focus, .bmi-select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(29,158,117,.12);
+}
+.bmi-select option { background: #0d1117; color: var(--text); }
+
+/* Field grid */
+.bmi-fields {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+.bmi-field-full { grid-column: 1 / -1; }
+
+/* Calculate button */
+.bmi-calc-btn {
+  width: 100%; margin-top: 1.5rem;
+  background: var(--green); color: #fff;
+  font-size: .95rem; font-weight: 800;
+  padding: .9rem; border-radius: .85rem;
+  border: none; cursor: pointer;
+  box-shadow: 0 0 24px rgba(29,158,117,.25);
+  transition: all 160ms ease;
+  display: flex; align-items: center;
+  justify-content: center; gap: .5rem;
+}
+.bmi-calc-btn:hover { background: #18876A; box-shadow: 0 0 32px rgba(62,255,168,.25); transform: translateY(-1px); }
+.bmi-calc-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+/* ── Result panel ────────────────────────────────────────────────────────── */
+.bmi-result-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Override default soft-card for dark theme */
+#bmiResult {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 1.25rem !important;
+  padding: 1.75rem !important;
+  box-shadow: none !important;
+}
+#bmiResult.hidden { display: none !important; }
+
+/* Result name / bmi text */
+#resultName { color: var(--text) !important; }
+#resultBMI { color: var(--muted) !important; }
+
+/* Result badges — dark versions */
+.badge-underweight { background: rgba(59,130,246,.15) !important; color: #93C5FD !important; border: 1px solid rgba(59,130,246,.3) !important; }
+.badge-normal      { background: rgba(16,185,129,.15) !important; color: #6EE7B7 !important; border: 1px solid rgba(16,185,129,.3) !important; }
+.badge-overweight  { background: rgba(249,115,22,.15) !important; color: #FDB87D !important; border: 1px solid rgba(249,115,22,.3) !important; }
+.badge-obese       { background: rgba(239,68,68,.15)  !important; color: #FCA5A5 !important; border: 1px solid rgba(239,68,68,.3)  !important; }
+
+/* Advice panels */
+#resultAdviceEN {
+  background: rgba(29,158,117,.08) !important;
+  border: 1px solid rgba(29,158,117,.2) !important;
+  border-radius: .85rem !important;
+  color: var(--text) !important;
+}
+#resultAdviceKN {
+  background: rgba(249,115,22,.07) !important;
+  border: 1px solid rgba(249,115,22,.18) !important;
+  border-radius: .85rem !important;
+  color: var(--text) !important;
+}
+
+/* Percentile text */
+#resultPercentile { color: var(--dim) !important; }
+
+/* Meal plan button inside result */
+#bmiResult button[onclick="prefillMealForm()"] {
+  background: var(--green) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: .85rem !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 20px rgba(29,158,117,.2) !important;
+  transition: all 150ms ease !important;
+}
+#bmiResult button[onclick="prefillMealForm()"]:hover {
+  background: #18876A !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Growth chart wrapper */
+#growthChartWrapper {
+  background: #0b1120;
+  border: 1px solid var(--border);
+  border-radius: .85rem;
+  padding: 1.25rem;
+}
+#growthChartWrapper p { color: var(--text) !important; }
+
+/* Advisor panel dark override */
+#advisorPanel {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 1.25rem !important;
+}
+
+/* ── Info strip at bottom ────────────────────────────────────────────────── */
+.bmi-info-strip {
+  margin-top: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.75rem 2rem;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .bmi-info-strip { grid-template-columns: repeat(3, 1fr); }
+}
+.bmi-info-item { display: flex; flex-direction: column; gap: .35rem; }
+.bmi-info-title {
+  font-size: .7rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--green);
+}
+.bmi-info-body { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+
+/* ── How it works steps ──────────────────────────────────────────────────── */
+.bmi-steps {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  margin-top: 1rem;
+}
+.bmi-step {
+  display: flex; gap: .85rem; align-items: flex-start;
+  padding: .85rem 1rem;
+  background: #0b1120;
+  border: 1px solid var(--border);
+  border-radius: .85rem;
+  transition: border-color 150ms ease;
+}
+.bmi-step:hover { border-color: var(--border-hi); }
+.bmi-step-num {
+  width: 1.6rem; height: 1.6rem;
+  border-radius: 50%;
+  background: rgba(29,158,117,.15);
+  border: 1px solid rgba(29,158,117,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 900;
+  color: var(--green-hi); flex-shrink: 0; margin-top: .1rem;
+}
+.bmi-step-text { font-size: .83rem; color: var(--text); line-height: 1.55; }
+.bmi-step-text strong { color: var(--green-hi); }
+
+/* ── Loading state ───────────────────────────────────────────────────────── */
+.ld-bmi-card {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1rem;
+  padding: 2rem; text-align: center;
+}
+.ld-bmi-label { font-size: .9rem; font-weight: 600; color: var(--text); }
+.ld-bmi-sub   { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+/* ── Error/success toasts dark override ──────────────────────────────────── */
+.es-toast--warn {
+  background: rgba(234,179,8,.08) !important;
+  border: 1px solid rgba(234,179,8,.2) !important;
+  border-radius: .85rem !important;
+}
+.es-card--error {
+  background: rgba(239,68,68,.06) !important;
+  border: 1px solid rgba(239,68,68,.2) !important;
+  border-radius: .85rem !important;
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<section class="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-  <div class="hero-banner page-section">
-    <span class="sublabel text-white/90">Student health</span>
-    <h1 class="heading mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">BMI Assessment</h1>
-    <p class="mt-4 max-w-2xl text-white/88">
-      Record age, gender, height, and weight to get the BMI category and a quick health summary for the student.
-    </p>
-    <div class="mt-6 flex flex-wrap gap-3">
-      <a href="/meal-planner" class="btn-secondary bg-white text-primaryDark hover:bg-slate-50">Move to Meal Planner</a>
-      <a href="#bmiForm" class="btn-ghost bg-white/15 text-white hover:bg-white/20">Start Assessment</a>
+
+<!-- ══ HERO + FEATURES (top row) ══════════════════════════════════════════════ -->
+<div class="bmi-page">
+
+  <!-- Hero left -->
+  <div class="bmi-hero">
+    <div class="bmi-hero-inner">
+      <div class="bmi-hero-label">
+        <span class="bmi-hero-dot" aria-hidden="true"></span>
+        Student Health Assessment
+      </div>
+
+      <h1>BMI<br/><span>Assessment</span></h1>
+
+      <p class="bmi-hero-desc">
+        Record age, gender, height, and weight to instantly get the BMI category,
+        IAP percentile, bilingual health advice, and a direct link to a personalised meal plan.
+      </p>
+
+      <div class="bmi-hero-btns">
+        <a href="#bmiForm" class="bmi-btn-primary">
+          <span aria-hidden="true">⚖️</span> Start Assessment
+        </a>
+        <a href="/meal-planner" class="bmi-btn-ghost">
+          <span aria-hidden="true">🗓️</span> Meal Planner
+        </a>
+      </div>
+
+      <div class="bmi-hero-stats">
+        <div class="bmi-hero-stat">
+          <div class="bmi-hero-stat-val">IAP</div>
+          <div class="bmi-hero-stat-key">Growth Standard</div>
+        </div>
+        <div class="bmi-hero-stat" style="padding-left:1.25rem;border-left:1px solid rgba(255,255,255,.08);">
+          <div class="bmi-hero-stat-val">4</div>
+          <div class="bmi-hero-stat-key">BMI Categories</div>
+        </div>
+        <div class="bmi-hero-stat" style="padding-left:1.25rem;border-left:1px solid rgba(255,255,255,.08);">
+          <div class="bmi-hero-stat-val">EN·ಕನ್ನಡ</div>
+          <div class="bmi-hero-stat-key">Bilingual Advice</div>
+        </div>
+        <div class="bmi-hero-stat" style="padding-left:1.25rem;border-left:1px solid rgba(255,255,255,.08);">
+          <div class="bmi-hero-stat-val">&lt;1min</div>
+          <div class="bmi-hero-stat-key">Per Student</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="soft-card p-6">
-    <p class="sublabel">What you get</p>
-    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-      <div class="rounded-2xl bg-slate-50 p-4"><h2 class="font-semibold text-slate-900">BMI category result</h2><p class="mt-1 text-sm text-slate-600">Underweight, normal, overweight, or obese with a clear badge.</p></div>
-      <div class="rounded-2xl bg-slate-50 p-4"><h2 class="font-semibold text-slate-900">Health report</h2><p class="mt-1 text-sm text-slate-600">A concise summary for teachers and parents after calculation.</p></div>
-      <div class="rounded-2xl bg-slate-50 p-4"><h2 class="font-semibold text-slate-900">AI Nutrition Advisor</h2><p class="mt-1 text-sm text-slate-600">Consult the AI advisor after assessment to get personalised guidance for this student.</p></div>
+  <!-- What you get — right -->
+  <div class="bmi-features">
+    <div>
+      <div class="bmi-feat-label">What you get</div>
+      <div style="font-family:Poppins,sans-serif;font-weight:800;font-size:1.1rem;color:var(--text);margin-top:.2rem;">
+        Everything a teacher needs
+      </div>
+    </div>
+
+    <div class="bmi-feat-item">
+      <div class="bmi-feat-icon">⚖️</div>
+      <div>
+        <div class="bmi-feat-name">BMI Category Result</div>
+        <div class="bmi-feat-desc">Classified as Underweight, Normal, Overweight, or Obese using WHO/ICMR age-gender growth standards.</div>
+      </div>
+    </div>
+
+    <div class="bmi-feat-item">
+      <div class="bmi-feat-icon">📊</div>
+      <div>
+        <div class="bmi-feat-name">Percentile &amp; Z-Score</div>
+        <div class="bmi-feat-desc">Visual gauge showing exactly where the student falls on the IAP growth chart with animated marker.</div>
+      </div>
+    </div>
+
+    <div class="bmi-feat-item">
+      <div class="bmi-feat-icon">🗣️</div>
+      <div>
+        <div class="bmi-feat-name">Bilingual Health Advice</div>
+        <div class="bmi-feat-desc">Personalised dietary recommendations in both English and Kannada for teachers and parents.</div>
+      </div>
+    </div>
+
+    <div class="bmi-feat-item">
+      <div class="bmi-feat-icon">📈</div>
+      <div>
+        <div class="bmi-feat-name">Growth Trend Chart</div>
+        <div class="bmi-feat-desc">Auto-tracks BMI over time for repeated assessments of the same student — shows improving or declining trends.</div>
+      </div>
+    </div>
+
+    <div class="bmi-feat-item">
+      <div class="bmi-feat-icon">🗓️</div>
+      <div>
+        <div class="bmi-feat-name">One-click Meal Plan</div>
+        <div class="bmi-feat-desc">Result prefills the Meal Planner — one click generates a full 7-day plan tailored to the BMI category.</div>
+      </div>
     </div>
   </div>
-</section>
 
-<section id="bmiForm" class="mt-6 grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-  <div class="soft-card p-6">
-    <div class="sublabel">BMI calculator</div>
-    <h2 class="section-title mt-2 text-3xl text-slate-900">Enter student details</h2>
-    <div class="mt-6 grid gap-4 sm:grid-cols-2">
-      <div><label class="mb-2 block text-sm font-semibold text-slate-700">Student Name</label><input id="bmiName" type="text" placeholder="e.g. Priya" class="input-field"/></div>
-      <div><label class="mb-2 block text-sm font-semibold text-slate-700">Age</label><input id="bmiAge" type="number" min="5" max="15" placeholder="5–15" class="input-field"/></div>
-      <div><label class="mb-2 block text-sm font-semibold text-slate-700">Gender</label><select id="bmiGender" class="select-field"><option value="boy">Boy</option><option value="girl">Girl</option></select></div>
-      <div></div>
-      <div><label class="mb-2 block text-sm font-semibold text-slate-700">Height (cm)</label><input id="bmiHeight" type="number" placeholder="e.g. 135" class="input-field"/></div>
-      <div><label class="mb-2 block text-sm font-semibold text-slate-700">Weight (kg)</label><input id="bmiWeight" type="number" placeholder="e.g. 28" class="input-field"/></div>
+</div><!-- /.bmi-page -->
+
+
+<!-- ══ FORM + RESULT (second row) ═════════════════════════════════════════════ -->
+<div id="bmiForm" class="bmi-page" style="margin-top:1.5rem;">
+
+  <!-- Form left -->
+  <div class="bmi-form-section">
+    <div class="bmi-section-title">Enter student details</div>
+
+    <div class="bmi-fields">
+
+      <div class="bmi-field-full">
+        <label class="bmi-label" for="bmiName">Student Name</label>
+        <input id="bmiName" type="text" placeholder="e.g. Priya Shetty" class="bmi-input" autocomplete="off"/>
+      </div>
+
+      <div>
+        <label class="bmi-label" for="bmiAge">Age (years)</label>
+        <input id="bmiAge" type="number" min="5" max="15" placeholder="5 – 15" class="bmi-input"/>
+      </div>
+
+      <div>
+        <label class="bmi-label" for="bmiGender">Gender</label>
+        <select id="bmiGender" class="bmi-select">
+          <option value="boy">Boy</option>
+          <option value="girl">Girl</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="bmi-label" for="bmiHeight">Height (cm)</label>
+        <input id="bmiHeight" type="number" placeholder="e.g. 135" class="bmi-input"/>
+      </div>
+
+      <div>
+        <label class="bmi-label" for="bmiWeight">Weight (kg)</label>
+        <input id="bmiWeight" type="number" placeholder="e.g. 28" class="bmi-input"/>
+      </div>
+
     </div>
-    <button onclick="calculateBMI()" class="btn-primary mt-6 w-full py-3">Calculate BMI</button>
+
+    <button onclick="calculateBMI()" class="bmi-calc-btn">
+      <span aria-hidden="true">⚖️</span> Calculate BMI
+    </button>
+
+    <!-- How it works -->
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+      <div class="bmi-feat-label" style="margin-bottom:.85rem;">How it works</div>
+      <div class="bmi-steps">
+        <div class="bmi-step">
+          <div class="bmi-step-num">1</div>
+          <div class="bmi-step-text"><strong>Enter measurements</strong> — name, age, gender, height, weight</div>
+        </div>
+        <div class="bmi-step">
+          <div class="bmi-step-num">2</div>
+          <div class="bmi-step-text"><strong>BMI is calculated</strong> — weight ÷ height² using WHO/ICMR standards</div>
+        </div>
+        <div class="bmi-step">
+          <div class="bmi-step-num">3</div>
+          <div class="bmi-step-text"><strong>Category &amp; percentile</strong> — classified against IAP age-gender growth bands</div>
+        </div>
+        <div class="bmi-step">
+          <div class="bmi-step-num">4</div>
+          <div class="bmi-step-text"><strong>Bilingual advice</strong> — personalised guidance in English and Kannada</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="space-y-6">
+  <!-- Result right -->
+  <div class="bmi-result-wrap">
+
     <div id="bmiResult" class="soft-card hidden p-6">
       <div class="flex items-start justify-between gap-4">
         <div>
@@ -60,17 +591,63 @@
       </div>
       <div id="resultAdviceEN" class="mt-5 rounded-2xl bg-emerald-50 p-4 text-sm text-slate-700"></div>
       <div id="resultAdviceKN" class="kn mt-3 rounded-2xl bg-amber-50 p-4 text-sm text-slate-700"></div>
-      <button onclick="prefillMealForm()" class="btn-secondary mt-6 w-full py-3">Generate Meal Plan for this Student</button>
+      <button onclick="prefillMealForm()" class="btn-secondary mt-6 w-full py-3">
+        🗓️ Generate Meal Plan for this Student
+      </button>
     </div>
 
     <div id="advisorPanel" class="hidden"></div>
+
+    <!-- Empty state — shown before first calculation -->
+    <div id="bmiEmptyState" class="bmi-form-section" style="text-align:center;padding:3rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;" aria-hidden="true">⚖️</div>
+      <div style="font-family:Poppins,sans-serif;font-weight:800;font-size:1.1rem;color:var(--text);margin-bottom:.5rem;">
+        Result will appear here
+      </div>
+      <div style="font-size:.85rem;color:var(--muted);max-width:32ch;margin:0 auto;line-height:1.7;">
+        Fill in the student details on the left and click <strong style="color:var(--green-hi);">Calculate BMI</strong>
+      </div>
+    </div>
+
   </div>
-</section>
+
+</div><!-- /.bmi-page second row -->
+
+
+<!-- ══ INFO STRIP ═════════════════════════════════════════════════════════════ -->
+<div class="bmi-info-strip">
+
+  <div class="bmi-info-item">
+    <div class="bmi-info-title">Growth Standard Used</div>
+    <div class="bmi-info-body">
+      Indian Academy of Pediatrics (IAP) age-gender percentile tables.
+      Cutoffs: P5 = Underweight, P85 = Overweight, P95 = Obese.
+    </div>
+  </div>
+
+  <div class="bmi-info-item">
+    <div class="bmi-info-title">Age Range</div>
+    <div class="bmi-info-body">
+      Designed for school children aged 5–15 years. Assessment takes under
+      one minute per student with no clinical expertise needed.
+    </div>
+  </div>
+
+  <div class="bmi-info-item">
+    <div class="bmi-info-title">Privacy Note</div>
+    <div class="bmi-info-body">
+      Student data is stored securely in Supabase. Results are saved locally
+      for growth tracking. No personal data is shared with third parties.
+    </div>
+  </div>
+
+</div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-/* Auth guard — runs immediately before any content renders */
+/* Auth guard */
 if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
   sessionStorage.setItem('np_login_redirect', '/bmi');
   window.location.replace('/login?msg=protected');
@@ -79,5 +656,12 @@ if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
 <script src="/static/js/advisor.js"></script>
 <script src="/static/js/bmi.js"></script>
 <script>
+/* Hide empty state once result appears */
+const _origCalc = window.calculateBMI;
+window.calculateBMI = async function() {
+  const es = document.getElementById('bmiEmptyState');
+  if (es) es.style.display = 'none';
+  await _origCalc();
+};
 </script>
 {% endblock %}
