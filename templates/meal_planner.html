@@ -6,117 +6,324 @@
 <link rel="stylesheet" href="/static/css/advisor.css"/>
 <link rel="stylesheet" href="/static/css/nutrition_score.css"/>
 <link rel="stylesheet" href="/static/css/weekly_summary.css"/>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Meal Planner — mp- prefix, dark premium
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --bg:        #060a0e;
+  --surface:   #0d1117;
+  --border:    #1a2332;
+  --border-hi: #253347;
+  --green:     #1D9E75;
+  --green-hi:  #3EFFA8;
+  --text:      #E2E8F0;
+  --muted:     #94A3B8;
+  --dim:       #4A5568;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.mp-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-hi);
+  background: linear-gradient(135deg, #071f17 0%, #0a2e1f 40%, #0d3d2a 100%);
+  padding: 2.25rem 2rem;
+  color: #fff;
+}
+.mp-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 30%, rgba(29,158,117,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(249,115,22,.07) 0%, transparent 40%);
+  pointer-events: none;
+}
+.mp-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+.mp-hero-inner { position: relative; z-index: 1; display: grid; gap: 1.5rem; }
+@media (min-width: 1024px) { .mp-hero-inner { grid-template-columns: 1.15fr 0.85fr; align-items: center; } }
+
+.mp-hero-label {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .25rem .75rem; background: rgba(62,255,168,.1);
+  border: 1px solid rgba(62,255,168,.2); border-radius: 9999px;
+  font-size: .65rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--green-hi); margin-bottom: 1.1rem;
+}
+.mp-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-hi); animation: mp-pulse 2s ease-in-out infinite; }
+@keyframes mp-pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+
+.mp-hero h1 {
+  font-family: Poppins, sans-serif; font-weight: 900;
+  font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+  letter-spacing: -0.05em; line-height: 1.08; color: #fff; margin-bottom: .9rem;
+}
+.mp-hero h1 span {
+  background: linear-gradient(90deg, #3EFFA8, #1D9E75);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.mp-hero-desc { font-size: .92rem; line-height: 1.75; color: rgba(255,255,255,.65); max-width: 50ch; margin-bottom: 1.5rem; }
+
+.mp-hero-btns { display: flex; flex-wrap: wrap; gap: .6rem; }
+.mp-btn-primary {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--green); color: #fff; font-size: .82rem; font-weight: 700;
+  padding: .65rem 1.15rem; border-radius: 9999px; text-decoration: none;
+  box-shadow: 0 0 20px rgba(29,158,117,.3); transition: all 150ms ease; border:none; cursor:pointer;
+}
+.mp-btn-primary:hover { background: #18876A; transform: translateY(-1px); }
+.mp-btn-ghost {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.8);
+  font-size: .82rem; font-weight: 600; padding: .65rem 1.15rem; border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,.14); text-decoration: none; transition: background 150ms ease;
+}
+.mp-btn-ghost:hover { background: rgba(255,255,255,.14); }
+
+/* Hero step rail */
+.mp-hero-steps { display: flex; flex-direction: column; gap: .65rem; }
+.mp-hero-step {
+  display: flex; align-items: center; gap: .8rem;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 1rem; padding: .85rem 1rem;
+}
+.mp-hero-step-num {
+  flex-shrink: 0; width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  background: rgba(62,255,168,.18); border: 1px solid rgba(62,255,168,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 900; color: var(--green-hi);
+}
+.mp-hero-step-title { font-size: .85rem; font-weight: 700; color: #fff; }
+.mp-hero-step-sub { font-size: .72rem; color: rgba(255,255,255,.55); margin-top: .05rem; }
+
+
+/* ── Form card ───────────────────────────────────────────────────────────── */
+.mp-form-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 1.25rem; padding: 1.75rem;
+}
+.mp-form-label {
+  font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .18em;
+  color: var(--green); margin-bottom: .3rem;
+}
+.mp-form-title {
+  font-family: Poppins, sans-serif; font-weight: 900; font-size: 1.35rem;
+  color: var(--text); letter-spacing: -.03em; margin-bottom: 1.4rem;
+}
+
+.mp-field-label {
+  display: block; font-size: .72rem; font-weight: 700; color: var(--muted);
+  margin-bottom: .35rem;
+}
+.mp-required { color: #FCA5A5; }
+
+.mp-input, .mp-select, .mp-textarea {
+  width: 100%; background: #0b1120; border: 1px solid var(--border-hi);
+  border-radius: .65rem; color: var(--text); padding: .7rem .85rem;
+  font-size: .85rem; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease;
+  -webkit-appearance: none;
+}
+.mp-input::placeholder, .mp-textarea::placeholder { color: var(--dim); }
+.mp-input:focus, .mp-select:focus, .mp-textarea:focus {
+  border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12);
+}
+.mp-select option { background: #0d1117; color: var(--text); }
+.mp-textarea { resize: none; }
+
+.mp-err { margin-top: .3rem; font-size: .7rem; color: #F87171; }
+.mp-err.hidden { display: none; }
+
+.mp-generate-btn {
+  width: 100%; margin-top: 1.4rem;
+  background: var(--green); color: #fff; font-size: .9rem; font-weight: 800;
+  padding: .85rem; border-radius: .75rem; border: none; cursor: pointer;
+  box-shadow: 0 0 24px rgba(29,158,117,.25); transition: all 160ms ease;
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+}
+.mp-generate-btn:hover { background: #18876A; box-shadow: 0 0 32px rgba(62,255,168,.25); transform: translateY(-1px); }
+.mp-generate-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+/* form error toast */
+#formError {
+  background: rgba(239,68,68,.08) !important;
+  border: 1px solid rgba(239,68,68,.2) !important;
+  color: #FCA5A5 !important; border-radius: .75rem !important;
+}
+
+/* ── Placeholder (right column, before generation) ──────────────────────── */
+.mp-placeholder {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 1.25rem; padding: 1.75rem;
+}
+.mp-ph-grid { display: grid; gap: .85rem; margin-top: 1.1rem; }
+@media (min-width: 640px) { .mp-ph-grid { grid-template-columns: repeat(3,1fr); } }
+.mp-ph-item {
+  background: #0b1120; border: 1px solid var(--border); border-radius: .85rem;
+  padding: 1.1rem; transition: border-color 150ms ease;
+}
+.mp-ph-item:hover { border-color: var(--border-hi); }
+.mp-ph-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+.mp-ph-title { font-size: .85rem; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
+.mp-ph-sub { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+
+/* ── Loading card dark override ──────────────────────────────────────────── */
+.ld-meal-card {
+  background: var(--surface) !important; border: 1px solid var(--border) !important;
+  border-radius: 1.25rem !important; padding: 1.75rem !important;
+}
+.ld-meal-label { color: var(--text) !important; }
+.ld-meal-sublabel { color: var(--muted) !important; }
+.ld-bar-track { background: rgba(255,255,255,.08) !important; }
+.ld-step { color: var(--muted) !important; }
+.ld-step--done { color: var(--green-hi) !important; }
+.ld-step--active { color: var(--text) !important; }
+
+/* ── Result content: override Tailwind utility classes injected by JS ──── */
+#mealResult .bg-white            { background: var(--surface) !important; }
+#mealResult .border-slate-100    { border-color: var(--border) !important; }
+#mealResult .border-primary\/10  { border-color: rgba(29,158,117,.18) !important; }
+#mealResult .bg-primary\/8       { background: rgba(29,158,117,.08) !important; }
+#mealResult .text-primary        { color: var(--green-hi) !important; }
+#mealResult .text-gray-400,
+#mealResult .text-gray-800,
+#mealResult .text-slate-900,
+#mealResult .text-slate-700      { color: var(--text) !important; }
+#mealResult .text-orange-400     { color: #FDB87D !important; }
+#mealResult .divide-slate-100 > * + * { border-color: var(--border) !important; }
+#mealResult .bg-slate-50         { background: #0b1120 !important; }
+#mealResult .bg-green-100        { background: rgba(29,158,117,.14) !important; }
+#mealResult .text-green-700      { color: var(--green-hi) !important; }
+#mealResult .border-primary\/30  { border-color: rgba(29,158,117,.3) !important; }
+#mealResult .border-primary      { border-color: var(--green) !important; }
+#mealResult .bg-blue-500         { background: #2563EB !important; }
+#mealResult .shadow-sm           { box-shadow: none !important; }
+#mealResult button.bg-primary,
+#mealResult button[class*="bg-primary"] {
+  background: var(--green) !important;
+  box-shadow: 0 0 16px rgba(29,158,117,.2) !important;
+}
+
+/* AI selection summary + nutrient rings + score cards — generic dark glass wrapper */
+#mealResult > div { color: var(--text); }
+#nutritionScoreContainer, #weeklySummaryContainer, #gapContainer, #equivContainer {
+  --score-surface: var(--surface);
+}
+</style>
 {% endblock %}
 
 {% block content %}
 
-<!-- Hero Banner -->
-<section class="hero-banner page-section">
-  <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+<!-- ══ HERO ════════════════════════════════════════════════════════════════ -->
+<section class="mp-hero">
+  <div class="mp-hero-inner">
     <div>
-      <span class="sublabel text-white/90">Meal workflow</span>
-      <h1 class="heading mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">Meal Planner</h1>
-      <p class="mt-3 max-w-xl text-sm leading-6 text-white/85 sm:text-base">
-        Consult the AI co-pilot, then generate a printable 7-day school meal plan with regional food, nutrient targets, and parent guidance built in.
+      <div class="mp-hero-label"><span class="mp-hero-dot" aria-hidden="true"></span>Meal Workflow</div>
+      <h1>AI Weekly<br/><span>Meal Planner</span></h1>
+      <p class="mp-hero-desc">
+        Consult the AI co-pilot, then generate a printable 7-day school meal plan
+        with regional Karnataka foods, nutrient targets, and parent guidance built in — under ₹150/day.
       </p>
-      <div class="mt-5 flex flex-wrap gap-3">
-        <a href="#mealForm" class="btn-secondary bg-white text-primaryDark hover:bg-slate-50">Start Planning</a>
-        <a href="/food-catalog" class="btn-ghost bg-white/15 text-white hover:bg-white/20">Browse Foods</a>
+      <div class="mp-hero-btns">
+        <a href="#mealForm" class="mp-btn-primary"><span aria-hidden="true">🗓️</span> Start Planning</a>
+        <a href="/food-catalog" class="mp-btn-ghost"><span aria-hidden="true">🥗</span> Browse Foods</a>
       </div>
     </div>
-    <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
-      <div class="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur">
-        <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">1</span>
-        <div><p class="text-sm font-bold text-white">Student details</p><p class="text-xs text-white/75">School, age, diet, region, strategy.</p></div>
+
+    <div class="mp-hero-steps">
+      <div class="mp-hero-step">
+        <div class="mp-hero-step-num">1</div>
+        <div><div class="mp-hero-step-title">Student details</div><div class="mp-hero-step-sub">School, age, diet, region, strategy</div></div>
       </div>
-      <div class="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur">
-        <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">2</span>
-        <div><p class="text-sm font-bold text-white">AI consultation</p><p class="text-xs text-white/75">Get advice for poster, report & parents.</p></div>
+      <div class="mp-hero-step">
+        <div class="mp-hero-step-num">2</div>
+        <div><div class="mp-hero-step-title">AI consultation</div><div class="mp-hero-step-sub">Get advice for poster, report &amp; parents</div></div>
       </div>
-      <div class="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur">
-        <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-sm font-bold text-white">3</span>
-        <div><p class="text-sm font-bold text-white">Generate &amp; share</p><p class="text-xs text-white/75">Poster, PDF, WhatsApp, Health Report.</p></div>
+      <div class="mp-hero-step">
+        <div class="mp-hero-step-num">3</div>
+        <div><div class="mp-hero-step-title">Generate &amp; share</div><div class="mp-hero-step-sub">Poster, PDF, WhatsApp, Health Report</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Main Form + Results -->
+<!-- ══ FORM + RESULTS ══════════════════════════════════════════════════════ -->
 <section id="mealForm" class="mt-5 grid gap-5 xl:grid-cols-[420px_1fr]">
 
   <!-- Left: Input form -->
-  <div class="soft-card p-5 sm:p-6">
-    <p class="sublabel">Student information</p>
-    <h2 class="section-title mt-1 text-2xl text-slate-900">Plan a weekly menu</h2>
+  <div class="mp-form-card">
+    <div class="mp-form-label">Student information</div>
+    <div class="mp-form-title">Plan a weekly menu</div>
 
-    <div class="mt-5 grid gap-3 sm:grid-cols-2">
+    <div class="grid gap-3 sm:grid-cols-2">
 
-      <!-- School & Student -->
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">School Name <span class="text-red-400">*</span></label>
+        <label class="mp-field-label" for="mealSchool">School Name <span class="mp-required">*</span></label>
         <input id="mealSchool" type="text" placeholder="Govt HS Mangalore" autocomplete="organization"
-          class="input-field" oninput="clearFieldError(this)"/>
-        <p id="mealSchoolErr" class="mt-1 hidden text-xs text-red-500">Please enter school name</p>
+          class="mp-input" oninput="clearFieldError(this)"/>
+        <p id="mealSchoolErr" class="mp-err hidden">Please enter school name</p>
       </div>
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Student Name</label>
-        <input id="mealStudent" type="text" placeholder="Priya" autocomplete="name" class="input-field"/>
+        <label class="mp-field-label" for="mealStudent">Student Name</label>
+        <input id="mealStudent" type="text" placeholder="Priya" autocomplete="name" class="mp-input"/>
       </div>
 
-      <!-- Age & Gender -->
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Age Group</label>
-        <select id="mealAge" class="select-field">
+        <label class="mp-field-label" for="mealAge">Age Group</label>
+        <select id="mealAge" class="mp-select">
           <option value="5-8">5–8 years</option>
           <option value="9-12" selected>9–12 years</option>
           <option value="13-15">13–15 years</option>
         </select>
       </div>
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Gender</label>
-        <select id="mealGender" class="select-field">
+        <label class="mp-field-label" for="mealGender">Gender</label>
+        <select id="mealGender" class="mp-select">
           <option value="">Not specified</option>
           <option value="girl">Girl</option>
           <option value="boy">Boy</option>
         </select>
       </div>
 
-      <!-- Height & Weight -->
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Height (cm)</label>
+        <label class="mp-field-label" for="mealHeight">Height (cm)</label>
         <input id="mealHeight" type="number" min="50" max="250" step="0.1" placeholder="132"
-          class="input-field" oninput="clearFieldError(this)"/>
-        <p id="mealHeightErr" class="mt-1 hidden text-xs text-red-500">Enter 50–250</p>
+          class="mp-input" oninput="clearFieldError(this)"/>
+        <p id="mealHeightErr" class="mp-err hidden">Enter 50–250</p>
       </div>
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Weight (kg)</label>
+        <label class="mp-field-label" for="mealWeight">Weight (kg)</label>
         <input id="mealWeight" type="number" min="5" max="150" step="0.1" placeholder="28"
-          class="input-field" oninput="clearFieldError(this)"/>
-        <p id="mealWeightErr" class="mt-1 hidden text-xs text-red-500">Enter 5–150</p>
+          class="mp-input" oninput="clearFieldError(this)"/>
+        <p id="mealWeightErr" class="mp-err hidden">Enter 5–150</p>
       </div>
 
-      <!-- Diet & Activity -->
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Diet Type</label>
-        <select id="mealDiet" class="select-field" onchange="onDietChange()">
+        <label class="mp-field-label" for="mealDiet">Diet Type</label>
+        <select id="mealDiet" class="mp-select" onchange="onDietChange()">
           <option value="vegetarian">🥗 Vegetarian</option>
           <option value="eggetarian">🥚 Eggetarian</option>
           <option value="non-vegetarian">🍗 Non-Veg</option>
         </select>
       </div>
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Activity Level</label>
-        <select id="mealActivity" class="select-field">
+        <label class="mp-field-label" for="mealActivity">Activity Level</label>
+        <select id="mealActivity" class="mp-select">
           <option value="moderate">Moderate school activity</option>
           <option value="low">Low activity</option>
           <option value="high">High activity / sports</option>
         </select>
       </div>
 
-      <!-- Region & Month -->
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Region</label>
-        <select id="mealRegion" class="select-field">
+        <label class="mp-field-label" for="mealRegion">Region</label>
+        <select id="mealRegion" class="mp-select">
           <option value="mangalore">Mangalore</option>
           <option value="udupi">Udupi</option>
           <option value="shivamogga">Shivamogga</option>
@@ -126,8 +333,8 @@
         </select>
       </div>
       <div>
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Month</label>
-        <select id="mealMonth" class="select-field">
+        <label class="mp-field-label" for="mealMonth">Month</label>
+        <select id="mealMonth" class="mp-select">
           <option>january</option><option>february</option><option>march</option>
           <option>april</option><option>may</option><option>june</option>
           <option>july</option><option>august</option><option>september</option>
@@ -135,10 +342,9 @@
         </select>
       </div>
 
-      <!-- Strategy (full width) -->
       <div class="sm:col-span-2">
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Nutrition Strategy</label>
-        <select id="mealStrategy" class="select-field">
+        <label class="mp-field-label" for="mealStrategy">Nutrition Strategy</label>
+        <select id="mealStrategy" class="mp-select">
           <option value="standard">⚖️ Standard Balanced</option>
           <option value="high_protein">💪 High Protein</option>
           <option value="calcium_iron">🦴 Calcium + Iron Rich</option>
@@ -146,59 +352,50 @@
         </select>
       </div>
 
-      <!-- Health notes (full width) -->
       <div class="sm:col-span-2">
-        <label class="mb-1 block text-xs font-semibold text-slate-600">Health Notes</label>
+        <label class="mp-field-label" for="mealHealthNotes">Health Notes</label>
         <textarea id="mealHealthNotes" rows="2"
           placeholder="Allergies, appetite, anaemia, sports, doctor notes..."
-          class="input-field resize-none text-sm"></textarea>
+          class="mp-textarea text-sm"></textarea>
       </div>
 
     </div>
 
-    <!-- AI Advisor panel injected here -->
     <div id="advisorPanel" class="mt-5"></div>
 
-    <!-- Generate button -->
-    <button id="generateBtn" onclick="generateMeal()"
-      class="btn-primary mt-5 w-full py-3 text-sm font-bold">
+    <button id="generateBtn" onclick="generateMeal()" class="mp-generate-btn">
       ✨ Generate Meal Plan with Selected AI Advice
     </button>
 
-    <!-- Inline error toast -->
-    <div id="formError" class="mt-3 hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"></div>
+    <div id="formError" class="mt-3 hidden rounded-xl px-4 py-3 text-sm"></div>
   </div>
 
   <!-- Right: Results area -->
   <div class="flex flex-col gap-5 min-w-0">
 
-    <!-- Pre-generation guidance panel -->
-    <div id="mealPlaceholder" class="soft-card p-6">
-      <p class="sublabel">How it works</p>
-      <div class="mt-4 grid gap-3 sm:grid-cols-3">
-        <div class="rounded-2xl bg-slate-50 p-4">
-          <div class="mb-2 text-2xl">📝</div>
-          <h3 class="text-sm font-semibold text-slate-900">Input student data</h3>
-          <p class="mt-1 text-xs text-slate-500">Age, diet, and region guide the plan.</p>
+    <div id="mealPlaceholder" class="mp-placeholder">
+      <div class="mp-form-label">How it works</div>
+      <div class="mp-ph-grid">
+        <div class="mp-ph-item">
+          <div class="mp-ph-icon">📝</div>
+          <div class="mp-ph-title">Input student data</div>
+          <div class="mp-ph-sub">Age, diet, and region guide the plan.</div>
         </div>
-        <div class="rounded-2xl bg-slate-50 p-4">
-          <div class="mb-2 text-2xl">🤖</div>
-          <h3 class="text-sm font-semibold text-slate-900">Ask the AI co-pilot</h3>
-          <p class="mt-1 text-xs text-slate-500">Get English or Kannada guidance first.</p>
+        <div class="mp-ph-item">
+          <div class="mp-ph-icon">🤖</div>
+          <div class="mp-ph-title">Ask the AI co-pilot</div>
+          <div class="mp-ph-sub">Get English or Kannada guidance first.</div>
         </div>
-        <div class="rounded-2xl bg-slate-50 p-4">
-          <div class="mb-2 text-2xl">🖨️</div>
-          <h3 class="text-sm font-semibold text-slate-900">Print &amp; download</h3>
-          <p class="mt-1 text-xs text-slate-500">AI advice flows into poster, report, parents.</p>
+        <div class="mp-ph-item">
+          <div class="mp-ph-icon">🖨️</div>
+          <div class="mp-ph-title">Print &amp; download</div>
+          <div class="mp-ph-sub">AI advice flows into poster, report, parents.</div>
         </div>
       </div>
     </div>
 
-    <!-- Loading -->
     <div id="mealLoading" class="hidden">
       <div class="ld-meal-card">
-
-        <!-- Spinner + headline -->
         <div class="ld-meal-header">
           <div class="ld-meal-spinner-wrap">
             <div class="ld-meal-spinner-emoji" aria-hidden="true">🥗</div>
@@ -209,45 +406,20 @@
           </div>
         </div>
 
-        <!-- Animated progress bar -->
         <div class="ld-bar-track" role="progressbar" aria-label="Meal plan generation progress" aria-valuemin="0" aria-valuemax="100">
           <div class="ld-bar-fill"></div>
         </div>
 
-        <!-- Step list -->
         <ul class="ld-steps" aria-label="Generation steps" id="mealLoadingSteps">
-
-          <li class="ld-step ld-step--done" id="ldStep1">
-            <span class="ld-step-icon" aria-hidden="true">✓</span>
-            <span>Student profile analyzed</span>
-          </li>
-
-          <li class="ld-step ld-step--done" id="ldStep2">
-            <span class="ld-step-icon" aria-hidden="true">✓</span>
-            <span>Nutrition targets calculated</span>
-          </li>
-
-          <li class="ld-step ld-step--active" id="ldStep3">
-            <span class="ld-step-icon" aria-label="In progress"></span>
-            <span>Building meal plan with regional Karnataka foods</span>
-          </li>
-
-          <li class="ld-step ld-step--pending" id="ldStep4">
-            <span class="ld-step-icon" aria-hidden="true">⏳</span>
-            <span>Creating AI recommendations</span>
-          </li>
-
-          <li class="ld-step ld-step--pending" id="ldStep5">
-            <span class="ld-step-icon" aria-hidden="true">⏳</span>
-            <span>Finalising nutrition score &amp; insights</span>
-          </li>
-
+          <li class="ld-step ld-step--done" id="ldStep1"><span class="ld-step-icon" aria-hidden="true">✓</span><span>Student profile analyzed</span></li>
+          <li class="ld-step ld-step--done" id="ldStep2"><span class="ld-step-icon" aria-hidden="true">✓</span><span>Nutrition targets calculated</span></li>
+          <li class="ld-step ld-step--active" id="ldStep3"><span class="ld-step-icon" aria-label="In progress"></span><span>Building meal plan with regional Karnataka foods</span></li>
+          <li class="ld-step ld-step--pending" id="ldStep4"><span class="ld-step-icon" aria-hidden="true">⏳</span><span>Creating AI recommendations</span></li>
+          <li class="ld-step ld-step--pending" id="ldStep5"><span class="ld-step-icon" aria-hidden="true">⏳</span><span>Finalising nutrition score &amp; insights</span></li>
         </ul>
-
       </div>
     </div>
 
-    <!-- Results (populated by JS) -->
     <div id="mealResult" class="hidden min-w-0"></div>
   </div>
 
@@ -256,7 +428,6 @@
 
 {% block scripts %}
 <script>
-/* Auth guard — runs immediately before any content renders */
 if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
   sessionStorage.setItem('np_login_redirect', '/meal-planner');
   window.location.replace('/login?msg=protected');
@@ -271,7 +442,6 @@ if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
 <script src="/static/js/weekly_summary.js"></script>
 <script src="/static/js/meal.js"></script>
 <script>
-  // Set current month
   (function () {
     const sel = document.getElementById('mealMonth');
     if (sel) {
@@ -281,7 +451,6 @@ if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
     }
   })();
 
-  // Prefill from BMI or localStorage
   window.addEventListener('DOMContentLoaded', () => {
     const name   = localStorage.getItem('prefill_name');
     const age    = localStorage.getItem('prefill_age');
@@ -296,14 +465,12 @@ if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
     localStorage.removeItem('prefill_age');
     localStorage.removeItem('prefill_gender');
 
-    // Restore plan from URL ?plan=token
     const params = new URLSearchParams(window.location.search);
     const token  = params.get('plan');
     if (token) loadPlanByToken(token);
   });
 
   function onDietChange() {
-    // Re-render advisor with updated profile if already open
     if (window.NutriPrintAdvisor) {
       const p = document.getElementById('advisorPanel');
       if (p && p.innerHTML.trim()) window.NutriPrintAdvisor.render(p);
@@ -317,271 +484,91 @@ if (typeof NutriAuth !== 'undefined' && !NutriAuth.isLoggedIn()) {
     if (fe) fe.classList.add('hidden');
   }
 
-  /* ── Meal loading step animator ─────────────────────────────────────────── */
   let _stepTimers = [];
 
   function startLoadingSteps() {
-    // Reset all steps
     [1,2,3,4,5].forEach(n => {
       const el = document.getElementById('ldStep' + n);
       if (!el) return;
-      if (n <= 2) {
-        el.className = 'ld-step ld-step--done';
-        el.querySelector('.ld-step-icon').textContent = '✓';
-      } else if (n === 3) {
-        el.className = 'ld-step ld-step--active';
-        el.querySelector('.ld-step-icon').textContent = '';
-      } else {
-        el.className = 'ld-step ld-step--pending';
-        el.querySelector('.ld-step-icon').textContent = '⏳';
-      }
+      if (n <= 2) { el.className = 'ld-step ld-step--done'; el.querySelector('.ld-step-icon').textContent = '✓'; }
+      else if (n === 3) { el.className = 'ld-step ld-step--active'; el.querySelector('.ld-step-icon').textContent = ''; }
+      else { el.className = 'ld-step ld-step--pending'; el.querySelector('.ld-step-icon').textContent = '⏳'; }
     });
 
     const advance = (stepNum) => {
       const prev = document.getElementById('ldStep' + (stepNum - 1));
       const curr = document.getElementById('ldStep' + stepNum);
-      if (prev) {
-        prev.className = 'ld-step ld-step--done';
-        prev.querySelector('.ld-step-icon').textContent = '✓';
-      }
-      if (curr) {
-        curr.className = 'ld-step ld-step--active';
-        curr.querySelector('.ld-step-icon').textContent = '';
-      }
+      if (prev) { prev.className = 'ld-step ld-step--done'; prev.querySelector('.ld-step-icon').textContent = '✓'; }
+      if (curr) { curr.className = 'ld-step ld-step--active'; curr.querySelector('.ld-step-icon').textContent = ''; }
     };
 
     _stepTimers.forEach(clearTimeout);
-    _stepTimers = [
-      setTimeout(() => advance(4), 2800),
-      setTimeout(() => advance(5), 5200),
-    ];
+    _stepTimers = [ setTimeout(() => advance(4), 2800), setTimeout(() => advance(5), 5200) ];
   }
 
   function stopLoadingSteps() {
     _stepTimers.forEach(clearTimeout);
     _stepTimers = [];
-    // Mark all done
     [1,2,3,4,5].forEach(n => {
       const el = document.getElementById('ldStep' + n);
-      if (el) {
-        el.className = 'ld-step ld-step--done';
-        const icon = el.querySelector('.ld-step-icon');
-        if (icon) icon.textContent = '✓';
-      }
+      if (el) { el.className = 'ld-step ld-step--done'; const icon = el.querySelector('.ld-step-icon'); if (icon) icon.textContent = '✓'; }
     });
   }
 
-  /* Patch generateMeal to call step animation */
   const _origGenerate = window.generateMeal;
   window.generateMeal = async function () {
     startLoadingSteps();
-    try {
-      await _origGenerate.apply(this, arguments);
-    } finally {
-      stopLoadingSteps();
-    }
+    try { await _origGenerate.apply(this, arguments); }
+    finally { stopLoadingSteps(); }
   };
 </script>
 
-<!-- ══════════════════════════════════════════════════════════
-     Recipe QR Modal
-     ══════════════════════════════════════════════════════════ -->
-<div id="recipeQRModal"
-     hidden
-     role="dialog"
-     aria-labelledby="recipeQRTitle"
-     aria-describedby="recipeQRDesc"
-     class="qrm-backdrop"
-     onclick="if(event.target===this)closeRecipeQR()">
-
+<!-- ══ Recipe QR Modal (unchanged, already dark-compatible) ══════════════════ -->
+<div id="recipeQRModal" hidden role="dialog" aria-labelledby="recipeQRTitle" aria-describedby="recipeQRDesc"
+     class="qrm-backdrop" onclick="if(event.target===this)closeRecipeQR()">
   <div class="qrm-panel" role="document">
-
-    <!-- Header -->
     <div class="qrm-header">
       <div class="qrm-header-text">
         <p class="qrm-kicker">Scan to open recipe</p>
         <h2 class="qrm-title" id="recipeQRTitle">Recipe</h2>
       </div>
-      <button onclick="closeRecipeQR()"
-              id="recipeQRClose"
-              class="qrm-close"
-              aria-label="Close QR modal">
+      <button onclick="closeRecipeQR()" id="recipeQRClose" class="qrm-close" aria-label="Close QR modal">
         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
         </svg>
       </button>
     </div>
-
-    <!-- QR canvas -->
     <div class="qrm-qr-wrap">
       <div id="recipeQRCanvas" class="qrm-canvas" aria-label="QR code"></div>
       <p class="qrm-scan-hint" id="recipeQRDesc">Point your phone camera at the code to open the recipe page.</p>
     </div>
-
-    <!-- Direct link -->
     <div class="qrm-link-row">
-      <a id="recipeQRLink"
-         href="#"
-         target="_blank"
-         rel="noopener"
-         class="qrm-link"
-         aria-label="Open recipe page in new tab">
+      <a id="recipeQRLink" href="#" target="_blank" rel="noopener" class="qrm-link" aria-label="Open recipe page in new tab">
         Open recipe page ↗
       </a>
     </div>
-
   </div>
 </div>
 
 <style>
-/* ── QR Modal styles (scoped to qrm- prefix) ─────────────────── */
-.qrm-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  animation: qrmFadeIn 180ms ease-out;
-}
-
-@keyframes qrmFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
+.qrm-backdrop { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,.65); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; animation: qrmFadeIn 180ms ease-out; }
+@keyframes qrmFadeIn { from{opacity:0;} to{opacity:1;} }
 .qrm-backdrop[hidden] { display: none !important; }
-
-.qrm-panel {
-  background: #ffffff;
-  border-radius: 1.5rem;
-  width: 100%;
-  max-width: 320px;
-  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.22);
-  overflow: hidden;
-  animation: qrmSlideUp 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes qrmSlideUp {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)   scale(1); }
-}
-
-.qrm-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 1.1rem 1.25rem 0.9rem;
-  background: linear-gradient(135deg, #0F5E46, #1D9E75);
-  color: white;
-}
-
-.qrm-kicker {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.72);
-  margin-bottom: 0.2rem;
-}
-
-.qrm-title {
-  font-family: Poppins, sans-serif;
-  font-weight: 800;
-  font-size: 1rem;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  color: white;
-  margin: 0;
-  word-break: break-word;
-}
-
-.qrm-close {
-  flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 140ms ease;
-  margin-top: 0.1rem;
-}
-
-.qrm-close:hover { background: rgba(255,255,255,0.28); }
-.qrm-close:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
-}
-
-.qrm-qr-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1.4rem 1.25rem 0.9rem;
-}
-
-.qrm-canvas {
-  border-radius: 0.85rem;
-  overflow: hidden;
-  border: 3px solid #D1FAE5;
-  box-shadow: 0 8px 24px rgba(15, 94, 70, 0.12);
-  /* qrcode.js renders an img inside — make it fit */
-  line-height: 0;
-}
-
-.qrm-canvas img,
-.qrm-canvas canvas {
-  display: block;
-  border-radius: 0.6rem;
-}
-
-.qrm-scan-hint {
-  margin-top: 0.85rem;
-  font-size: 0.78rem;
-  color: #64748B;
-  text-align: center;
-  line-height: 1.5;
-  max-width: 22ch;
-}
-
-.qrm-link-row {
-  padding: 0 1.25rem 1.25rem;
-  text-align: center;
-}
-
-.qrm-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #1D9E75;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  background: #ECFDF5;
-  border: 1px solid #BBF7D0;
-  transition: background 130ms ease;
-  word-break: break-all;
-}
-
-.qrm-link:hover {
-  background: #D1FAE5;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .qrm-backdrop, .qrm-panel { animation: none !important; }
-}
+.qrm-panel { background: #0d1117; border: 1px solid #253347; border-radius: 1.5rem; width: 100%; max-width: 320px; box-shadow: 0 32px 80px rgba(0,0,0,.5); overflow: hidden; animation: qrmSlideUp 220ms cubic-bezier(.34,1.56,.64,1); }
+@keyframes qrmSlideUp { from{opacity:0;transform:translateY(24px) scale(.97);} to{opacity:1;transform:translateY(0) scale(1);} }
+.qrm-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; padding: 1.1rem 1.25rem .9rem; background: linear-gradient(135deg, #0a2e1f, #1D9E75); color: #fff; }
+.qrm-kicker { font-size: .65rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.72); margin-bottom: .2rem; }
+.qrm-title { font-family: Poppins, sans-serif; font-weight: 800; font-size: 1rem; line-height: 1.25; letter-spacing: -.02em; color: #fff; margin: 0; word-break: break-word; }
+.qrm-close { flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 140ms ease; margin-top: .1rem; }
+.qrm-close:hover { background: rgba(255,255,255,.28); }
+.qrm-qr-wrap { display: flex; flex-direction: column; align-items: center; padding: 1.4rem 1.25rem .9rem; }
+.qrm-canvas { border-radius: .85rem; overflow: hidden; border: 3px solid #1a2332; box-shadow: 0 8px 24px rgba(0,0,0,.3); line-height: 0; background: #fff; padding: 8px; }
+.qrm-canvas img, .qrm-canvas canvas { display: block; border-radius: .6rem; }
+.qrm-scan-hint { margin-top: .85rem; font-size: .78rem; color: #94A3B8; text-align: center; line-height: 1.5; max-width: 22ch; }
+.qrm-link-row { padding: 0 1.25rem 1.25rem; text-align: center; }
+.qrm-link { display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; font-weight: 700; color: #3EFFA8; text-decoration: none; padding: .5rem 1rem; border-radius: 9999px; background: rgba(29,158,117,.12); border: 1px solid rgba(29,158,117,.25); transition: background 130ms ease; word-break: break-all; }
+.qrm-link:hover { background: rgba(29,158,117,.2); }
+@media (prefers-reduced-motion: reduce) { .qrm-backdrop, .qrm-panel { animation: none !important; } }
 </style>
 
 {% endblock %}

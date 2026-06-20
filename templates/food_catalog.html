@@ -7,45 +7,279 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
         integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSi2jPyMtAn6rZe8XHVE0IPCbPhRV1YlCEq8g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Food Catalog — fc- prefix, dark premium
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --bg:        #060a0e;
+  --surface:   #0d1117;
+  --border:    #1a2332;
+  --border-hi: #253347;
+  --green:     #1D9E75;
+  --green-hi:  #3EFFA8;
+  --text:      #E2E8F0;
+  --muted:     #94A3B8;
+  --dim:       #4A5568;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.fc-hero {
+  position: relative; overflow: hidden;
+  border-radius: 1.25rem; border: 1px solid var(--border-hi);
+  background: linear-gradient(135deg, #071f17 0%, #0a2e1f 40%, #0d3d2a 100%);
+  padding: 2.25rem 2rem; color: #fff;
+}
+.fc-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 30%, rgba(29,158,117,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(249,115,22,.07) 0%, transparent 40%);
+  pointer-events: none;
+}
+.fc-hero::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 26px 26px; pointer-events: none;
+}
+.fc-hero-inner { position: relative; z-index: 1; display: grid; gap: 1.5rem; }
+@media (min-width: 1024px) { .fc-hero-inner { grid-template-columns: 1.1fr 0.9fr; align-items: center; } }
+
+.fc-hero-label {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .25rem .75rem; background: rgba(62,255,168,.1);
+  border: 1px solid rgba(62,255,168,.2); border-radius: 9999px;
+  font-size: .65rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--green-hi); margin-bottom: 1.1rem;
+}
+.fc-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-hi); animation: fc-pulse 2s ease-in-out infinite; }
+@keyframes fc-pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+
+.fc-hero h1 {
+  font-family: Poppins, sans-serif; font-weight: 900;
+  font-size: clamp(1.9rem, 4.5vw, 2.75rem); letter-spacing: -0.05em; line-height: 1.08;
+  color: #fff; margin-bottom: .9rem;
+}
+.fc-hero h1 span {
+  background: linear-gradient(90deg, #3EFFA8, #1D9E75);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.fc-hero-desc { font-size: .92rem; line-height: 1.75; color: rgba(255,255,255,.65); max-width: 50ch; }
+
+.fc-hero-cards { display: grid; gap: .65rem; grid-template-columns: repeat(3,1fr); }
+@media (max-width: 1023px) { .fc-hero-cards { grid-template-columns: repeat(3,1fr); margin-top: .5rem; } }
+.fc-hero-card {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 1rem; padding: 1rem .9rem;
+}
+.fc-hero-card-title { font-size: .82rem; font-weight: 800; color: #fff; margin-bottom: .25rem; }
+.fc-hero-card-sub { font-size: .7rem; color: rgba(255,255,255,.55); line-height: 1.5; }
+
+/* ── Filter bar ──────────────────────────────────────────────────────────── */
+.fc-filter-bar {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 1.25rem; padding: 1.5rem;
+}
+.fc-filter-grid { display: grid; gap: .85rem; grid-template-columns: 1fr; }
+@media (min-width: 1024px) { .fc-filter-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; } }
+
+.fc-input, .fc-select {
+  width: 100%; background: #0b1120; border: 1px solid var(--border-hi);
+  border-radius: .65rem; color: var(--text); padding: .7rem .9rem;
+  font-size: .85rem; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease;
+  -webkit-appearance: none;
+}
+.fc-input::placeholder { color: var(--dim); }
+.fc-input:focus, .fc-select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
+.fc-select option { background: #0d1117; color: var(--text); }
+
+.fc-tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.fc-tag {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .3rem .8rem; background: rgba(255,255,255,.04);
+  border: 1px solid var(--border); border-radius: 9999px;
+  font-size: .7rem; font-weight: 600; color: var(--dim);
+}
+
+/* ── Results counter ─────────────────────────────────────────────────────── */
+.fc-results-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 1.5rem 0 1rem; padding: 0 .25rem;
+}
+.fc-results-count { font-size: .8rem; color: var(--muted); font-weight: 600; }
+.fc-results-count strong { color: var(--green-hi); }
+
+/* ── Food grid + cards ───────────────────────────────────────────────────── */
+#foodGrid { display: grid; gap: 1rem; }
+
+/* Override Tailwind utility classes JS injects on cards */
+#foodGrid .soft-card,
+#foodGrid article.soft-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  border-radius: 1.1rem !important;
+  transition: border-color 160ms ease, transform 160ms ease !important;
+}
+#foodGrid article.soft-card:hover {
+  border-color: var(--border-hi) !important;
+  transform: translateY(-2px);
+}
+#foodGrid .text-slate-900 { color: var(--text) !important; }
+#foodGrid .text-slate-700 { color: var(--text) !important; }
+#foodGrid .text-slate-600 { color: var(--muted) !important; }
+#foodGrid .text-slate-500 { color: var(--muted) !important; }
+#foodGrid .text-slate-400 { color: var(--dim) !important; }
+#foodGrid .text-primary   { color: var(--green-hi) !important; }
+#foodGrid .bg-primary\/10 { background: rgba(29,158,117,.14) !important; }
+#foodGrid .bg-slate-50    { background: #0b1120 !important; border: 1px solid var(--border); }
+#foodGrid .bg-slate-100   { background: rgba(255,255,255,.05) !important; color: var(--dim) !important; }
+#foodGrid .bg-slate-100.px-3 { color: var(--dim) !important; }
+#foodGrid .border-primary\/25 { border-color: rgba(29,158,117,.3) !important; }
+#foodGrid .bg-green-50 { background: rgba(29,158,117,.1) !important; }
+#foodGrid a.btn-ghost {
+  background: transparent !important;
+  border: 1px solid var(--border-hi) !important;
+  color: var(--text) !important;
+}
+#foodGrid a.btn-ghost:hover { border-color: var(--green) !important; color: var(--green-hi) !important; }
+#foodGrid button[onclick^="toggleCatalogQR"] {
+  background: rgba(29,158,117,.1) !important;
+  border: 1px solid rgba(29,158,117,.25) !important;
+  color: var(--green-hi) !important;
+}
+#foodGrid button[onclick^="toggleCatalogQR"]:hover { background: var(--green) !important; color: #fff !important; }
+
+/* QR drawer dark override */
+.nq-catalog-qr-drawer {
+  background: rgba(29,158,117,.07) !important;
+  border: 1px solid rgba(29,158,117,.2) !important;
+}
+.nq-catalog-qr-lbl { color: var(--green-hi) !important; }
+.nq-catalog-qr-btn--ghost {
+  background: var(--surface) !important;
+  color: var(--green-hi) !important;
+  border: 1px solid var(--border-hi) !important;
+}
+.nq-catalog-qr-btn--ghost:hover { background: #0b1120 !important; }
+
+/* ── Skeleton loading dark override ─────────────────────────────────────── */
+.ld-catalog-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+}
+.ld-shimmer {
+  background: linear-gradient(90deg, #14202c 25%, #1c2c3c 37%, #14202c 63%) !important;
+  background-size: 400% 100% !important;
+}
+
+/* ── Load more button ───────────────────────────────────────────────────── */
+#loadMoreBtn {
+  background: transparent !important;
+  border: 1px solid var(--border-hi) !important;
+  color: var(--text) !important;
+  border-radius: 9999px !important;
+  font-weight: 700 !important;
+}
+#loadMoreBtn:hover { border-color: var(--green) !important; color: var(--green-hi) !important; background: rgba(29,158,117,.06) !important; }
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.fc-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--surface);
+  border: 1px dashed var(--border-hi);
+  border-radius: 1.1rem;
+}
+.fc-empty-icon { font-size: 2.5rem; margin-bottom: .85rem; }
+.fc-empty-title { font-family: Poppins, sans-serif; font-weight: 800; color: var(--text); font-size: 1rem; margin-bottom: .35rem; }
+.fc-empty-sub { font-size: .82rem; color: var(--muted); max-width: 36ch; margin: 0 auto; line-height: 1.6; }
+</style>
 {% endblock %}
 
 {% block content %}
-<section class="hero-banner page-section">
-  <div class="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════════ -->
+<section class="fc-hero">
+  <div class="fc-hero-inner">
     <div>
-      <span class="sublabel text-white/90">Local nutrition</span>
-      <h1 class="heading mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Food Catalog</h1>
-      <p class="mt-4 max-w-2xl text-white/88">Search Karnataka foods, apply dietary filters, and inspect nutrition cards for planning balanced school menus.</p>
+      <div class="fc-hero-label"><span class="fc-hero-dot" aria-hidden="true"></span>Local Nutrition Database</div>
+      <h1>Karnataka<br/><span>Food Catalog</span></h1>
+      <p class="fc-hero-desc">
+        Search 53+ Karnataka foods, apply dietary filters, and inspect nutrition
+        cards with calories, protein, calcium, and iron for planning balanced school menus.
+      </p>
     </div>
-    <div class="soft-card bg-white/90 p-5 text-slate-900">
-      <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-        <div class="rounded-2xl bg-slate-50 p-4"><div class="font-bold">Search</div><p class="text-sm text-slate-600">Find foods by name or ingredient.</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><div class="font-bold">Filters</div><p class="text-sm text-slate-600">Diet, region, meal type, highlight, and category.</p></div>
-        <div class="rounded-2xl bg-slate-50 p-4"><div class="font-bold">Nutrition cards</div><p class="text-sm text-slate-600">View calories, protein, calcium, iron, and serving size.</p></div>
+
+    <div class="fc-hero-cards">
+      <div class="fc-hero-card">
+        <div class="fc-hero-card-title">🔍 Search</div>
+        <div class="fc-hero-card-sub">Find foods by name or ingredient instantly.</div>
+      </div>
+      <div class="fc-hero-card">
+        <div class="fc-hero-card-title">🧭 Filters</div>
+        <div class="fc-hero-card-sub">Diet, region, meal type, and nutrient highlight.</div>
+      </div>
+      <div class="fc-hero-card">
+        <div class="fc-hero-card-title">📊 Nutrition cards</div>
+        <div class="fc-hero-card-sub">Calories, protein, calcium, iron per serving.</div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="mt-6 soft-card p-6">
-  <div class="grid gap-4 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
-    <input id="foodSearch" class="input-field" type="search" placeholder="Search foods, ingredients, or categories" oninput="loadFoods(true)"/>
-    <select id="filterDiet" class="select-field" onchange="loadFoods(true)"><option value="">All diets</option><option value="vegetarian">Vegetarian</option><option value="eggetarian">Eggetarian</option><option value="non-vegetarian">Non-Veg</option></select>
-    <select id="filterRegion" class="select-field" onchange="loadFoods(true)"><option value="">All regions</option><option value="mangalore">Mangalore</option><option value="udupi">Udupi</option><option value="shivamogga">Shivamogga</option><option value="bengaluru_rural">Bengaluru Rural</option><option value="mysuru">Mysuru</option><option value="hubli_dharwad">Hubli-Dharwad</option></select>
-    <select id="filterMealType" class="select-field" onchange="loadFoods(true)"><option value="">Meal type</option><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snack">Snack</option></select>
-    <select id="filterHighlight" class="select-field" onchange="loadFoods(true)"><option value="">All highlights</option><option value="high-calcium">High Calcium</option><option value="high-iron">High Iron</option><option value="high-protein">High Protein</option><option value="anti-anaemia">Anti-Anaemia</option></select>
+<!-- ══ FILTER BAR ══════════════════════════════════════════════════════════ -->
+<section class="mt-6 fc-filter-bar">
+  <div class="fc-filter-grid">
+    <input id="foodSearch" class="fc-input" type="search" placeholder="🔍 Search foods, ingredients, or categories" oninput="loadFoods(true)"/>
+    <select id="filterDiet" class="fc-select" onchange="loadFoods(true)">
+      <option value="">All diets</option>
+      <option value="vegetarian">Vegetarian</option>
+      <option value="eggetarian">Eggetarian</option>
+      <option value="non-vegetarian">Non-Veg</option>
+    </select>
+    <select id="filterRegion" class="fc-select" onchange="loadFoods(true)">
+      <option value="">All regions</option>
+      <option value="mangalore">Mangalore</option>
+      <option value="udupi">Udupi</option>
+      <option value="shivamogga">Shivamogga</option>
+      <option value="bengaluru_rural">Bengaluru Rural</option>
+      <option value="mysuru">Mysuru</option>
+      <option value="hubli_dharwad">Hubli-Dharwad</option>
+    </select>
+    <select id="filterMealType" class="fc-select" onchange="loadFoods(true)">
+      <option value="">Meal type</option>
+      <option value="breakfast">Breakfast</option>
+      <option value="lunch">Lunch</option>
+      <option value="dinner">Dinner</option>
+      <option value="snack">Snack</option>
+    </select>
+    <select id="filterHighlight" class="fc-select" onchange="loadFoods(true)">
+      <option value="">All highlights</option>
+      <option value="high-calcium">High Calcium</option>
+      <option value="high-iron">High Iron</option>
+      <option value="high-protein">High Protein</option>
+      <option value="anti-anaemia">Anti-Anaemia</option>
+    </select>
   </div>
-  <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-slate-500">
-    <span class="rounded-full bg-slate-100 px-3 py-1">Karnataka food categories</span>
-    <span class="rounded-full bg-slate-100 px-3 py-1">Local grains</span>
-    <span class="rounded-full bg-slate-100 px-3 py-1">Seasonal foods</span>
-    <span class="rounded-full bg-slate-100 px-3 py-1">Nutrition metadata</span>
+  <div class="fc-tags">
+    <span class="fc-tag">🌾 Local grains</span>
+    <span class="fc-tag">🌱 Seasonal foods</span>
+    <span class="fc-tag">📋 Nutrition metadata</span>
+    <span class="fc-tag">🗣️ Bilingual names</span>
   </div>
 </section>
 
-<section class="mt-6">
+<!-- ══ RESULTS ═════════════════════════════════════════════════════════════ -->
+<section class="mt-2">
+  <div class="fc-results-bar">
+    <span class="fc-results-count" id="fcResultsCount">Loading foods…</span>
+  </div>
   <div id="foodGrid" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"></div>
-  <div class="mt-6 text-center"><button id="loadMoreBtn" onclick="loadMoreFoods()" class="btn-secondary px-6 py-3">Load More</button></div>
+  <div class="mt-6 text-center">
+    <button id="loadMoreBtn" onclick="loadMoreFoods()" class="btn-secondary px-6 py-3">Load More</button>
+  </div>
 </section>
 {% endblock %}
 
@@ -53,44 +287,21 @@
 <script src="/static/js/meal.js"></script>
 <script src="/static/js/qr_system.js"></script>
 <style>
-/* ── Catalog QR drawer ─────────────────────────────────────── */
+/* ── Catalog QR drawer (kept structurally same, recolored above) ───────── */
 .nq-catalog-qr-drawer {
-  margin-top: .65rem;
-  padding: 1rem;
-  background: #F0FDF4;
-  border: 1.5px solid #BBF7D0;
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .55rem;
+  margin-top: .65rem; padding: 1rem; border-radius: 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
   animation: nqCatalogIn 200ms cubic-bezier(.22,1,.36,1) both;
 }
-@keyframes nqCatalogIn {
-  from { opacity:0; transform:translateY(-6px) scale(.97); }
-  to   { opacity:1; transform:translateY(0)    scale(1);   }
-}
+@keyframes nqCatalogIn { from{opacity:0;transform:translateY(-6px) scale(.97);} to{opacity:1;transform:translateY(0) scale(1);} }
 .nq-catalog-qr-drawer[hidden] { display:none !important; }
-.nq-catalog-qr-drawer canvas,
-.nq-catalog-qr-drawer img { display:block; border-radius:6px; }
-.nq-catalog-qr-lbl {
-  font-size:.68rem; font-weight:700; color:#065F46;
-  letter-spacing:.05em; text-transform:uppercase;
-}
+.nq-catalog-qr-drawer canvas, .nq-catalog-qr-drawer img { display:block; border-radius:6px; }
+.nq-catalog-qr-lbl { font-size:.68rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
 .nq-catalog-qr-actions { display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; }
-.nq-catalog-qr-btn {
-  display:inline-flex; align-items:center; gap:.25rem;
-  padding:.3rem .7rem; border-radius:9999px;
-  font-size:.68rem; font-weight:700; cursor:pointer;
-  transition:all 140ms ease; border:none; text-decoration:none;
-}
+.nq-catalog-qr-btn { display:inline-flex; align-items:center; gap:.25rem; padding:.3rem .7rem; border-radius:9999px; font-size:.68rem; font-weight:700; cursor:pointer; transition:all 140ms ease; border:none; text-decoration:none; }
 .nq-catalog-qr-btn--green { background:#1D9E75; color:white; }
 .nq-catalog-qr-btn--green:hover { background:#166F53; }
-.nq-catalog-qr-btn--ghost { background:white; color:#065F46; border:1px solid #BBF7D0; }
-.nq-catalog-qr-btn--ghost:hover { background:#DCFCE7; }
-@media (prefers-reduced-motion:reduce) {
-  .nq-catalog-qr-drawer { animation:none !important; }
-}
+@media (prefers-reduced-motion:reduce) { .nq-catalog-qr-drawer { animation:none !important; } }
 </style>
 <script>
   let foodPage = 1;
@@ -99,7 +310,6 @@
     return String(value || '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;");
   }
 
-  /* ── QR toggle for catalog cards ─────────────────────────── */
   function toggleCatalogQR(btn, foodName) {
     const card   = btn.closest('article');
     const drawer = card.querySelector('.nq-catalog-qr-drawer');
@@ -119,7 +329,7 @@
     const url    = origin + '/recipes/' + encodeURIComponent(foodName.replace(/ /g, '_'));
 
     const canWrap = document.createElement('div');
-    canWrap.style.cssText = 'padding:8px;background:white;border:1.5px solid #BBF7D0;border-radius:.75rem;line-height:0;';
+    canWrap.style.cssText = 'padding:8px;background:white;border:1.5px solid #1a2332;border-radius:.75rem;line-height:0;';
     if (typeof QRCode !== 'undefined') {
       new QRCode(canWrap, {
         text: url, width: 120, height: 120,
@@ -152,7 +362,6 @@
     drawer.appendChild(actions);
   }
 
-  /** Use the same resolver as meal.js */
   function foodCatalogImg(name) {
     return foodImgHtml(name, 'w-14 h-14', 'contain');
   }
@@ -205,7 +414,6 @@
     if (reset) {
       foodPage = 1;
       const grid = document.getElementById('foodGrid');
-      // Show skeleton cards while loading
       grid.innerHTML = `<div class="ld-catalog-grid" style="grid-column:1/-1;" id="catalogSkeleton">
         ${Array.from({length: 8}).map(() => `
           <div class="ld-catalog-card">
@@ -225,6 +433,8 @@
             </div>
           </div>`).join('')}
       </div>`;
+      const rc = document.getElementById('fcResultsCount');
+      if (rc) rc.textContent = 'Loading foods…';
     }
 
     const params = new URLSearchParams();
@@ -247,14 +457,28 @@
     const data = await response.json();
     const grid = document.getElementById('foodGrid');
 
-    // Remove skeleton on first load
     if (reset) {
       const skel = document.getElementById('catalogSkeleton');
       if (skel) skel.remove();
     }
 
+    if (reset && (!data.foods || data.foods.length === 0)) {
+      grid.innerHTML = `<div class="fc-empty">
+        <div class="fc-empty-icon">🔍</div>
+        <div class="fc-empty-title">No foods match these filters</div>
+        <div class="fc-empty-sub">Try clearing a filter or searching a different ingredient name.</div>
+      </div>`;
+      document.getElementById('loadMoreBtn').style.display = 'none';
+      const rc = document.getElementById('fcResultsCount');
+      if (rc) rc.textContent = '0 foods found';
+      return;
+    }
+
     data.foods.forEach((food) => grid.insertAdjacentHTML('beforeend', renderFoodCard(food)));
     document.getElementById('loadMoreBtn').style.display = foodPage >= data.total_pages ? 'none' : 'inline-flex';
+
+    const rc = document.getElementById('fcResultsCount');
+    if (rc) rc.innerHTML = `Showing <strong>${grid.querySelectorAll('article').length}</strong> of <strong>${data.total ?? data.foods.length}</strong> foods`;
   }
 
   function loadMoreFoods() {
