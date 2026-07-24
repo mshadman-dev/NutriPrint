@@ -38,9 +38,9 @@
 .da-d5 { transition-delay: 300ms; }
 
 /* ── Page shell ─────────────────────────────────────────────────────────── */
-.da-page { max-width: 1200px; margin: 0 auto; padding: 0 1rem 3rem; }
-@media (min-width: 640px)  { .da-page { padding: 0 1.5rem 3rem; } }
-@media (min-width: 1024px) { .da-page { padding: 0 2rem  3rem; } }
+.da-page { max-width: 1200px; margin: 0 auto; padding: 0 1rem 4rem; }
+@media (min-width: 640px)  { .da-page { padding: 0 1.5rem 4rem; } }
+@media (min-width: 1024px) { .da-page { padding: 0 2rem  4rem; } }
 
 /* ── Hero header ────────────────────────────────────────────────────────── */
 .da-hero {
@@ -49,8 +49,8 @@
   border-radius: 1.5rem;
   border: 1px solid var(--border-hi);
   background: linear-gradient(135deg, #071f17 0%, #0a2e1f 40%, #0d3d2a 100%);
-  padding: 2.25rem 2rem;
-  margin: 1.5rem 0 2rem;
+  padding: 2.5rem 2.25rem;
+  margin: 1.75rem 0 2.5rem;
   color: white;
 }
 .da-hero::before {
@@ -85,12 +85,12 @@
 }
 .da-hero-title {
   font-family: Poppins, sans-serif;
-  font-weight:900; font-size:clamp(1.5rem,3.5vw,2.1rem);
+  font-weight:900; font-size:clamp(1.6rem,3.8vw,2.3rem);
   letter-spacing:-.04em; line-height:1.15; color:white;
-  margin-bottom:.5rem;
+  margin-bottom:.6rem;
 }
 .da-hero-sub {
-  font-size:.9rem; color:rgba(255,255,255,.6); line-height:1.6;
+  font-size:.92rem; color:rgba(255,255,255,.65); line-height:1.65;
 }
 .da-hero-right {
   display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;
@@ -118,21 +118,22 @@
 
 /* ── Section label ──────────────────────────────────────────────────────── */
 .da-section-label {
-  font-size:.65rem; font-weight:800; letter-spacing:.18em;
+  font-size:.68rem; font-weight:800; letter-spacing:.18em;
   text-transform:uppercase; color: var(--green);
-  margin-bottom:.75rem;
+  margin-bottom:1rem;
+  padding-top:.5rem;
 }
 .da-card-title {
   font-family:Poppins,sans-serif; font-weight:800;
-  font-size:.9rem; color: var(--text);
+  font-size:.95rem; color: var(--text);
   display:flex; align-items:center; gap:.45rem;
 }
 
 /* ── Overview stat cards ────────────────────────────────────────────────── */
 .da-stats-grid {
-  display:grid; gap:.85rem;
+  display:grid; gap:1rem;
   grid-template-columns: repeat(2,1fr);
-  margin-bottom:1.75rem;
+  margin-bottom:2.25rem;
 }
 @media (min-width:640px)  { .da-stats-grid { grid-template-columns: repeat(3,1fr); } }
 @media (min-width:1024px) { .da-stats-grid { grid-template-columns: repeat(5,1fr); } }
@@ -142,19 +143,23 @@
   background: var(--surface);
   border:1px solid var(--border);
   border-radius:1.25rem;
-  padding:1.4rem 1.2rem;
+  padding:1.6rem 1.3rem 1.4rem;
   display:flex; flex-direction:column; align-items:center;
-  gap:.5rem; text-align:center;
-  transition: transform 160ms ease, border-color 160ms ease;
+  gap:.6rem; text-align:center;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   cursor:default;
 }
 .da-stat-card::after {
   content:'';
-  position:absolute; bottom:0; left:0; right:0; height:2px;
+  position:absolute; bottom:0; left:0; right:0; height:3px;
   transform:scaleX(0); transform-origin:left;
-  transition:transform 220ms ease;
+  transition:transform 250ms ease;
 }
-.da-stat-card:hover { transform:translateY(-3px); border-color: var(--border-hi); }
+.da-stat-card:hover {
+  transform:translateY(-4px);
+  border-color: var(--border-hi);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
 .da-stat-card:hover::after { transform:scaleX(1); }
 .da-stat-card--green::after  { background:linear-gradient(90deg,#1D9E75,#3EFFA8); }
 .da-stat-card--blue::after   { background:linear-gradient(90deg,#3B82F6,#93C5FD); }
@@ -162,11 +167,18 @@
 .da-stat-card--red::after    { background:linear-gradient(90deg,#EF4444,#FCA5A5); }
 .da-stat-card--purple::after { background:linear-gradient(90deg,#8B5CF6,#C4B5FD); }
 
-.da-stat-icon { font-size:1.6rem; line-height:1; }
+.da-stat-icon {
+  font-size:1.5rem; line-height:1;
+  width:2.8rem; height:2.8rem;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:0.75rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+}
 .da-stat-value {
   font-family:Poppins,sans-serif; font-weight:900;
-  font-size:clamp(1.65rem,4vw,2.2rem);
-  letter-spacing:-.03em; line-height:1;
+  font-size:clamp(1.8rem,4.5vw,2.4rem);
+  letter-spacing:-.04em; line-height:1;
 }
 .da-stat-value--green  { color: var(--green-hi); }
 .da-stat-value--blue   { color:#60A5FA; }
@@ -174,17 +186,18 @@
 .da-stat-value--red    { color:#F87171; }
 .da-stat-value--purple { color:#A78BFA; }
 .da-stat-label {
-  font-size:.66rem; font-weight:700; color: var(--muted);
-  text-transform:uppercase; letter-spacing:.07em; line-height:1.3;
+  font-size:.68rem; font-weight:700; color: var(--muted);
+  text-transform:uppercase; letter-spacing:.08em; line-height:1.3;
+  margin-top:.1rem;
 }
 
 /* ── Nutrition Score card ───────────────────────────────────────────────── */
 .da-score-card {
   background: linear-gradient(135deg, #071f17 0%, #0a2e1f 45%, #0d3d2a 100%);
   border: 1px solid var(--border-hi);
-  border-radius:1.5rem; padding:2rem 1.75rem;
+  border-radius:1.5rem; padding:2.25rem 2rem;
   color:white; position:relative; overflow:hidden;
-  display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap;
+  display:flex; align-items:center; gap:2rem; flex-wrap:wrap;
 }
 .da-score-card::before {
   content:'';position:absolute;inset:0;
@@ -195,7 +208,7 @@
 }
 .da-score-ring-wrap {
   position:relative; z-index:1; flex-shrink:0;
-  width:120px; height:120px;
+  width:130px; height:130px;
 }
 .da-score-ring-wrap svg { width:100%; height:100%; transform:rotate(-90deg); }
 .da-score-ring-bg   { fill:none; stroke:rgba(255,255,255,.1); stroke-width:10; }
@@ -210,15 +223,15 @@
 }
 .da-score-number {
   font-family:Poppins,sans-serif; font-weight:900;
-  font-size:1.85rem; color:white; line-height:1; letter-spacing:-.03em;
+  font-size:2rem; color:white; line-height:1; letter-spacing:-.03em;
 }
 .da-score-denom { font-size:.7rem; color:rgba(255,255,255,.5); font-weight:600; }
 .da-score-meta { position:relative; z-index:1; flex:1; min-width:180px; }
 .da-score-title {
   font-family:Poppins,sans-serif; font-weight:800;
-  font-size:1.2rem; margin-bottom:.4rem;
+  font-size:1.3rem; margin-bottom:.5rem;
 }
-.da-score-desc { font-size:.85rem; color:rgba(255,255,255,.6); line-height:1.65; }
+.da-score-desc { font-size:.88rem; color:rgba(255,255,255,.6); line-height:1.7; }
 .da-score-pills {
   display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.85rem;
 }
@@ -231,10 +244,10 @@
 }
 
 /* ── Two/three column grids ─────────────────────────────────────────────── */
-.da-grid-2 { display:grid; gap:1.25rem; grid-template-columns:1fr; }
+.da-grid-2 { display:grid; gap:1.5rem; grid-template-columns:1fr; }
 @media (min-width:768px) { .da-grid-2 { grid-template-columns:1fr 1fr; } }
 
-.da-grid-3 { display:grid; gap:1.25rem; grid-template-columns:1fr; }
+.da-grid-3 { display:grid; gap:1.5rem; grid-template-columns:1fr; }
 @media (min-width:768px)  { .da-grid-3 { grid-template-columns:1fr 1fr; } }
 @media (min-width:1100px) { .da-grid-3 { grid-template-columns:1fr 1fr 1fr; } }
 
@@ -244,38 +257,46 @@
   border:1px solid var(--border);
   border-radius:1.25rem;
   overflow:hidden;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.da-card:hover {
+  border-color: var(--border-hi);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.2);
 }
 .da-card-header {
-  padding:1.1rem 1.4rem .75rem;
+  padding:1.2rem 1.5rem .85rem;
   border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between; gap:.5rem;
 }
-.da-card-body { padding:1.25rem 1.4rem; }
+.da-card-body { padding:1.4rem 1.5rem; }
 
 /* ── BMI distribution cards ─────────────────────────────────────────────── */
 .da-bmi-dist-grid {
-  display:grid; gap:.75rem;
+  display:grid; gap:1rem;
   grid-template-columns: repeat(2,1fr);
 }
 @media (min-width:640px) { .da-bmi-dist-grid { grid-template-columns:repeat(4,1fr); } }
 
 .da-bmi-dist-card {
-  border-radius:1.1rem; padding:1.1rem;
+  border-radius:1.1rem; padding:1.25rem 1rem;
   text-align:center;
   border:1px solid;
-  transition: transform 150ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
-.da-bmi-dist-card:hover { transform:translateY(-3px); }
+.da-bmi-dist-card:hover {
+  transform:translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
 
 .da-bmi-dist-card--uw  { background:rgba(59,130,246,.07);  border-color:rgba(59,130,246,.22); }
 .da-bmi-dist-card--ok  { background:rgba(16,185,129,.07);  border-color:rgba(16,185,129,.22); }
 .da-bmi-dist-card--ow  { background:rgba(249,115,22,.07);  border-color:rgba(249,115,22,.22); }
 .da-bmi-dist-card--ob  { background:rgba(239,68,68,.07);   border-color:rgba(239,68,68,.22); }
 
-.da-bmi-dist-icon { font-size:1.5rem; margin-bottom:.35rem; }
+.da-bmi-dist-icon { font-size:1.6rem; margin-bottom:.45rem; }
 .da-bmi-dist-value {
   font-family:Poppins,sans-serif; font-weight:900;
-  font-size:1.85rem; letter-spacing:-.03em; line-height:1;
+  font-size:2rem; letter-spacing:-.04em; line-height:1;
 }
 .da-bmi-dist-card--uw .da-bmi-dist-value { color:#60A5FA; }
 .da-bmi-dist-card--ok .da-bmi-dist-value { color:#34D399; }
@@ -283,12 +304,12 @@
 .da-bmi-dist-card--ob .da-bmi-dist-value { color:#F87171; }
 
 .da-bmi-dist-label {
-  font-size:.66rem; font-weight:700; text-transform:uppercase;
-  letter-spacing:.08em; color: var(--muted); margin-top:.25rem;
+  font-size:.68rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.08em; color: var(--muted); margin-top:.35rem;
 }
 .da-bmi-dist-bar-wrap {
-  margin-top:.5rem;
-  height:4px; background:rgba(255,255,255,.06); border-radius:9999px; overflow:hidden;
+  margin-top:.6rem;
+  height:5px; background:rgba(255,255,255,.06); border-radius:9999px; overflow:hidden;
 }
 .da-bmi-dist-bar {
   height:100%; border-radius:9999px;
@@ -300,33 +321,34 @@
 .da-bmi-dist-card--ob .da-bmi-dist-bar { background:#EF4444; }
 
 /* ── Activity table ─────────────────────────────────────────────────────── */
-.da-activity-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+.da-activity-table { width:100%; border-collapse:collapse; font-size:.84rem; }
 .da-activity-table th {
-  text-align:left; padding:.5rem .85rem;
-  font-size:.62rem; font-weight:700; text-transform:uppercase;
+  text-align:left; padding:.65rem .95rem;
+  font-size:.64rem; font-weight:700; text-transform:uppercase;
   letter-spacing:.1em; color: var(--dim);
   border-bottom:1px solid var(--border);
 }
 .da-activity-table td {
-  padding:.7rem .85rem;
+  padding:.8rem .95rem;
   border-bottom:1px solid var(--border);
   vertical-align:middle;
 }
 .da-activity-table tr:last-child td { border-bottom:none; }
-.da-activity-table tr:hover td { background: rgba(255,255,255,.02); }
+.da-activity-table tr:hover td { background: rgba(29,158,117,.03); }
 .da-activity-name {
   font-weight:700; color: var(--text);
-  display:flex; align-items:center; gap:.5rem;
+  display:flex; align-items:center; gap:.6rem;
 }
 .da-activity-avatar {
-  width:2rem; height:2rem; border-radius:50%;
+  width:2.2rem; height:2.2rem; border-radius:50%;
   background:linear-gradient(135deg,#1D9E75,#0a4534);
-  color:white; font-weight:800; font-size:.8rem;
+  color:white; font-weight:800; font-size:.82rem;
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
+  box-shadow: 0 2px 8px rgba(29,158,117,0.2);
 }
 .da-activity-bmi  { font-family:Poppins,sans-serif; font-weight:700; color: var(--text); }
-.da-activity-date { font-size:.72rem; color: var(--dim); }
+.da-activity-date { font-size:.74rem; color: var(--dim); }
 
 .da-search-input {
   font-size:.78rem;border:1px solid var(--border-hi);
@@ -350,21 +372,21 @@
 .da-badge--obese       { background:rgba(239,68,68,.15);  color:#FCA5A5; }
 
 /* ── Insight cards ──────────────────────────────────────────────────────── */
-.da-insight-list { display:flex; flex-direction:column; gap:.65rem; }
+.da-insight-list { display:flex; flex-direction:column; gap:.75rem; }
 .da-insight-item {
-  display:flex; align-items:flex-start; gap:.75rem;
-  padding:.85rem 1rem;
-  border-radius:.9rem;
+  display:flex; align-items:flex-start; gap:.85rem;
+  padding:1rem 1.1rem;
+  border-radius:1rem;
   border:1px solid;
-  transition: transform 140ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
-.da-insight-item:hover { transform:translateX(3px); }
+.da-insight-item:hover { transform:translateX(3px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 .da-insight-item--info    { background:rgba(29,158,117,.07);  border-color:rgba(29,158,117,.2); }
 .da-insight-item--warn    { background:rgba(234,179,8,.07);   border-color:rgba(234,179,8,.2); }
 .da-insight-item--alert   { background:rgba(239,68,68,.07);   border-color:rgba(239,68,68,.2); }
 .da-insight-item--neutral { background: var(--surface-2);     border-color: var(--border); }
-.da-insight-icon { font-size:1.1rem; flex-shrink:0; margin-top:.05rem; line-height:1; }
-.da-insight-text { font-size:.83rem; line-height:1.6; color: var(--muted); }
+.da-insight-icon { font-size:1.2rem; flex-shrink:0; margin-top:.05rem; line-height:1; }
+.da-insight-text { font-size:.85rem; line-height:1.65; color: var(--muted); }
 .da-insight-text strong { color: var(--text); }
 
 /* ── Donut chart container ──────────────────────────────────────────────── */
@@ -374,11 +396,11 @@
 .da-legend-dot { width:.65rem; height:.65rem; border-radius:50%; flex-shrink:0; }
 
 /* ── Bar progress ───────────────────────────────────────────────────────── */
-.da-bar-row { display:flex; flex-direction:column; gap:1rem; padding:.25rem 0; }
-.da-bar-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem; }
-.da-bar-name { font-size:.83rem; font-weight:700; color: var(--text); }
+.da-bar-row { display:flex; flex-direction:column; gap:1.1rem; padding:.25rem 0; }
+.da-bar-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:.45rem; }
+.da-bar-name { font-size:.85rem; font-weight:700; color: var(--text); }
 .da-bar-count { font-size:.78rem; color: var(--dim); }
-.da-bar-track { height:8px; background: rgba(255,255,255,.06); border-radius:9999px; overflow:hidden; }
+.da-bar-track { height:10px; background: rgba(255,255,255,.06); border-radius:9999px; overflow:hidden; }
 .da-bar-fill { height:100%; border-radius:9999px; transition:width 900ms cubic-bezier(0.22,1,0.36,1); }
 
 /* ── School score meter ─────────────────────────────────────────────────── */
@@ -589,7 +611,7 @@
     <!-- ─────────────────────────────────────────────────────────────────
          § 2 + § 6  SCHOOL NUTRITION SCORE + BMI DISTRIBUTION
          ───────────────────────────────────────────────────────────────── -->
-    <div class="da-score-card da-reveal" style="margin-bottom:1.75rem;">
+    <div class="da-score-card da-reveal" style="margin-bottom:2.25rem;">
       <!-- Score ring -->
       <div class="da-score-ring-wrap">
         <svg viewBox="0 0 120 120">
@@ -616,7 +638,7 @@
     </div>
 
     <!-- BMI distribution quick cards -->
-    <div class="da-bmi-dist-grid da-reveal" style="margin-bottom:1.75rem;">
+    <div class="da-bmi-dist-grid da-reveal" style="margin-bottom:2.25rem;">
       <div class="da-bmi-dist-card da-bmi-dist-card--uw">
         <div class="da-bmi-dist-icon">📉</div>
         <div class="da-bmi-dist-value" id="distUW">—</div>
@@ -654,7 +676,7 @@
     <!-- ─────────────────────────────────────────────────────────────────
          § 3 + § 4 + chart  —  3-column row
          ───────────────────────────────────────────────────────────────── -->
-    <div class="da-grid-3" style="margin-bottom:1.75rem;">
+    <div class="da-grid-3" style="margin-bottom:2.25rem;">
 
       <!-- Recent Student Activity -->
       <div class="da-card da-reveal da-d1" style="grid-column:span 2; min-width:0;">
@@ -703,7 +725,7 @@
     <!-- ─────────────────────────────────────────────────────────────────
          § 4 NUTRITION INSIGHTS  +  bar chart breakdown
          ───────────────────────────────────────────────────────────────── -->
-    <div class="da-grid-2" style="margin-bottom:1.75rem;">
+    <div class="da-grid-2" style="margin-bottom:2.25rem;">
 
       <!-- Nutrition Insights -->
       <div class="da-card da-reveal da-d1">
@@ -830,6 +852,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/progress_tracker.js"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════════════════
    NutriPrint — Teacher Analytics Dashboard JS
@@ -1378,8 +1401,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
   document.getElementById('dashContent').classList.remove('hidden');
   daInitReveal();
+
+  // Ensure demo data is seeded before loading dashboard stats
+  if (typeof ptSeedDemoData === 'function') ptSeedDemoData();
+
   await daLoadDashboard();
 });
 </script>
-<script src="/static/js/progress_tracker.js"></script>
 {% endblock %}

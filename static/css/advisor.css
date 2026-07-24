@@ -1,9 +1,9 @@
 .advisor-shell {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 249, 0.98));
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: linear-gradient(180deg, var(--surface), rgba(13, 17, 23, 0.98));
+  border: 1px solid var(--border);
   border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .advisor-header {
@@ -59,10 +59,10 @@
 
 .advisor-chat-card,
 .advisor-selected-card {
-  background: white;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 1rem;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm);
   padding: 0.9rem;
 }
 
@@ -82,17 +82,17 @@
 }
 
 .advisor-select {
-  border: 1px solid #D1D5DB;
-  background: #F8FAFC;
-  color: #334155;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text);
   padding: 0.55rem 0.65rem;
   font-weight: 700;
 }
 
 .advisor-chip {
-  border: 1px solid rgba(29, 158, 117, 0.25);
-  background: #F0FDF4;
-  color: #0F5E46;
+  border: 1px solid rgba(29, 158, 117, 0.3);
+  background: rgba(29, 158, 117, 0.1);
+  color: #3EFFA8;
   padding: 0.55rem 0.7rem;
   font-weight: 800;
 }
@@ -105,8 +105,8 @@
   flex-direction: column;
   gap: 0.55rem;
   border-radius: 0.9rem;
-  background: #F8FAF9;
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: var(--surface-light);
+  border: 1px solid var(--border);
   padding: 0.75rem;
 }
 
@@ -127,9 +127,9 @@
 
 .advisor-message.assistant {
   align-self: flex-start;
-  background: white;
-  color: #334155;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .advisor-dot {
@@ -165,14 +165,20 @@
 .advisor-input {
   min-width: 0;
   flex: 1;
-  border: 1px solid #D1D5DB;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text);
   padding: 0.7rem 0.8rem;
   outline: none;
 }
 
+.advisor-input::placeholder {
+  color: var(--text-muted);
+}
+
 .advisor-input:focus {
   border-color: #1D9E75;
-  box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
+  box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.2);
 }
 
 .advisor-send {
@@ -191,39 +197,39 @@
 
 .advisor-empty {
   border-radius: 0.9rem;
-  background: #F8FAF9;
-  border: 1px dashed rgba(29, 158, 117, 0.28);
-  color: #64748B;
+  background: var(--surface-light);
+  border: 1px dashed rgba(29, 158, 117, 0.3);
+  color: var(--text-muted);
   font-size: 0.84rem;
   line-height: 1.5;
   padding: 0.9rem;
 }
 
 .advisor-rec-card {
-  border: 1px solid rgba(29, 158, 117, 0.16);
+  border: 1px solid rgba(29, 158, 117, 0.2);
   border-radius: 1rem;
   padding: 0.85rem;
-  background: linear-gradient(180deg, #FFFFFF, #F8FAF9);
+  background: var(--surface);
 }
 
 .advisor-rec-title {
   font-size: 0.9rem;
   font-weight: 900;
-  color: #0F172A;
+  color: var(--text);
 }
 
 .advisor-rec-action {
   margin-top: 0.25rem;
   font-size: 0.82rem;
   font-weight: 800;
-  color: #0F5E46;
+  color: #3EFFA8;
 }
 
 .advisor-rec-body {
   margin-top: 0.45rem;
   font-size: 0.8rem;
   line-height: 1.5;
-  color: #64748B;
+  color: var(--text-muted);
 }
 
 .advisor-check-grid {
@@ -237,11 +243,11 @@
   align-items: center;
   gap: 0.45rem;
   border-radius: 0.75rem;
-  background: #F8FAFC;
+  background: var(--surface-light);
   padding: 0.48rem 0.55rem;
   font-size: 0.78rem;
   font-weight: 800;
-  color: #334155;
+  color: var(--text);
 }
 
 .advisor-check input {
@@ -270,10 +276,10 @@
 .advisor-detail-card,
 .advisor-action-card,
 .advisor-risk-card {
-  background: white;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 1rem;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .advisor-summary-card {
@@ -292,13 +298,13 @@
   margin-top: 0.35rem;
   font-size: 1rem;
   font-weight: 800;
-  color: #0F172A;
+  color: var(--text);
 }
 
 .advisor-summary-kn {
   margin-top: 0.15rem;
   font-size: 0.72rem;
-  color: #64748B;
+  color: var(--text-muted);
 }
 
 .advisor-section {
@@ -318,12 +324,12 @@
   font-family: Poppins, sans-serif;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #0F172A;
+  color: var(--text);
 }
 
 .advisor-section-note {
   font-size: 0.8rem;
-  color: #64748B;
+  color: var(--text-muted);
 }
 
 .advisor-actions-grid {
@@ -358,7 +364,7 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.85rem;
-  background: linear-gradient(135deg, rgba(29, 158, 117, 0.12), rgba(249, 115, 22, 0.08));
+  background: linear-gradient(135deg, rgba(29, 158, 117, 0.15), rgba(249, 115, 22, 0.1));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -369,7 +375,7 @@
 .advisor-action-title {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #0F172A;
+  color: var(--text);
 }
 
 .advisor-action-kn {
@@ -382,7 +388,7 @@
   margin-top: 0.75rem;
   font-size: 0.84rem;
   line-height: 1.55;
-  color: #475569;
+  color: var(--text-muted);
 }
 
 .advisor-action-list {
@@ -390,7 +396,7 @@
   display: grid;
   gap: 0.35rem;
   font-size: 0.8rem;
-  color: #334155;
+  color: var(--text);
 }
 
 .advisor-action-list span {
@@ -418,7 +424,7 @@
 .advisor-detail-title {
   font-family: Poppins, sans-serif;
   font-weight: 800;
-  color: #0F172A;
+  color: var(--text);
   font-size: 1rem;
 }
 
@@ -432,7 +438,7 @@
   margin-top: 0.75rem;
   font-size: 0.88rem;
   line-height: 1.65;
-  color: #475569;
+  color: var(--text-muted);
 }
 
 .advisor-food-list,
@@ -445,16 +451,16 @@
 .advisor-food-item,
 .advisor-goal-item {
   border-radius: 0.9rem;
-  background: #F8FAF9;
+  background: var(--surface-light);
   padding: 0.7rem 0.85rem;
-  border: 1px solid rgba(29, 158, 117, 0.12);
+  border: 1px solid rgba(29, 158, 117, 0.15);
 }
 
 .advisor-food-item strong,
 .advisor-goal-item strong {
   display: block;
   font-size: 0.86rem;
-  color: #0F172A;
+  color: var(--text);
 }
 
 .advisor-food-item span,
@@ -462,7 +468,7 @@
   display: block;
   margin-top: 0.18rem;
   font-size: 0.72rem;
-  color: #64748B;
+  color: var(--text-muted);
 }
 
 .advisor-risk-grid {
@@ -485,7 +491,7 @@
 .advisor-risk-label {
   font-size: 0.86rem;
   font-weight: 800;
-  color: #0F172A;
+  color: var(--text);
 }
 
 .advisor-risk-level {
@@ -497,34 +503,34 @@
   padding: 0.28rem 0.55rem;
 }
 
-.advisor-risk-level.high { background: #FEE2E2; color: #991B1B; }
-.advisor-risk-level.medium { background: #FEF3C7; color: #92400E; }
-.advisor-risk-level.low { background: #D1FAE5; color: #065F46; }
+.advisor-risk-level.high { background: rgba(239,68,68,0.15); color: #FCA5A5; }
+.advisor-risk-level.medium { background: rgba(245,158,11,0.15); color: #FCD34D; }
+.advisor-risk-level.low { background: rgba(16,185,129,0.15); color: #6EE7B7; }
 
 .advisor-risk-copy {
   margin-top: 0.45rem;
   font-size: 0.8rem;
   line-height: 1.5;
-  color: #475569;
+  color: var(--text-muted);
 }
 
 .advisor-water-card {
   margin-top: 0.75rem;
   border-radius: 1rem;
-  border: 1px solid rgba(29, 158, 117, 0.12);
-  background: linear-gradient(135deg, rgba(29, 158, 117, 0.08), rgba(255, 255, 255, 1));
+  border: 1px solid rgba(29, 158, 117, 0.2);
+  background: linear-gradient(135deg, rgba(29, 158, 117, 0.1), var(--surface));
   padding: 0.9rem;
 }
 
 .advisor-water-value {
   font-size: 1.3rem;
   font-weight: 900;
-  color: #0F5E46;
+  color: #3EFFA8;
 }
 
 .advisor-water-subtitle {
   font-size: 0.72rem;
-  color: #64748B;
+  color: var(--text-muted);
 }
 
 .advisor-divider {
@@ -573,9 +579,9 @@
 }
 
 .advisor-message.assistant .advisor-msg-content {
-  background: white;
-  color: #334155;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
   border-radius: 0 0.9rem 0.9rem 0.9rem;
   padding: 0.6rem 0.75rem;
   max-width: 96%;
@@ -591,7 +597,7 @@
 }
 
 .advisor-rec-card:hover {
-  box-shadow: 0 4px 16px rgba(29, 158, 117, 0.12);
+  box-shadow: 0 4px 16px rgba(29, 158, 117, 0.15);
 }
 
 /* Chip hover */
@@ -601,7 +607,7 @@
 }
 
 .advisor-chip:hover {
-  background: #DCFCE7;
+  background: rgba(29, 158, 117, 0.2);
   transform: translateY(-1px);
 }
 
@@ -624,7 +630,7 @@
 /* Rec list scroll */
 .advisor-rec-list {
   scrollbar-width: thin;
-  scrollbar-color: #D1FAE5 transparent;
+  scrollbar-color: rgba(29,158,117,0.3) transparent;
 }
 
 /* Placeholder text */

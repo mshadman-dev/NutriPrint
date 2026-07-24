@@ -139,14 +139,14 @@
     }, 680);
   }
 
-  /* Hard deadline: 3.2 s */
-  const deadline = setTimeout(hideSplash, 3200);
+  /* Hard deadline: 1.5 s (shortened for demo readiness) */
+  const deadline = setTimeout(hideSplash, 1500);
 
   /* Allow skip on click/tap */
   splash.addEventListener('click', () => { clearTimeout(deadline); hideSplash(); });
 
-  /* Auto-hide after checklist completes */
-  setTimeout(() => { clearTimeout(deadline); hideSplash(); }, 2750);
+  /* Auto-hide after shortened duration */
+  setTimeout(() => { clearTimeout(deadline); hideSplash(); }, 1400);
 
   function _afterSplash () {
     if (typeof initHeroAnimations === 'function') initHeroAnimations();

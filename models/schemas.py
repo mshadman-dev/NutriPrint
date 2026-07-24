@@ -84,7 +84,7 @@ class MealDay(BaseModel):
     dinner    : MealItem
 
 class AIRecommendation(BaseModel):
-    id                   : str
+    id                   : Optional[str] = None
     title                : str
     short_action         : str
     detailed_explanation : str

@@ -509,12 +509,69 @@ function ptShowToast(msg, type = 'success') {
   }, 2800);
 }
 
+/* ─── Demo Data Seeding ────────────────────────────────────────────────────── */
+
+/**
+ * Seeds demo student data if localStorage has no tracked students.
+ * Ensures the dashboard is never empty during a demo or first visit.
+ */
+function ptSeedDemoData() {
+  const existing = ptGetAllStudentNames();
+  if (existing.length > 0) return; // Real data exists — don't overwrite
+
+  const DEMO_KEY = 'np_demo_seeded_v1';
+  if (localStorage.getItem(DEMO_KEY)) return; // Already seeded once and user deleted
+
+  const demoStudents = [
+    {
+      name: 'Ananya Sharma',
+      records: [
+        { date: '15/01/2026', bmi: 13.8, classification: 'underweight', age: 10, gender: 'female', percentile: 4, z_score: -1.8, weight_kg: 24, height_cm: 132, label: 'Jan Assessment' },
+        { date: '15/03/2026', bmi: 14.5, classification: 'underweight', age: 10, gender: 'female', percentile: 7, z_score: -1.5, weight_kg: 25.5, height_cm: 133, label: 'Mar Assessment' },
+        { date: '15/05/2026', bmi: 15.2, classification: 'normal', age: 10, gender: 'female', percentile: 18, z_score: -0.9, weight_kg: 27, height_cm: 134, label: 'May Assessment' },
+      ]
+    },
+    {
+      name: 'Karthik Gowda',
+      records: [
+        { date: '15/01/2026', bmi: 16.1, classification: 'normal', age: 11, gender: 'male', percentile: 42, z_score: -0.2, weight_kg: 32, height_cm: 141, label: 'Jan Assessment' },
+        { date: '15/03/2026', bmi: 16.3, classification: 'normal', age: 11, gender: 'male', percentile: 45, z_score: -0.1, weight_kg: 33, height_cm: 142, label: 'Mar Assessment' },
+        { date: '15/05/2026', bmi: 16.5, classification: 'normal', age: 11, gender: 'male', percentile: 48, z_score: 0.0, weight_kg: 34, height_cm: 143, label: 'May Assessment' },
+      ]
+    },
+    {
+      name: 'Priya Hegde',
+      records: [
+        { date: '15/01/2026', bmi: 19.8, classification: 'overweight', age: 12, gender: 'female', percentile: 88, z_score: 1.2, weight_kg: 45, height_cm: 151, label: 'Jan Assessment' },
+        { date: '15/03/2026', bmi: 19.2, classification: 'overweight', age: 12, gender: 'female', percentile: 86, z_score: 1.1, weight_kg: 44, height_cm: 152, label: 'Mar Assessment' },
+        { date: '15/05/2026', bmi: 18.4, classification: 'normal', age: 12, gender: 'female', percentile: 78, z_score: 0.8, weight_kg: 43, height_cm: 153, label: 'May Assessment' },
+      ]
+    },
+    {
+      name: 'Rakesh Kumar',
+      records: [
+        { date: '15/02/2026', bmi: 14.2, classification: 'underweight', age: 9, gender: 'male', percentile: 5, z_score: -1.6, weight_kg: 22, height_cm: 125, label: 'Feb Assessment' },
+        { date: '15/05/2026', bmi: 14.6, classification: 'underweight', age: 9, gender: 'male', percentile: 8, z_score: -1.4, weight_kg: 23, height_cm: 126, label: 'May Assessment' },
+      ]
+    },
+  ];
+
+  demoStudents.forEach(s => {
+    ptSaveHistory(s.name, s.records);
+  });
+
+  localStorage.setItem(DEMO_KEY, '1');
+}
+
 /* ─── Init ─────────────────────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Set today's date as default for manual entry
   const dateEl = document.getElementById('pt-input-date');
   if (dateEl) dateEl.value = new Date().toLocaleDateString('en-IN');
+
+  // Seed demo data if empty (ensures dashboard is never blank during demo)
+  ptSeedDemoData();
 
   ptRender();
 });

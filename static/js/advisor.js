@@ -212,7 +212,7 @@
         method : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body   : JSON.stringify({
-          question,
+          question: text,
           language,
           profile: buildProfile(),
           history: state.history.slice(0, -1).slice(-10), // last 5 turns

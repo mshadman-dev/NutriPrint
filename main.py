@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import HTTPException
 
 from routers import ai_advisor, bmi, meals, foods, auth, poster, recipes
 from routers.foods import impact
@@ -113,3 +114,12 @@ async def ping():
 @app.get("/api/impact")
 async def impact_proxy():
     return await impact()
+
+
+@app.exception_handler(404)
+async def not_found_handler(request: Request, exc: HTTPException):
+    return templates.TemplateResponse(
+        request=request,
+        name="404.html",
+        status_code=404,
+    )
