@@ -110,6 +110,7 @@
   background: #FFFFFF; border: 1px solid rgba(148,163,184,0.15);
   border-radius: 1.5rem; padding: 1.75rem;
   box-shadow: 0 14px 35px rgba(15,23,42,0.06);
+  min-width: 0;
 }
 .mp-form-label {
   font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .18em;
@@ -258,7 +259,7 @@
 </section>
 
 <!-- ══ FORM + RESULTS ══════════════════════════════════════════════════════ -->
-<section id="mealForm" class="mt-5 grid gap-5 xl:grid-cols-[420px_1fr]">
+<section id="mealForm" class="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
 
   <!-- Left: Input form -->
   <div class="mp-form-card">
