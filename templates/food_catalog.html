@@ -12,28 +12,28 @@
    Food Catalog — fc- prefix, dark premium
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --bg:        #060a0e;
-  --surface:   #0d1117;
-  --border:    #1a2332;
-  --border-hi: #253347;
-  --green:     #1D9E75;
-  --green-hi:  #3EFFA8;
-  --text:      #E2E8F0;
-  --muted:     #94A3B8;
-  --dim:       #4A5568;
+  --bg:        #FFFFFF;
+  --surface:   #F8FAFC;
+  --border:    rgba(148,163,184,0.15);
+  --border-hi: rgba(148,163,184,0.25);
+  --green:     #14B8A6;
+  --green-hi:  #0D9488;
+  --text:      #0F172A;
+  --muted:     #64748B;
+  --dim:       #94A3B8;
 }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .fc-hero {
   position: relative; overflow: hidden;
   border-radius: 1.25rem; border: 1px solid var(--border-hi);
-  background: linear-gradient(135deg, #071f17 0%, #0a2e1f 40%, #0d3d2a 100%);
+  background: linear-gradient(135deg, #0F172A 0%, #0F172A 40%, #14B8A6 100%);
   padding: 2.25rem 2rem; color: #fff;
 }
 .fc-hero::before {
   content: ''; position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse at 10% 30%, rgba(29,158,117,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 30%, rgba(20,184,166,.16) 0%, transparent 50%),
     radial-gradient(ellipse at 90% 90%, rgba(249,115,22,.07) 0%, transparent 40%);
   pointer-events: none;
 }
@@ -47,8 +47,8 @@
 
 .fc-hero-label {
   display: inline-flex; align-items: center; gap: .4rem;
-  padding: .25rem .75rem; background: rgba(62,255,168,.1);
-  border: 1px solid rgba(62,255,168,.2); border-radius: 9999px;
+  padding: .25rem .75rem; background: rgba(20,184,166,.1);
+  border: 1px solid rgba(20,184,166,.2); border-radius: 9999px;
   font-size: .65rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
   color: var(--green-hi); margin-bottom: 1.1rem;
 }
@@ -61,7 +61,7 @@
   color: #fff; margin-bottom: .9rem;
 }
 .fc-hero h1 span {
-  background: linear-gradient(90deg, #3EFFA8, #1D9E75);
+  background: linear-gradient(90deg, #0D9488, #1D9E75);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .fc-hero-desc { font-size: .92rem; line-height: 1.75; color: rgba(255,255,255,.65); max-width: 50ch; }
@@ -84,14 +84,14 @@
 @media (min-width: 1024px) { .fc-filter-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; } }
 
 .fc-input, .fc-select {
-  width: 100%; background: #0b1120; border: 1px solid var(--border-hi);
+  width: 100%; background: #FFFFFF; border: 1px solid var(--border-hi);
   border-radius: .65rem; color: var(--text); padding: .7rem .9rem;
   font-size: .85rem; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease;
   -webkit-appearance: none;
 }
 .fc-input::placeholder { color: var(--dim); }
-.fc-input:focus, .fc-select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
-.fc-select option { background: #0d1117; color: var(--text); }
+.fc-input:focus, .fc-select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(20,184,166,.12); }
+.fc-select option { background: #F8FAFC; color: var(--text); }
 
 .fc-tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .5rem; }
 .fc-tag {
@@ -131,12 +131,12 @@
 #foodGrid .text-slate-500 { color: var(--muted) !important; }
 #foodGrid .text-slate-400 { color: var(--dim) !important; }
 #foodGrid .text-primary   { color: var(--green-hi) !important; }
-#foodGrid .bg-primary\/10 { background: rgba(29,158,117,.14) !important; }
-#foodGrid .bg-slate-50    { background: #0b1120 !important; border: 1px solid var(--border); }
-#foodGrid .bg-slate-100   { background: rgba(255,255,255,.05) !important; color: var(--dim) !important; }
+#foodGrid .bg-primary\/10 { background: rgba(20,184,166,.14) !important; }
+#foodGrid .bg-slate-50    { background: #FFFFFF !important; border: 1px solid var(--border); }
+#foodGrid .bg-slate-100   { background: #F1F5F9 !important; color: var(--dim) !important; }
 #foodGrid .bg-slate-100.px-3 { color: var(--dim) !important; }
-#foodGrid .border-primary\/25 { border-color: rgba(29,158,117,.3) !important; }
-#foodGrid .bg-green-50 { background: rgba(29,158,117,.1) !important; }
+#foodGrid .border-primary\/25 { border-color: rgba(20,184,166,.3) !important; }
+#foodGrid .bg-green-50 { background: rgba(20,184,166,.1) !important; }
 #foodGrid a.btn-ghost {
   background: transparent !important;
   border: 1px solid var(--border-hi) !important;
@@ -144,16 +144,16 @@
 }
 #foodGrid a.btn-ghost:hover { border-color: var(--green) !important; color: var(--green-hi) !important; }
 #foodGrid button[onclick^="toggleCatalogQR"] {
-  background: rgba(29,158,117,.1) !important;
-  border: 1px solid rgba(29,158,117,.25) !important;
+  background: rgba(20,184,166,.1) !important;
+  border: 1px solid rgba(20,184,166,.25) !important;
   color: var(--green-hi) !important;
 }
 #foodGrid button[onclick^="toggleCatalogQR"]:hover { background: var(--green) !important; color: #fff !important; }
 
 /* QR drawer dark override */
 .nq-catalog-qr-drawer {
-  background: rgba(29,158,117,.07) !important;
-  border: 1px solid rgba(29,158,117,.2) !important;
+  background: rgba(20,184,166,.07) !important;
+  border: 1px solid rgba(20,184,166,.2) !important;
 }
 .nq-catalog-qr-lbl { color: var(--green-hi) !important; }
 .nq-catalog-qr-btn--ghost {
@@ -161,7 +161,7 @@
   color: var(--green-hi) !important;
   border: 1px solid var(--border-hi) !important;
 }
-.nq-catalog-qr-btn--ghost:hover { background: #0b1120 !important; }
+.nq-catalog-qr-btn--ghost:hover { background: #FFFFFF !important; }
 
 /* ── Skeleton loading dark override ─────────────────────────────────────── */
 .ld-catalog-card {
@@ -181,7 +181,7 @@
   border-radius: 9999px !important;
   font-weight: 700 !important;
 }
-#loadMoreBtn:hover { border-color: var(--green) !important; color: var(--green-hi) !important; background: rgba(29,158,117,.06) !important; }
+#loadMoreBtn:hover { border-color: var(--green) !important; color: var(--green-hi) !important; background: rgba(20,184,166,.06) !important; }
 
 /* ── Empty state ─────────────────────────────────────────────────────────── */
 .fc-empty {

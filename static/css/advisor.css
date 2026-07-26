@@ -1,13 +1,13 @@
 .advisor-shell {
-  background: linear-gradient(180deg, var(--surface), rgba(13, 17, 23, 0.98));
-  border: 1px solid var(--border);
+  background: #FFFFFF;
+  border: 1px solid rgba(148,163,184,0.15);
   border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 14px 35px rgba(15,23,42,0.06);
 }
 
 .advisor-header {
-  background: linear-gradient(135deg, #0F5E46 0%, #1D9E75 55%, #136B4F 100%);
+  background: linear-gradient(135deg, #0F172A 0%, #14B8A6 55%, #0D9488 100%);
   color: white;
   padding: 1.25rem;
 }
@@ -59,10 +59,10 @@
 
 .advisor-chat-card,
 .advisor-selected-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: #FFFFFF;
+  border: 1px solid rgba(148,163,184,0.15);
   border-radius: 1rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(15,23,42,0.04);
   padding: 0.9rem;
 }
 
@@ -82,17 +82,17 @@
 }
 
 .advisor-select {
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text);
+  border: 1px solid rgba(148,163,184,0.25);
+  background: #FFFFFF;
+  color: #0F172A;
   padding: 0.55rem 0.65rem;
   font-weight: 700;
 }
 
 .advisor-chip {
-  border: 1px solid rgba(29, 158, 117, 0.3);
-  background: rgba(29, 158, 117, 0.1);
-  color: #3EFFA8;
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  background: rgba(20, 184, 166, 0.08);
+  color: #0D9488;
   padding: 0.55rem 0.7rem;
   font-weight: 800;
 }
@@ -105,8 +105,8 @@
   flex-direction: column;
   gap: 0.55rem;
   border-radius: 0.9rem;
-  background: var(--surface-light);
-  border: 1px solid var(--border);
+  background: #F8FAFC;
+  border: 1px solid rgba(148,163,184,0.12);
   padding: 0.75rem;
 }
 
@@ -121,15 +121,15 @@
 
 .advisor-message.user {
   align-self: flex-end;
-  background: #1D9E75;
+  background: #14B8A6;
   color: white;
 }
 
 .advisor-message.assistant {
   align-self: flex-start;
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid rgba(148,163,184,0.15);
 }
 
 .advisor-dot {
@@ -138,7 +138,7 @@
   height: 0.42rem;
   margin-right: 0.22rem;
   border-radius: 999px;
-  background: #1D9E75;
+  background: #14B8A6;
   animation: advisorPulse 0.9s infinite ease-in-out;
 }
 
@@ -165,28 +165,34 @@
 .advisor-input {
   min-width: 0;
   flex: 1;
-  border: 1px solid var(--border);
-  background: var(--surface-light);
-  color: var(--text);
+  border: 1px solid rgba(148,163,184,0.25);
+  background: #FFFFFF;
+  color: #0F172A;
   padding: 0.7rem 0.8rem;
   outline: none;
 }
 
 .advisor-input::placeholder {
-  color: var(--text-muted);
+  color: #94A3B8;
 }
 
 .advisor-input:focus {
-  border-color: #1D9E75;
-  box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.2);
+  border-color: #14B8A6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
 }
 
 .advisor-send {
   border: none;
-  background: #F97316;
+  background: #14B8A6;
   color: white;
   padding: 0.7rem 1rem;
   font-weight: 900;
+  cursor: pointer;
+  transition: background 140ms ease;
+}
+
+.advisor-send:hover {
+  background: #0D9488;
 }
 
 .advisor-rec-list {
@@ -197,39 +203,39 @@
 
 .advisor-empty {
   border-radius: 0.9rem;
-  background: var(--surface-light);
-  border: 1px dashed rgba(29, 158, 117, 0.3);
-  color: var(--text-muted);
+  background: #F8FAFC;
+  border: 1px dashed rgba(20, 184, 166, 0.3);
+  color: #64748B;
   font-size: 0.84rem;
   line-height: 1.5;
   padding: 0.9rem;
 }
 
 .advisor-rec-card {
-  border: 1px solid rgba(29, 158, 117, 0.2);
+  border: 1px solid rgba(20, 184, 166, 0.2);
   border-radius: 1rem;
   padding: 0.85rem;
-  background: var(--surface);
+  background: #FFFFFF;
 }
 
 .advisor-rec-title {
   font-size: 0.9rem;
   font-weight: 900;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-rec-action {
   margin-top: 0.25rem;
   font-size: 0.82rem;
   font-weight: 800;
-  color: #3EFFA8;
+  color: #0D9488;
 }
 
 .advisor-rec-body {
   margin-top: 0.45rem;
   font-size: 0.8rem;
   line-height: 1.5;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-check-grid {
@@ -243,15 +249,15 @@
   align-items: center;
   gap: 0.45rem;
   border-radius: 0.75rem;
-  background: var(--surface-light);
+  background: #F8FAFC;
   padding: 0.48rem 0.55rem;
   font-size: 0.78rem;
   font-weight: 800;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-check input {
-  accent-color: #1D9E75;
+  accent-color: #14B8A6;
 }
 
 @media (min-width: 640px) {
@@ -276,10 +282,10 @@
 .advisor-detail-card,
 .advisor-action-card,
 .advisor-risk-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: #FFFFFF;
+  border: 1px solid rgba(148,163,184,0.15);
   border-radius: 1rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(15,23,42,0.04);
 }
 
 .advisor-summary-card {
@@ -290,7 +296,7 @@
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #1D9E75;
+  color: #14B8A6;
   font-weight: 800;
 }
 
@@ -298,13 +304,13 @@
   margin-top: 0.35rem;
   font-size: 1rem;
   font-weight: 800;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-summary-kn {
   margin-top: 0.15rem;
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-section {
@@ -324,12 +330,12 @@
   font-family: Poppins, sans-serif;
   font-size: 1.05rem;
   font-weight: 800;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-section-note {
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-actions-grid {
@@ -364,7 +370,7 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.85rem;
-  background: linear-gradient(135deg, rgba(29, 158, 117, 0.15), rgba(249, 115, 22, 0.1));
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(249, 115, 22, 0.06));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -375,20 +381,20 @@
 .advisor-action-title {
   font-size: 0.95rem;
   font-weight: 800;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-action-kn {
   margin-top: 0.1rem;
   font-size: 0.72rem;
-  color: #1D9E75;
+  color: #14B8A6;
 }
 
 .advisor-action-body {
   margin-top: 0.75rem;
   font-size: 0.84rem;
   line-height: 1.55;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-action-list {
@@ -396,7 +402,7 @@
   display: grid;
   gap: 0.35rem;
   font-size: 0.8rem;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-action-list span {
@@ -424,21 +430,21 @@
 .advisor-detail-title {
   font-family: Poppins, sans-serif;
   font-weight: 800;
-  color: var(--text);
+  color: #0F172A;
   font-size: 1rem;
 }
 
 .advisor-detail-kn {
   margin-top: 0.2rem;
   font-size: 0.72rem;
-  color: #1D9E75;
+  color: #14B8A6;
 }
 
 .advisor-detail-copy {
   margin-top: 0.75rem;
   font-size: 0.88rem;
   line-height: 1.65;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-food-list,
@@ -451,16 +457,16 @@
 .advisor-food-item,
 .advisor-goal-item {
   border-radius: 0.9rem;
-  background: var(--surface-light);
+  background: #F8FAFC;
   padding: 0.7rem 0.85rem;
-  border: 1px solid rgba(29, 158, 117, 0.15);
+  border: 1px solid rgba(20, 184, 166, 0.12);
 }
 
 .advisor-food-item strong,
 .advisor-goal-item strong {
   display: block;
   font-size: 0.86rem;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-food-item span,
@@ -468,7 +474,7 @@
   display: block;
   margin-top: 0.18rem;
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-risk-grid {
@@ -491,7 +497,7 @@
 .advisor-risk-label {
   font-size: 0.86rem;
   font-weight: 800;
-  color: var(--text);
+  color: #0F172A;
 }
 
 .advisor-risk-level {
@@ -503,39 +509,39 @@
   padding: 0.28rem 0.55rem;
 }
 
-.advisor-risk-level.high { background: rgba(239,68,68,0.15); color: #FCA5A5; }
-.advisor-risk-level.medium { background: rgba(245,158,11,0.15); color: #FCD34D; }
-.advisor-risk-level.low { background: rgba(16,185,129,0.15); color: #6EE7B7; }
+.advisor-risk-level.high { background: rgba(239,68,68,0.1); color: #DC2626; }
+.advisor-risk-level.medium { background: rgba(245,158,11,0.1); color: #D97706; }
+.advisor-risk-level.low { background: rgba(20,184,166,0.1); color: #0D9488; }
 
 .advisor-risk-copy {
   margin-top: 0.45rem;
   font-size: 0.8rem;
   line-height: 1.5;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-water-card {
   margin-top: 0.75rem;
   border-radius: 1rem;
-  border: 1px solid rgba(29, 158, 117, 0.2);
-  background: linear-gradient(135deg, rgba(29, 158, 117, 0.1), var(--surface));
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.06), #FFFFFF);
   padding: 0.9rem;
 }
 
 .advisor-water-value {
   font-size: 1.3rem;
   font-weight: 900;
-  color: #3EFFA8;
+  color: #0D9488;
 }
 
 .advisor-water-subtitle {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: #64748B;
 }
 
 .advisor-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(29, 158, 117, 0.24), transparent);
+  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.2), transparent);
   margin: 1rem 0;
 }
 
@@ -571,7 +577,7 @@
 }
 
 .advisor-message.user .advisor-msg-content {
-  background: #1D9E75;
+  background: #14B8A6;
   color: white;
   border-radius: 0.9rem 0.9rem 0 0.9rem;
   padding: 0.6rem 0.75rem;
@@ -579,9 +585,9 @@
 }
 
 .advisor-message.assistant .advisor-msg-content {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid rgba(148,163,184,0.15);
   border-radius: 0 0.9rem 0.9rem 0.9rem;
   padding: 0.6rem 0.75rem;
   max-width: 96%;
@@ -597,7 +603,7 @@
 }
 
 .advisor-rec-card:hover {
-  box-shadow: 0 4px 16px rgba(29, 158, 117, 0.15);
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.12);
 }
 
 /* Chip hover */
@@ -607,7 +613,7 @@
 }
 
 .advisor-chip:hover {
-  background: rgba(29, 158, 117, 0.2);
+  background: rgba(20, 184, 166, 0.14);
   transform: translateY(-1px);
 }
 
@@ -630,7 +636,7 @@
 /* Rec list scroll */
 .advisor-rec-list {
   scrollbar-width: thin;
-  scrollbar-color: rgba(29,158,117,0.3) transparent;
+  scrollbar-color: rgba(20,184,166,0.3) transparent;
 }
 
 /* Placeholder text */

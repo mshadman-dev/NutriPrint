@@ -9,15 +9,15 @@
    BMI Assessment Page — bmi- prefix, dark premium
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --bg:       #060a0e;
-  --surface:  #0d1117;
-  --border:   #1a2332;
-  --border-hi:#253347;
-  --green:    #1D9E75;
-  --green-hi: #3EFFA8;
-  --text:     #E2E8F0;
-  --muted:    #94A3B8;
-  --dim:      #4A5568;
+  --bg:       #FFFFFF;
+  --surface:  #F8FAFC;
+  --border:   rgba(148,163,184,0.15);
+  --border-hi:rgba(148,163,184,0.25);
+  --green:    #14B8A6;
+  --green-hi: #0D9488;
+  --text:     #0F172A;
+  --muted:    #64748B;
+  --dim:      #94A3B8;
 }
 
 /* ── Page wrapper ────────────────────────────────────────────────────────── */
@@ -32,7 +32,7 @@
   overflow: hidden;
   border-radius: 1.25rem;
   border: 1px solid var(--border-hi);
-  background: linear-gradient(135deg, #071f17 0%, #0a2e1f 40%, #0d3d2a 100%);
+  background: linear-gradient(135deg, #0F172A 0%, #0F172A 40%, #14B8A6 100%);
   padding: 2.5rem 2rem;
   color: white;
 }
@@ -41,8 +41,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 10% 50%, rgba(29,158,117,.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 90% 10%, rgba(62,255,168,.07) 0%, transparent 40%);
+    radial-gradient(ellipse at 10% 50%, rgba(20,184,166,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(20,184,166,.07) 0%, transparent 40%);
   pointer-events: none;
 }
 /* Dot grid texture */
@@ -61,8 +61,8 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.25rem 0.75rem;
-  background: rgba(62,255,168,.1);
-  border: 1px solid rgba(62,255,168,.2);
+  background: rgba(20,184,166,.1);
+  border: 1px solid rgba(20,184,166,.2);
   border-radius: 9999px;
   font-size: 0.65rem;
   font-weight: 800;
@@ -92,7 +92,7 @@
   margin-bottom: 1rem;
 }
 .bmi-hero h1 span {
-  background: linear-gradient(90deg, #3EFFA8, #1D9E75);
+  background: linear-gradient(90deg, #0D9488, #1D9E75);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -118,11 +118,11 @@
   font-size: .85rem; font-weight: 700;
   padding: .7rem 1.25rem; border-radius: 9999px;
   text-decoration: none;
-  box-shadow: 0 0 20px rgba(29,158,117,.3);
+  box-shadow: 0 0 20px rgba(20,184,166,.3);
   transition: all 150ms ease;
   border: none; cursor: pointer;
 }
-.bmi-btn-primary:hover { background: #18876A; transform: translateY(-1px); }
+.bmi-btn-primary:hover { background: #0D9488; transform: translateY(-1px); }
 .bmi-btn-ghost {
   display: inline-flex; align-items: center; gap: .4rem;
   background: rgba(255,255,255,.08); color: rgba(255,255,255,.8);
@@ -169,7 +169,7 @@
   color: var(--green); margin-bottom: .25rem;
 }
 .bmi-feat-item {
-  background: #0b1120;
+  background: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: .85rem;
   padding: 1rem 1.15rem;
@@ -180,8 +180,8 @@
 .bmi-feat-icon {
   width: 2.2rem; height: 2.2rem;
   border-radius: .6rem;
-  background: rgba(29,158,117,.1);
-  border: 1px solid rgba(29,158,117,.2);
+  background: rgba(20,184,166,.1);
+  border: 1px solid rgba(20,184,166,.2);
   display: flex; align-items: center; justify-content: center;
   font-size: 1rem; flex-shrink: 0;
 }
@@ -216,7 +216,7 @@
 }
 .bmi-input, .bmi-select {
   width: 100%;
-  background: #0b1120;
+  background: #FFFFFF;
   border: 1px solid var(--border-hi);
   border-radius: .75rem;
   color: var(--text);
@@ -229,9 +229,9 @@
 .bmi-input::placeholder { color: var(--dim); }
 .bmi-input:focus, .bmi-select:focus {
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(29,158,117,.12);
+  box-shadow: 0 0 0 3px rgba(20,184,166,.12);
 }
-.bmi-select option { background: #0d1117; color: var(--text); }
+.bmi-select option { background: #FFFFFF; color: var(--text); }
 
 /* Field grid */
 .bmi-fields {
@@ -248,12 +248,12 @@
   font-size: .95rem; font-weight: 800;
   padding: .9rem; border-radius: .85rem;
   border: none; cursor: pointer;
-  box-shadow: 0 0 24px rgba(29,158,117,.25);
+  box-shadow: 0 0 24px rgba(20,184,166,.25);
   transition: all 160ms ease;
   display: flex; align-items: center;
   justify-content: center; gap: .5rem;
 }
-.bmi-calc-btn:hover { background: #18876A; box-shadow: 0 0 32px rgba(62,255,168,.25); transform: translateY(-1px); }
+.bmi-calc-btn:hover { background: #0D9488; box-shadow: 0 0 32px rgba(20,184,166,.25); transform: translateY(-1px); }
 .bmi-calc-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
 
 /* ── Result panel ────────────────────────────────────────────────────────── */
@@ -285,8 +285,8 @@
 
 /* Advice panels */
 #resultAdviceEN {
-  background: rgba(29,158,117,.08) !important;
-  border: 1px solid rgba(29,158,117,.2) !important;
+  background: rgba(20,184,166,.08) !important;
+  border: 1px solid rgba(20,184,166,.2) !important;
   border-radius: .85rem !important;
   color: var(--text) !important;
 }
@@ -307,17 +307,17 @@
   border: none !important;
   border-radius: .85rem !important;
   font-weight: 700 !important;
-  box-shadow: 0 0 20px rgba(29,158,117,.2) !important;
+  box-shadow: 0 0 20px rgba(20,184,166,.2) !important;
   transition: all 150ms ease !important;
 }
 #bmiResult button[onclick="prefillMealForm()"]:hover {
-  background: #18876A !important;
+  background: #0D9488 !important;
   transform: translateY(-1px) !important;
 }
 
 /* Growth chart wrapper */
 #growthChartWrapper {
-  background: #0b1120;
+  background: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: .85rem;
   padding: 1.25rem;
@@ -363,7 +363,7 @@
 .bmi-step {
   display: flex; gap: .85rem; align-items: flex-start;
   padding: .85rem 1rem;
-  background: #0b1120;
+  background: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: .85rem;
   transition: border-color 150ms ease;
@@ -372,8 +372,8 @@
 .bmi-step-num {
   width: 1.6rem; height: 1.6rem;
   border-radius: 50%;
-  background: rgba(29,158,117,.15);
-  border: 1px solid rgba(29,158,117,.25);
+  background: rgba(20,184,166,.15);
+  border: 1px solid rgba(20,184,166,.25);
   display: flex; align-items: center; justify-content: center;
   font-size: .7rem; font-weight: 900;
   color: var(--green-hi); flex-shrink: 0; margin-top: .1rem;
